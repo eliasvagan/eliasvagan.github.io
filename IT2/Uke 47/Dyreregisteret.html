@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<input type="text" id="inpPnr" placeholder="Søk på personnummer">
+<div id="skjerm"></div>
+
+<script>
+    var inpPnr = document.getElementById("inpPnr");
+    var skjerm = document.getElementById("skjerm");
+
+    inpPnr.addEventListener("input", finnDyr);
+
+    function finnDyr() {
+        if (innbyggere.has(inpPnr.value)){
+            var dyr = innbyggere.get(inpPnr.value);
+            skjerm.innerHTML = `
+
+                <p><b>Navn: </b>${dyr.navn}</p>
+                <p><b>Personnummer: </b>${dyr.pnr}</p>
+                <p><b>Adresse: </b>${dyr.adr}</p>
+
+
+            `;
+        }
+    }
+
+    var kalleKanin = {
+        pnr: "001",
+        navn: "Kalle Kanin",
+        adr: "Kaninsvingen 22b"
+    };
+
+    var tassen = {
+        pnr: "002",
+        navn: "Tassen",
+        adr: "Kjøttbeinsgaten 31"
+    };
+
+    var klausKu  = {
+        pnr: "003",
+        navn: "Klaus Ku",
+        adr: "Jordet"
+    };
+
+    var innbyggere = new Map();
+
+    innbyggere.set(kalleKanin.pnr, kalleKanin);
+    innbyggere.set(tassen.pnr, tassen);
+    innbyggere.set(klausKu.pnr, klausKu);
+
+    console.log(innbyggere.get("002"));
+
+</script>
+
+</body>
+</html>
