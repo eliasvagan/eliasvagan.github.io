@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stjernegreie</title>
+    <style>
+        html {
+            background-color: black;
+        }
+        div {
+
+            position: absolute;
+            border-radius: 100px;
+            background-color:white;
+            transition: 2s ease;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+    var i = 1;
+    while(i < 300) {
+
+        var stjerne = document.createElement("div");
+        stjerne.style.left = Math.random() * innerWidth + "px";
+        stjerne.style.top = Math.random() * innerHeight + "px";
+        var widthAndHeight = Math.random() * 10 + 1;
+        stjerne.style.width = widthAndHeight + "px";
+        stjerne.style.height = widthAndHeight + "px";
+        stjerne.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+
+        document.body.appendChild(stjerne);
+
+        i++
+    }
+
+    function scramble() {
+        var sterjner = document.querySelectorAll("div");
+        for (var stjerne of sterjner) {
+            stjerne.style.left = Math.random() * innerWidth + "px";
+            stjerne.style.top = Math.random() * innerHeight + "px";
+            var widthAndHeight = Math.random() * 10 + 1;
+            stjerne.style.width = widthAndHeight + "px";
+            stjerne.style.height = widthAndHeight + "px";
+
+            stjerne.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        }
+    }
+
+    document.onclick = scramble;
+
+</script>
+
+</body>
+</html>
