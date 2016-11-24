@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space</title>
+    <style>
+        html {
+            background-color: #6f6f6f;
+        }
+        img {
+            transition: 1s ease;
+            position: absolute;
+
+        }
+        img:hover {
+            curso: url(bacon.png), pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="grisebingen"></div>
+
+
+<script>
+    var grisebingen = document.getElementById("grisebingen");
+    var i = 1;
+    while(i < ((innerWidth*innerHeight)/8000)){
+        var gris = document.createElement("img");
+        gris.src = "astropig.png";
+        grisebingen.appendChild(gris);
+        gris.style.left = Math.random() * innerWidth + "px";
+        gris.style.top = Math.random() * innerHeight + "px";
+        i++;
+
+    }
+
+    var grisene = document.querySelectorAll("img");
+    for(var gris of grisene) {
+        gris.addEventListener("mouseover", snurr);
+    }
+
+    function snurr() {
+        this.style.transform = `rotate(${Math.random()*6}turn)`;
+        this.style.left = Math.random() * innerWidth + "px";
+        this.style.top = Math.random() * innerHeight + "px";
+    }
+
+</script>
+
+</body>
+</html>
