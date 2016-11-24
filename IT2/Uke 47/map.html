@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maps</title>
+</head>
+<body>
+
+
+<script>
+
+    var minBil = "Honda Accord";
+    var dinBil = "Datsun 120";
+
+    //Definerer en ny map
+    var biler = new Map();
+
+    //Legger bilene inn i map
+    biler.set(100, minBil);
+    biler.set(101, dinBil);
+
+    //Henter bil nummer 100
+    console.log(biler.get(100));
+
+    //Sjekker om map har bil nummer 100
+    console.log(biler.has(100));
+
+    //Henter alle bilene
+    for(var bil of biler.values()) {
+        console.log(bil);
+    }
+
+
+</script>
+</body>
+</html>

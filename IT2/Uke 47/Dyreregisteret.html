@@ -4,30 +4,51 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    html {
+        background-color: lightgray;
+    }
+    article {
+        font-family: sans-serif;
+        max-width: 30em;
+        background-color: white;
+        margin: 1em auto;
+        position: relative;
+        padding: 2em;
+        box-sizing: border-box;
+    }
+    article:first-of-type {
+        display: flex;
+        padding: 0;
+    }
+    article:first-of-type > *:last-of-type {
+        flex: 1;
+    }
+    }
+    article:first-of-type > *:first-of-type {
+        flex: 2;
+    }
+    input, button {
+        padding: 0.9em;
+        font-size: 0.9em;
+    }
+</style>
 <body>
+<article>
+    <input type="text" id="inpPnr" placeholder="Søk på personnummer">
+    <button id="seAlt">Se alt</button>
+</article>
+<article>
+    <div id="skjerm"></div>
+</article>
 
-<input type="text" id="inpPnr" placeholder="Søk på personnummer">
-<div id="skjerm"></div>
+
+
 
 <script>
     var inpPnr = document.getElementById("inpPnr");
     var skjerm = document.getElementById("skjerm");
-
-    inpPnr.addEventListener("input", finnDyr);
-
-    function finnDyr() {
-        if (innbyggere.has(inpPnr.value)){
-            var dyr = innbyggere.get(inpPnr.value);
-            skjerm.innerHTML = `
-
-                <p><b>Navn: </b>${dyr.navn}</p>
-                <p><b>Personnummer: </b>${dyr.pnr}</p>
-                <p><b>Adresse: </b>${dyr.adr}</p>
-
-
-            `;
-        }
-    }
+    var seAlt = document.getElementById("seAlt");
 
     var kalleKanin = {
         pnr: "001",
@@ -54,6 +75,36 @@
     innbyggere.set(klausKu.pnr, klausKu);
 
     console.log(innbyggere.get("002"));
+
+    function finnDyr() {
+        if (innbyggere.has(inpPnr.value)){
+            var dyr = innbyggere.get(inpPnr.value);
+            skjerm.innerHTML = `
+
+                <p><b>Navn: </b>${dyr.navn}</p>
+                <p><b>Personnummer: </b>${dyr.pnr}</p>
+                <p><b>Adresse: </b>${dyr.adr}</p>
+
+
+
+            `;
+        }
+    }
+    function visAlleDyr() {
+        skjerm.innerHTML = "";
+        for(var dyr of innbyggere.values()){
+            skjerm.innerHTML += `
+
+                <p><b>Navn: </b>${dyr.navn}</p>
+                <p><b>Personnummer: </b>${dyr.pnr}</p>
+                <p><b>Adresse: </b>${dyr.adr}</p>
+                <br>
+
+            `
+        }
+    }
+    inpPnr.addEventListener("input", finnDyr);
+    seAlt.onclick = visAlleDyr();
 
 </script>
 
