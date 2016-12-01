@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+
+            box-sizing: border-box;
+        }
+
+        @keyframes pulse {
+            0%      {transform: translateY(0)}
+            100%    {transform: translateY(-0.2em)}
+        }
+        button, input {
+            border: none;
+            margin: 0.1em;
+            padding: 1em;
+            background-color: lightgray;
+            color: black;
+            font-size: 1.2em;
+            transition: 0.5s ease;
+            outline: none;
+        }
+        p {
+            font-size: 1.2em;
+            text-align: center;
+        }
+        button:hover {
+
+            transform: translateY(-0.2em);
+            transition: 0.1s ease;
+            background-color: #eaeaea;
+        }
+        button:active {
+            animation: pulse 0.2s;
+        }
+        #noteark {
+            padding: 1em;
+            border: solid 0.2em lightgray;
+            font-family: sans-serif;
+            min-height: 2em;
+            font-size: 1.3em;
+        }
+        .rad {
+            display: flex;
+            flex-direction: row;
+        }
+        .rad > * {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+        }
+        #knapper > *{
+            flex: 1;
+        }
+        #volume {
+            flex: 3;
+        }
+        #ui {
+            border: solid 0.2em #7ccbf0;
+            padding: 0.2em;
+            max-width: 50em;
+            position: relative;
+            margin: auto;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <div class="rad">
+            <p>Volume</p>
+            <input id="volume" type="range" min="0" max="1" step="0.001" value="0.3"/>
+        </div>
+        <div class="rad">
+            <div id="knapper"></div>
+        </div>
+        <div class="rad">
+            <button id="play">Play</button>
+            <button id="clear">Clear</button>
+        </div>
+        <div class="rad">
+            <div id="noteark"></div>
+        </div>
+    </div>
+
+
+    <script>
+        var noteark = document.getElementById("noteark");
+        var knapper = document.getElementById("knapper");
+        var play = document.getElementById("play");
+        var clear = document.getElementById("clear");
+        var volume = document.getElementById("volume");
+
+        //AudioContext og volumbar
+        var ac = new AudioContext();
+        var gainNode = ac.createGain();
+        gainNode.gain.value = 0.3;
+        document.getElementById('volume').addEventListener('change', function() {
+            gainNode.gain.value = this.value;
+        });
+
+        //Frekvensene defineres som noter
+        var noteFrekvenser = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+        var C = noteFrekvenser[0];
+        var D = noteFrekvenser[1];
+        var E = noteFrekvenser[2];
+        var F = noteFrekvenser[3];
+        var G = noteFrekvenser[4];
+        var A = noteFrekvenser[5];
+        var H = noteFrekvenser[6];
+
+        var noter = ["C", "D", "E", "F", "G", "A", "H"];
+        var noteliste = [];
+
+        for(var k=0; k<7; k++) {
+            var knapp = document.createElement("button");
+            knapp.innerHTML = noter[k];
+            knapp.classname = "noteknapp";
+            knapper.appendChild(knapp);
+            knapp.onclick = leggTilNote;
+
+        }
+        function leggTilNote() {
+            noteliste.push(this.innerHTML);
+            console.log(noteliste);
+
+            var nyNote = document.createElement("div");
+            nyNote.style.height = 2 + "em";
+            nyNote.style.backgroundColor = "red";
+            nyNote.style.width = 1 + "em";
+            nyNote.classname = "nyNote";
+            nyNote.style.marginTop = eval(this.innerHTML) + "px";
+            nyNote.innerText = this.innerHTML;
+            noteark.appendChild(nyNote);
+        }
+
+
+
+        play.onclick = function() {
+            for (var i = 0; i < noteliste.length; i++) {
+
+                var osc = ac.createOscillator();
+                osc.connect(gainNode);
+                gainNode.connect(ac.destination);
+
+                var freq = eval(noteliste[i]); //Jeg skjønte hva eval([...]) gjør fra kalkulatoren
+                osc.frequency.value = freq;
+
+                console.log(noteliste[i]);
+                console.log(freq);
+
+                osc.start(ac.currentTime + i / 3);
+                osc.stop(ac.currentTime + i / 3+ 0.2);
+            }
+        };
+
+        clear.onclick = function() {
+            noteliste = [];
+            noteark.innerHTML = noteliste;
+        };
+
+
+        //for (var i = 0; i < frekvenser.length; i++) {
+//
+        //    var frekvens = frekvenser[i];
+        //    var osc = ac.createOscillator();
+        //    osc.connect(ac.destination);
+        //    osc.type = "square";
+//
+        //    osc.frequency.value = frekvens + i * 16;
+        //    osc.start(i / 4);
+        //    osc.stop(i / 4+ 0.2);
+        //}
+
+
+        //osc.start(ac.currentTime);
+        //osc.stop(ac.currentTime + 0.5);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Last opp vilder</title>
+    <style>
+        html {
+            background-color: lightgray;
+        }
+        body {
+            max-width: 32em;
+            margin: auto;
+            padding: 1em;
+            font-family: sans-serif;
+            font-size: 1.2em;
+            background-color: white;
+            box-shadow: rgba(0,0,0,0.1) 0 0.2em 0.3em;
+        }
+        form {
+            display: flex;
+        }
+        form > * {
+            padding: 0.7em;
+
+            font-size: 0.9em;
+        }
+        form > input{
+            display: flex;
+          flex: 3;
+        }
+        button {
+            flex: 1;
+        }
+        .aspect-ratio {
+            position: relative;
+            margin-top: 1em;;
+            width: 100%;
+            height: 0;
+            padding-bottom: 55%;
+        }
+        .aspect-ratio iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0; top: 0;
+        }
+        iframe {
+
+
+        }
+    </style>
+</head>
+<body>
+<form action="" id="regVideo">
+    <p>YouTube-video-kode:</p>
+    <input type="text" id="videoURL" placeholder="Eksempel: 7An-txUkCvk" required>
+    <button type="submit">OK</button>
+</form>
+
+<div id="visVideoer"></div>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyBUPcXMIeKrAzk6bn2L4uJk96SsYixdkp8",
+        authDomain: "itfredag.firebaseapp.com",
+        databaseURL: "https://itfredag.firebaseio.com",
+        storageBucket: "itfredag.appspot.com",
+        messagingSenderId: "397592999262"
+    };
+    firebase.initializeApp(config);
+</script>
+<script>
+
+    var database = firebase.database();
+    var storage = firebase.storage();
+
+    var regVideo = document.getElementById("regVideo");
+    var videoURL = document.getElementById("videoURL");
+    var visVideoer = document.getElementById("visVideoer");
+
+    var mineVideoer = database.ref("minevideoer");
+
+
+    regVideo.onsubmit = function(evt) {
+        evt.preventDefault();
+        mineVideoer.push({
+            videourl: videoURL.value
+
+        });
+
+
+        videoURL.value = "";
+
+    };
+    mineVideoer.on("child_added", function(snap){
+        var data = snap.val();
+        visVideoer.innerHTML += `
+        <div class="aspect-ratio">
+        <iframe src="https://www.youtube.com/embed/${data.videourl}" frameborder="0" allowfullscreen></iframe>
+        </div>
+        `
+    });
+
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

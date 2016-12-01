@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div id="bildeshow">
+        <img src="img01.jpg" id="imgtag">
+    </div>
+
+    <script>
+        var bildeshow = document.getElementById("bildeshow");
+        var imgtag = document.getElementById("imgtag");
+
+        var bilder = ["img01.jpg", "img02.jpg", "img03.jpg","img04.jpg", "img05.jpg"];
+
+        var i = 0;
+        bildeshow.onclick = function() {
+
+
+            imgtag.src = bilder[i];
+            if(i>=bilder.length - 1) {
+                i = 0;
+            } else {
+                i++;
+            }
+
+        }
+
+
+    </script>
+
+</body>
+</html>

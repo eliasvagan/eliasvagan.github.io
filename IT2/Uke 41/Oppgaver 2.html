@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgaver s.105</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <a href="Oppgaver.html">Side 99</a>
+    <h1>Oppgaver side 105</h1>
+    <div class="oppgave">
+        <h2>1</h2>
+        <p id="p1"></p>
+        <script>
+            var p1 = document.getElementById("p1");
+            function skriv(bokside) {
+                p1.innerHTML += "Lekse på side: " + bokside + "<br>";
+            }
+            skriv(123);
+            skriv(421);
+            skriv(512);
+        </script>
+    </div>
+<div class="oppgave">
+    <h2>2</h2>
+    <table id="t2">
+        <tr>
+            <th>Fornavn</th>
+            <th>Etternavn</th>
+            <th>Nummer</th>
+        </tr>
+    </table>
+    <script>
+        var t2 = document.getElementById("t2");
+        function nyKontakt(fornavn,etternavn,telefon) {
+            t2.innerHTML += `
+                <tr>
+                    <td>${fornavn}</td>
+                    <td>${etternavn}</td>
+                    <td>${telefon}</td>
+                </tr>
+            `
+        }
+        nyKontakt("Elias", "Vågan", "9845657865");
+        nyKontakt("Shrek", "Swamp", "987845632");
+        nyKontakt("Mister","Tank","4565123256");
+
+        //t2.innerHTML += "<tr><td>" + fornavn +"</td><td>" + etternavn +"</td><td>" + telefon + "</td></tr>";
+
+
+    </script>
+</div>
+<div class="oppgave">
+    <h2>3</h2>
+    <p>f(x) = 3x</p>
+    <input id="i3" type="number" placeholder="x" oninput="calculateX()">
+    <p id="p3"></p>
+    <script>
+        var p3 = document.getElementById("p3");
+
+        function calculateX() {
+            var i3 = document.getElementById("i3");
+            var svar3 = i3.value;
+            p3.innerText = "f(" + svar3 + ") = " + svar3*3;
+
+        }
+    </script>
+
+</div>
+<div class="oppgave">
+    <h2>4</h2>
+    <input type="text" id="i41" placeholder="Tekst" oninput="lagDiv()">
+    <input type="number" id="i42" min="0" max="40" placeholder="Bredde" oninput="lagDiv()">
+    <input type="number" id="i43" min="0" max="40" placeholder="Høyde" oninput="lagDiv()">
+    <input type="color" id="i44" oninput="lagDiv()">
+    <div id="minDiv"></div>
+
+    <script>
+        var i41 = document.getElementById("i41");
+        var i42 = document.getElementById("i42");
+        var i43 = document.getElementById("i43");
+        var i44 = document.getElementById("i44");
+        var minDiv = document.getElementById("minDiv");
+        
+        function lagDiv() {
+
+            var tekst = i41;
+            var bredde = i42;
+            var hoyde = i43;
+            var farge = i44;
+            
+            minDiv.style.width = bredde.value + "em";
+            minDiv.style.height = hoyde.value  +"em";
+            minDiv.style.position = "absolute";
+            minDiv.innerHTML = tekst.value;
+            minDiv.style.backgroundColor = farge.value;
+            minDiv.style.padding = "1em";
+            minDiv.style.marginTop = "1em";
+            minDiv.style.marginLeft = "calc(50% - " + bredde.value/2 + "em)";
+            minDiv.style.lineHeight = hoyde.value + "em";
+            minDiv.style.textAlign = "center";
+            console.log(farge);
+            console.log(farge.value);
+
+        }
+
+
+
+    </script>
+
+
+
+
+</div>
+
+
+</body>
+</html>

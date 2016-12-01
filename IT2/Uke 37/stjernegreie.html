@@ -50,7 +50,12 @@
     }
 
     document.onclick = scramble;
-
+    document.onmousedown = function(){
+        setInterval(scramble, 10);
+    };
+    document.onmouseup = function(){
+        scramble();
+    };
 </script>
 
 </body>

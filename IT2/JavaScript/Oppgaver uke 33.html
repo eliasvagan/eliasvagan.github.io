@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Uke 33</title>
+    <link rel="stylesheet" href="uke%2033.css">
+</head>
+<body>
+    <section id="main">
+
+        <div class="break">
+            <h1>Uke 33</h1>
+            <p>Oppgaver med JavaScript</p>
+        </div>
+        <div class="break">
+            <div>
+                <h2>Side 32</h2>
+                <!-- OPPGAVE 1 -->
+                <p><b>Oppgave 1</b></p>
+                <p>Trykk på knappen for å starte scriptet</p>
+                <button id="O1">Knappen</button>
+                <script>
+                    document.getElementById("O1").onclick = function() {
+                        alert("Informasjonsteknologi 2");
+                    };
+                </script>
+            </div>
+            <div>
+                <!-- OPPGAVE 2 -->
+                <p><b>Oppgave 2</b></p>
+                <button id="O2">Vis navn</button>
+                <p id="NavneBoks" class="textBox"></p>
+                <script>
+                    document.getElementById("O2").onclick = function() {
+                        document.getElementById("NavneBoks").innerHTML = "Simen og Elias";
+                    }
+                </script>
+            </div>
+            <div>
+                <!-- OPPGAVE 3 -->
+                <p><b>Oppgave 3</b></p>
+                <button id="O3">Oppgi navn</button>
+                <script>
+                    document.getElementById("O3").onclick = function() {
+                        prompt("Hva heter du?");
+                    }
+                </script>
+            </div>
+            <div>
+                <!-- OPPGAVE 4 -->
+                <p><b>Oppgave 4</b></p>
+                <p>Ordet "String" betyr alt som man plasserer innenfor anførselstegn i JavaScript som skal være tekst eller andre ting som ikke skal tolkes som kode for noe annet.</p>
+
+            </div>
+        </div>
+        <div class="break">
+            <div>
+                <h2>Side 37</h2>
+                <!-- OPPGAVE 5  -->
+                <p><b>Oppgave 5</b></p>
+                <p>Trykk på knappene for å se høyden og nanvnet på nettleseren.</p>
+                <button id="O5A">Vis høyde</button>
+                <p id="HøydeBoks" class="textBox"></p>
+                <script>
+                    document.getElementById("O5A").onclick = function() {
+                        document.getElementById("HøydeBoks").innerHTML = "Nettleseren din er " + window.innerHeight + " piksler høy.";
+                    }
+                </script>
+                <button id="O5B">Vis nettlesernavn</button>
+                <p id="NettleserBoks" class="textBox"></p>
+                <script>
+                    document.getElementById("O5B").onclick = function() {
+                        document.getElementById("NettleserBoks").innerHTML = "Nettleseren din heter " + navigator.appVersion + ".";
+                    }
+                </script>
+            </div>
+            <div>
+                <!-- OPPGAVE 6 -->
+                <p><b>Oppgave 6</b></p>
+                <button id="O6">Endre overskriften</button>
+                <div class="eksempelDiv">
+                    <h1 id="O6Header">Gammel overskrift</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ab adipisci consequatur distinctio
+                        dolores dolorum facilis harum inventore minima nobis omnis perferendis, tempore! Dolores mollitia
+                        praesentium quasi tempora tempore temporibus.</p>
+                </div>
+                <script>
+                    document.getElementById("O6").onclick = function() {
+                        document.getElementById("O6Header").innerHTML = "Ny overskrift";
+                    }
+                </script>
+            </div>
+            <div>
+                <!-- OPPGAVE 7 -->
+                <p><b>Oppgave 7</b></p>
+                <p>Trykk på knappen for å endre det følgende innholdet.</p>
+                <button id="O7">Knappen</button>
+                <div id="endreDiv" class="eksempelDiv">
+                    <h1>Her er overskriften</h1>
+                    <p>Dette er litt tekst. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cum dignissimos ex exercitationem expedita illo inventore ipsa iste itaque, libero nemo pariatur perferendis perspiciatis, rerum vero? Distinctio esse est neque?</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis consectetur cum
+                        cupiditate itaque molestias omnis perferendis perspiciatis sed, ut?</p>
+                </div>
+                <script>
+                    document.getElementById("O7").onclick = function() {
+                        document.getElementById("endreDiv").innerHTML = `
+                            <h1>Her er en ny overskrift</h1>
+                            <p>Dette er en ny tekst, så legg merke til endringene.</p>
+                            <p>Ryan Lochte selv skal altså være tilbake i USA, selv om en dommer i Brasil skal ha bestemt at også han skal få inndratt passet. Men Lochte rakk å forlate OL-byen før politiet reagerte.</p>
+                        `;
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="break">
+            <div>
+                <h2>Side 42</h2>
+                <!-- OPPGAVE 8 -->
+                <p><b>Oppgave 8</b></p>
+                <button id="O8">Legg til innhold</button>
+                <div class="eksempelDiv">
+                    <h1>Overskrift</h1>
+                    <p id="O8text">Dette er en p-tag med noe innhold.</p>
+                </div>
+                <script>
+                    document.getElementById("O8").onclick = function() {
+                        document.getElementById("O8text").innerHTML += " Nå er det mer innhold her";
+                    }
+                </script>
+            </div>
+            <div>
+                <!-- OPPGAVE 9, 10 OG 11 -->
+                <p><b>Oppgave 9, 10 og 11</b></p>
+                <p>Vi endrer bilde ved å trykke på en knapp.</p>
+                <button id="O9">En knapp</button>
+                <img src="teletub1.png" id="IMGO9">
+                <script>
+                    var thunder = new Audio('thunder2.wav');
+
+                    document.getElementById("O9").onclick = function() {
+                        document.getElementById("IMGO9").src = "teletub2.png";
+                        thunder.play();
+                    }
+                </script>
+            </div>
+            <div>
+                <!-- OPPGAVE 12 -->
+                <p><b>Oppgave 12</b></p>
+                <p>Trykk på knappen for å duplisere innholdet fra den ene boksen til den andre.</p>
+                <p><i>Scriptet gjør også at vinduet scroller ned i samme slengen.</i></p>
+                <button id="O12">Dupliser!</button>
+                <div class="eksempelDiv" id="kopiBoks1">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut culpa, dignissimos dolore eum facere
+                        nihil nulla quae rem? A accusamus aliquid consequatur eos eum inventore officiis optio quas tenetur
+                        vitae!</p>
+                </div>
+                <br>
+                <div class="eksempelDiv" id="kopiBoks2"></div>
+                <script>
+                    document.getElementById("O12").onclick = function(){
+                        document.getElementById("kopiBoks2").innerHTML = document.getElementById("kopiBoks1").innerHTML;
+                        window.scrollBy(0, 100);
+                    }
+                </script>
+            </div>
+        </div>
+        <p class="footer">
+            Laget av Simen og Elias 18.Aug 2016
+        </p>
+    </section>
+
+</body>
+</html>

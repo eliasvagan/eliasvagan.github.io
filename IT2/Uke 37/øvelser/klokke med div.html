@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Klokkar</title>
+    <style>
+        #urskive {
+            position: relative;
+            margin: auto;
+            width: 40em;
+            height: 40em;
+            background-color: #cdcdcd;
+            border-radius: 50%;
+            border: solid 0.2em #929292;
+            box-sizing: border-box;
+            background-image: url(clock_numbers.svg);
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+        }
+        #timeviser, #minuttviser, #sekundviser {
+            position: absolute;
+            background-color: #373737;
+            bottom: 50%;
+            transform-origin: center bottom;
+        }
+        #lokk {
+            width: 1.6em;
+            height: 1.6em;
+            border-radius: 2em;
+            background-color: #373737;
+            position: absolute;
+            top: calc(50% - 0.8em);
+            left: calc(50% - 0.8em);
+        }
+        #sekundviser {
+            left: calc(50% - 0.25em);
+            top: 1em;
+            height: 19em;
+            width: 0.5em;
+            border-radius: 2em;
+            background-color: red;
+            transform-origin: center bottom;
+
+        }
+        #minuttviser {
+            left: calc(50% - 0.5em);
+            height: 18em;
+            width: 1em;
+            border-radius: 2em;
+        }
+        #timeviser {
+            left: calc(50% - 0.8em);
+            height: 15em;
+            width: 1.6em;
+            border-radius:2em 2em 0 0;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="urskive">
+        <div id="timeviser"></div>
+        <div id="minuttviser"></div>
+        <div id="sekundviser"></div>
+        <div id="lokk"></div>
+
+    </div>
+
+    <script>
+
+        var urskive = document.getElementById("urskive");
+        var minuttviser = document.getElementById("minuttviser");
+        var sekundviser = document.getElementById("sekundviser");
+        var timeviser = document.getElementById("timeviser");
+        var lokk = document.getElementById("lokk");
+
+        function visTid() {
+
+            var dato = new Date();
+            var timer = dato.getHours();
+            var minutter = dato.getMinutes();
+            var sekunder = dato.getSeconds();
+            var millisekunder = dato.getMilliseconds();
+            console.log(millisekunder);
+
+
+            sekundviser.style.transform = `rotate(${millisekunder * 0.006 + sekunder * 6}deg)`;
+            minuttviser.style.transform = `rotate(${minutter * 6 + sekunder * 0.06}deg)`;
+            timeviser.style.transform = `rotate(${timer * 30 + minutter * 0.5}deg)`;
+
+        }
+
+        visTid();
+        setInterval(visTid, 20);
+
+    </script>
+
+</body>
+</html>

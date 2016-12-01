@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Uppgavor uke 35</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <div class="side">
+        <h1>s.64</h1>
+
+        <div class="oppgave">
+            <h3>Oppgave 1</h3>
+            <script>
+
+                var prisFrukt = Number(3);
+                var prisGronnsaker = Number(2);
+
+                document.write(`
+                pris frukt: ${prisFrukt} <br>
+                pris grønnsaker: ${prisGronnsaker} <br>
+                Totalt pris varer: ${prisFrukt + prisGronnsaker}
+            `);
+
+            </script>
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 2</h3>
+            <p>Momskalkulator med 25% momss</p>
+            <input type="number" id="inputPris" placeholder="Original pris">
+            <p id="moms"></p>
+
+            <script>
+                //Definerer input of p-tag
+                var inputPris = document.getElementById("inputPris");
+                var moms = document.getElementById("moms");
+
+                //Regner ut pris
+                inputPris.oninput = function() {
+                    var momsPris = (inputPris.value * 1.25).toFixed(1);
+                    moms.innerHTML = "Pris med moms: " + momsPris;
+                };
+            </script>
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 3</h3>
+            <p>Kalkulator for mobilabonnement</p>
+            <table>
+                <tr>
+                    <td>Datamengde</td>
+                    <td>
+                        <input type="number" id="datamengde" placeholder="gigabytes">
+                    </td>
+                </tr>
+                <tr>
+                    <td>pris samtaler</td>
+                    <td>
+                        <input type="number" id="prisSamtaler">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ringetid</td>
+                    <td>
+                        <input type="number" id="ringetid" placeholder="minutter">
+                    </td>
+                </tr>
+                <tr>
+                    <td>pris SMS</td>
+                    <td>
+                        <input type="number" id="prisSMS">
+                    </td>
+                </tr>
+                <tr>
+                    <td>pris MMS</td>
+                    <td>
+                        <input type="number" id="prisMMS">
+                    </td>
+                </tr>
+                <tr>
+                    <td><!--<button id="btnRegnUt">Regn ut</button>--></td>
+                    <td id="totalSum">
+                        <b>Totalsum: </b>
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <script>
+
+                var inpdatamengde = document.getElementById("datamengde");
+                var inpprisSamtaler = document.getElementById("prisSamtaler");
+                var inpringetid = document.getElementById("ringetid");
+                var inpprisSMS = document.getElementById("prisSMS");
+                var inpprisMMS = document.getElementById("prisMMS");
+                var btnRegnUt = document.getElementById("btnRegnUt");
+                var totalSum = document.getElementById("totalSum");
+
+                function regnUt() {
+                    var prisSum = inpdatamengde.value * 40 + inpprisSamtaler.value * 0.89 +
+                            inpringetid.value * 0.39 + inpprisSMS.value * 0.69 +
+                            inpprisMMS.value * 1.99;
+                    totalSum.innerHTML ="<b>Totalsum:</b>" + prisSum.toFixed(2) + "kr";
+                }
+
+                inpdatamengde.oninput = inpprisSamtaler.oninput = inpringetid.oninput = inpprisSMS.oninput = inpprisMMS.oninput = regnUt;
+            </script>
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 4</h3>
+            <p>Array med 5 verdier.</p>
+            <button id="knappOppgave4">Hent film #5</button>
+            <p><b id="tekstOppgave4"></b></p>
+            <script>
+                var tekstOppgave4 = document.getElementById("tekstOppgave4");
+                var knappOppgave4 = document.getElementById("knappOppgave4");
+
+                var filmer = [];
+                filmer.push(
+                        "Tarzan",
+                        "Titanic",
+                        "Avatar",
+                        "The Godfather",
+                        "Charlie and the Chocolate Factory"
+                );
+
+                knappOppgave4.onclick = function () {
+                    tekstOppgave4.innerHTML = filmer[4];
+                }
+
+
+            </script>
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 5</h3>
+            <p>Objekter med egenskaper</p>
+            <button id="knappOppgave51">Hent frukt</button>
+            <button id="knappOppgave52">Endre frukt 2</button>
+            <p id="tekstOppgave5"></p>
+
+            <script>
+                var appelsiner = {};
+                appelsiner.id = "Appelsiner";
+                appelsiner.pris = 34;
+                appelsiner.vekt = 0.5;
+                appelsiner.farge = "oransje";
+
+                var epler = {};
+                epler.id = "Epler";
+                epler.pris = 29;
+                epler.vekt = 0.3;
+                epler.farge = "grønn";
+
+                var bananer = {};
+                bananer.id = "Bananer";
+                bananer.pris = 21;
+                bananer.vekt = 0.2;
+                bananer.farge = "gul";
+
+                var knappOppgave51 = document.getElementById("knappOppgave51");
+                var knappOppgave52 = document.getElementById("knappOppgave52");
+                
+
+                function visFrukt() {
+                    tekstOppgave5.innerHTML =
+                            "<b>" + bananer.id + "</b>" + ": " + bananer.pris + "kr, " + bananer.vekt + "kg, farge: " + bananer.farge + "<br>" +
+                            "<b>" + appelsiner.id + "</b>" + ": " + appelsiner.pris + "kr, " + appelsiner.vekt + "kg, farge: " + appelsiner.farge + "<br>" +
+                            "<b>" + epler.id + "</b>" + ": " + epler.pris + "kr, " + epler.vekt + "kg, farge: " + epler.farge
+                    ;
+                }
+                knappOppgave51.onclick = visFrukt;
+
+                knappOppgave52.onclick = function () {
+                    appelsiner.pris = 9001;
+                    visFrukt();
+                };
+            </script>
+        </div>
+
+    </div>
+    <div class="side">
+        <div class="oppgave">
+            <h1>s.69</h1>
+
+            <h3>Oppgave 1</h3>
+            <p id="tekst01"></p>
+            <script>
+                var tekst01 = document.getElementById("tekst01");
+                tekst01.innerHTML = "Denne teksten er plassert i JS."
+            </script>
+        </div>
+
+        <div class="oppgave">
+            <h3>Oppgave 2</h3>
+            <p>Hva heter du?</p>
+            <input type="text" id="input02">
+            <button id="button02">Send</button>
+            <p id="tekst02"></p>
+            <script>
+                var tekst02 = document.getElementById("tekst02");
+                var input02 = document.getElementById("input02");
+                var button02 = document.getElementById("button02");
+                button02.onclick = function() {
+                    tekst02.innerHTML = "Ditt svar er: " + input02.value;
+                }
+            </script>
+
+        </div>
+
+
+        <div class="oppgave">
+            <h3>Oppgave 3</h3>
+            <button id="button03">Hent filmer</button>
+            <p id="tekst03"></p>
+            <script>
+                var button03 = document.getElementById("button03");
+                var tekst03 = document.getElementById("tekst03");
+                var filmer03 = ["Titanic", "District 9", "Avatar", "Sucker Punch"];
+                button03.onclick = function () {
+                    tekst03.innerHTML = filmer03;
+                };
+            </script>
+        </div>
+    </div>
+    <div class="side">
+
+    </div>
+        <div class="side">
+            <h1>s.79</h1>
+
+        <div class="oppgave">
+            <h3>Oppgave 1</h3>
+
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 2</h3>
+
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 3</h3>
+
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 4</h3>
+
+
+
+        </div>
+    </div>
+    <div class="side">
+            <h1>s.83</h1>
+
+        <div class="oppgave">
+            <h3>Oppgave 1</h3>
+
+
+
+        </div>
+
+        <div class="oppgave">
+            <h3>Oppgave 2</h3>
+
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 3</h3>
+
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 4</h3>
+
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 4</h3>
+
+
+
+        </div>
+    </div>
+
+
+    <footer>
+        Simen og Elias
+    </footer>
+
+</body>
+</html>

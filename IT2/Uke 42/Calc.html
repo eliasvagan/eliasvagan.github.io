@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalkis brushan</title>
+    <style>
+        button, input {
+            padding: 1em;
+            background-color: white;
+            color: black;
+            font-family: sans-serif;
+            font-size: 1.2em;
+            border: solid 0.2em lightgray;
+            border-radius: 0.3em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <input type="text" id="skjerm">
+    <button id="ce">Clear</button>
+    <button id="b1">1</button>
+    <button id="b2">2</button>
+    <button id="b3">3</button>
+    <button id="pluss">+</button>
+
+
+    <button id="lik">=</button>
+
+    <script>
+        var skjerm = document.getElementById("skjerm");
+        var b1 = document.getElementById("b1");
+        var b2 = document.getElementById("b2");
+        var b3 = document.getElementById("b3");
+        var pluss = document.getElementById("pluss");
+        var lik = document.getElementById("lik");
+        var ce = document.getElementById("ce");
+        
+
+
+        function skrivTegn() {
+            skjerm.value += this.innerHTML;
+        }
+        function regnUt() {
+            var regneStykke = skjerm.value;
+            var svar = eval(regneStykke);
+            skjerm.value = svar;
+        }
+
+        b1.onclick = skrivTegn;
+        b2.onclick = skrivTegn;
+        b3.onclick = skrivTegn;
+        pluss.onclick = skrivTegn;
+
+        lik.onclick = regnUt;
+        ce.onclick = function clear() {
+            skjerm.value = 0;
+        }
+
+    </script>
+
+</body>
+</html>

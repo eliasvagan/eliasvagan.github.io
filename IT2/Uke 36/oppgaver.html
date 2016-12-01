@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgaver</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <div class="side">
+        <h1>s.72</h1>
+
+        <div class="oppgave">
+            <h3>Oppgave 1</h3>
+            <p>Canvas med rød firkant</p>
+            <canvas id="c721" width="200" height="150"></canvas>
+            <script>
+                var c721 = document.getElementById("c721");
+                var ctx721 = c721.getContext("2d");
+                ctx721.fillStyle = "Red";
+                ctx721.fillRect(30,20,50,50);
+
+
+            </script>
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 2</h3>
+            <canvas id="c722" width="500" height="400"></canvas>
+            <script>
+                var c722 = document.getElementById("c722");
+                var ctx722 = c722.getContext("2d");
+
+                //Firkant
+                ctx722.fillStyle = "Green";
+                ctx722.strokeStyle = "Red";
+                ctx722.lineWidth = 5;
+                ctx722.fillRect(20, 50, 150, 200);
+                ctx722.strokeRect(20, 50, 150, 200);
+
+                //Trekant
+                ctx722.fillStyle = "Blue";
+                ctx722.moveTo(250, 50);
+                ctx722.lineTo(400, 300);
+                ctx722.lineTo(100, 300);
+                ctx722.fill();
+
+
+            </script>
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 3</h3>
+            <canvas id="c723" width="500" height="400"></canvas>
+            <script>
+                var c723 = document.getElementById("c723");
+                var ctx723 = c723.getContext("2d");
+                ctx723.fillStyle = "lightBlue";
+                ctx723.fillRect(100, 200, 300, 100);
+
+                ctx723.fillStyle = "lightGreen";
+                ctx723.moveTo(250, 100);
+                ctx723.lineTo(450,200);
+                ctx723.lineTo(50, 200);
+                ctx723.lineTo(250, 100);
+                ctx723.fill();
+
+
+            </script>
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 4</h3>
+            <canvas id="c724" width="500" height="650"></canvas>
+            <script>
+                var c724 = document.getElementById("c724");
+                var ctx724 = c724.getContext("2d");
+
+                ctx724.fillStyle = "Red";
+                ctx724.fillRect(0,0,500,300);
+
+                ctx724.fillStyle = "White";
+                ctx724.fillRect(0, 100, 500, 100);
+                ctx724.fillRect(150, 0, 100, 300);
+
+                ctx724.fillStyle = "Blue";
+                ctx724.fillRect(0, 125, 500, 50);
+                ctx724.fillRect(175, 0, 50, 300);
+
+                ctx724.fillStyle = "Red";
+                ctx724.fillRect(0, 350, 500, 50);
+
+                ctx724.fillStyle = "Orange";
+                ctx724.fillRect(0, 400, 500, 50);
+
+                ctx724.fillStyle = "Yellow";
+                ctx724.fillRect(0, 450, 500, 50);
+
+                ctx724.fillStyle = "Green";
+                ctx724.fillRect(0, 500, 500, 50);
+
+                ctx724.fillStyle = "Blue";
+                ctx724.fillRect(0, 550, 500, 50);
+
+                ctx724.fillStyle = "Purple";
+                ctx724.fillRect(0, 600, 500, 50);
+
+
+            </script>
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 5</h3>
+            <button id="btn725">Sett inn farger!</button>
+            <p>Husk å skrive fargene på engelsk med stor forbokstav.</p>
+            <p><b>Eksempel:</b> "Yellow"</p>
+            <canvas id="c725" width="500" height="200"></canvas>
+            <script>
+                var btn725 = document.getElementById("btn725");
+                var c725 = document.getElementById("c725");
+                var ctx725 = c725.getContext("2d");
+
+                btn725.onclick = function() {
+                    var farge1 = prompt("Farge nummer 1");
+                    var farge2 = prompt("Farge nummer 2");
+                    var farge3 = prompt("Farge nummer 3");
+
+                    ctx725.fillStyle = farge1;
+                    ctx725.fillRect(0, 0, 150, 200);
+
+                    ctx725.fillStyle = farge2;
+                    ctx725.fillRect(175, 0, 150, 200);
+
+                    ctx725.fillStyle = farge3;
+                    ctx725.fillRect(350, 0, 150, 200);
+
+
+                };
+
+            </script>
+
+
+        </div>
+    </div>
+    <div class="side">
+        <h1>s.79</h1>
+        <div class="oppgave">
+
+            <h2>Oppgave 1</h2>
+            <button id="knapp01">Harambe</button>
+            <p id="tekst01"></p>
+            <script>
+                var tekst01 = document.getElementById("tekst01");
+                var knapp01 = document.getElementById("knapp01");
+                var svar01 = 0;
+
+                knapp01.onclick = function () {
+                    svar01 = prompt("Hvilket år ble grunnloven skrevet?");
+                    if (svar01 == 1814) {
+                        tekst01.innerHTML = "Du svarte riktig.";
+                    } else {
+                        tekst01.innerHTML = "Du svarte feil."
+                    }
+                };
+
+
+            </script>
+
+
+        </div>
+        <div class="oppgave">
+
+            <h1>Oppgave 2</h1>
+            <button id="knapp02">Harambe's quiz</button>
+            <p id="tekst02"></p>
+            <script>
+
+                var knapp02 = document.getElementById("knapp02");
+                var tekst02 = document.getElementById("tekst02");
+
+
+                knapp02.onclick = function () {
+                    svar02 = prompt("Hva heter verdens beste gorilla?");
+                    if (svar02 == "Harambe") {
+                        tekst02.innerHTML = `<img src="harambe.png">`;
+                    } else {
+                        tekst02.innerHTML = `<img src="ladybird.jpg">`;
+                    }
+                };
+
+
+            </script>
+
+
+        </div>
+        <div class="oppgave">
+            <h1>Oppgave 3</h1>
+            <script>
+                var tall = "4";
+                if(tall == 4) {
+                    document.write("sann");
+                }
+                else {
+                    document.write("sepukku")
+                }
+            </script>
+        </div>
+
+
+
+        <div class="oppgave">
+            <h1>Oppgave 4</h1>
+            <p>Du kan svare med enten stor eller liten forbokstav.</p>
+            <button id="knapp03">Dato Mayhem</button>
+            <p id="tekst03"></p>
+            <script>
+
+                var knapp03 = document.getElementById("knapp03");
+                var tekst03 = document.getElementById("tekst03");
+
+                function godDag() {
+
+
+                }
+                function godHelg() {
+
+
+                }
+                function fredag13() {
+
+
+                }
+
+
+                knapp03.onclick = function () {
+                    svar03 = prompt("Ukedag");
+                    svar04 = prompt("dato");
+
+
+                    if (svar03 === "Fredag" || "fredag" ){
+                        if (svar04 == "13") {
+                            tekst03.innerHTML = "Pass på! i dag er fredag den 13. <br> <img src='f13.png'>";
+                        }
+                    } else if(svar03 === "lørdag" || "Lørdag" || "søndag" || "Søndag") {
+                        tekst03.innerHTML += "Endelig helg!";
+                    } else {
+                        tekst03.innerHTML = "Ha en god dag! <br> <img src='niceday.png'>";
+                    }
+
+
+                };
+
+
+            </script>
+
+
+
+
+        </div>
+    </div>
+    <div class="side">
+        <h1>s.83</h1>
+        <div class="oppgave">
+            <h3>Oppgave 1</h3>
+
+            <button id="btn831">Random fugl</button>
+            <p id="p831"></p>
+            <script>
+                var p831 = document.getElementById("p831");
+                var btn831 = document.getElementById("btn831");
+                btn831.onclick = function () {
+                    var fugleTall = Math.random() * 2 + 1;
+                    fugleTall = fugleTall.toFixed(0);
+                    console.log(fugleTall);
+
+                    p831.innerHTML =(`<img src="fugler/fugl${fugleTall}.jpg"></img>`);
+
+                };
+            </script>
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 2</h3>
+            <button id="btn832">Kast terningen</button>
+            <p id="p832">
+
+            </p>
+            <script>
+                var btn832 = document.getElementById("btn832");
+                var p832 = document.getElementById("p832");
+
+                btn832.onclick = function () {
+                    var terningTall = Math.random() * 5 + 1;
+                    terningTall = terningTall.toFixed(0);
+                    p832.innerHTML = (`<p>Du fikk terningkast ${terningTall}.</p> <br><img src="terning/Terning${terningTall}.jpg"></img>`)
+                }
+
+
+            </script>
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 3</h3>
+            <button id="btn833">Roll 100!</button>
+            <p id="p833"></p>
+            <script>
+                var p833 = document.getElementById("p833");
+                var btn833 = document.getElementById("btn833");
+                btn833.onclick = function () {
+                    var roll100 = Math.random() * 99 + 1;
+                    roll100 = roll100.toFixed(0);
+                    p833.innerHTML = "Du fikk tallet " + roll100 + ".<br>";
+                    if (roll100<=20) {
+                        p833.innerHTML += "Det var ganske lite. ";
+                        if (roll100<=10) {
+                            p833.innerHTML += "Okei, det var faktisk veldig lite. "
+                        }
+                    } else if (roll100==100) {
+                        p833.innerHTML  += "Gratulerer! Du fikk det største tallet!";
+                    }
+                };
+            </script>
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 4</h3>
+            <p>Oppgaven bygger videre på oppgave 4 fra s.79.</p>
+            <p>Bare scroll opp.</p>
+
+
+        </div>
+        <div class="oppgave">
+            <h3>Oppgave 5</h3>
+            <p>Fyll inn tall og regneart.</p>
+            <input type="number" id="calc1">
+            <datalist id="regneartValg">
+                <option value="+">
+                <option value="-">
+                <option value="*">
+                <option value="/">
+            </datalist>
+            <input type="text" list="regneartValg" id="regneart">
+            <input type="number" id="calc2">
+            <p id="calc"></p>
+            <p id="calcSvar"></p>
+            <button id="btn835">=</button>
+
+
+        </div>
+        <script>
+            var btn835 = document.getElementById("btn835");
+            var calcSvar = document.getElementById("calcSvar");
+            var calc1 = document.getElementById("calc1");
+            var calc2 = document.getElementById("calc2");
+            var regneart = document.getElementById("regneart");
+
+
+
+            btn835.onclick = function () {
+
+                calc1 = Number(calc1);
+                console.log(calc1);
+
+                calc2 = Number(calc2);
+                console.log(calc2);
+
+                regneart = document.getElementById("regneart");
+
+
+                if (regneart = "+") {
+                    calcSvar.innerHTML = "Svar:" +  calc1 + calc2;
+                }
+            };
+
+        </script>
+    </div>
+
+</body>
+</html>

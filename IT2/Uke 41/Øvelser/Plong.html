@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plong</title>
+</head>
+<body>
+
+    <script>
+
+        var ac = new AudioContext();        //Ny audio context
+
+        function pip() {
+            var ac = new AudioContext();
+            var osc = ac.createOscillator();    //Lager en svingning
+            osc.connect(ac.destination);        //Kobler til forsterker
+            osc.start(ac.currentTime);
+            osc.stop(ac.currentTime + 0.5);
+        }
+
+        document.onclick = pip;
+
+    </script>
+
+</body>
+</html>

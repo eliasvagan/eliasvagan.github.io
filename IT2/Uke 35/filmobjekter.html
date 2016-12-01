@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hohoho nissegutt</title>
+</head>
+<body>
+
+    <script>
+        var fornavn = "Filthy";
+        var etternavn = "Frank";
+
+        //Objekter er klumper med informasjon
+        //object literal - på engelsk
+
+        var sharknado = {
+            tittel : "Sharknado",
+            lengde : "1:20",
+            regissor : "David Lynch"
+        };
+        document.write(`
+        ${sharknado.tittel} er ${sharknado.lengde} lang, og er regissert av ${sharknado.regissor}. <br><br>`)
+    </script>
+
+    <script>
+
+        var filmer = ["Sharknado", "E.T", "Jaws"];
+
+        // Dette er en indeksert liste
+        document.write(filmer[1] + "<br>"); // Skriver film nummer 2, E.T
+
+        //Endre film på plass 1
+        filmer[1] = "Poltergeist";
+
+        for(var film of filmer) {
+            document.write(film + ", ");
+        }
+
+
+
+    </script>
+
+</body>
+</html>

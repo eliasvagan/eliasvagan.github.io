@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Klokka</title>
+</head>
+<body>
+    <p id="tiden"></p>
+<script>
+    var tiden = document.getElementById("tiden");
+
+
+    function telling() {
+
+        var dato = new Date();
+
+        var sekunder = dato.getSeconds();
+
+        if(sekunder <= 15) {
+            tiden.innerHTML = "Øvre høyre del<br>Sekunder: " + sekunder;
+        } else if(sekunder <= 30) {
+            tiden.innerHTML = "Nedre høyre del<br>Sekunder: " + sekunder;
+        } else if(sekunder <= 45) {
+            tiden.innerHTML = "Nedre venstre del<br>Sekunder: " + sekunder;
+        } else {
+            tiden.innerHTML = "Øvre venstre del<br>Sekunder: " + sekunder;
+        }
+    }
+    setInterval(telling, 1000)
+
+</script>
+
+</body>
+</html>

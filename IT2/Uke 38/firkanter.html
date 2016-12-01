@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #firkant {
+            background-color: dodgerblue;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+        }
+        #sfirkant {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            /*background-color: darkorange;*/
+        }
+        #hfirkant {
+            width: 40px;
+            height: 80%;
+            right: -20px;
+            top: 0;
+            position: absolute;
+            /*background-color: black;*/
+        }
+        #bfirkant {
+            width: 80%;
+            height: 40px;
+            bottom: -20px;
+            right: 20px;
+            position: absolute;
+            /*background-color: deeppink;*/
+        }
+        #vfirkant {
+            height: 80%;
+            width: 40px;
+            left: -20px;
+            bottom: 20px;
+            position: absolute;
+            /*background-color: yellowgreen;*/
+        }
+        #tfirkant {
+            height: 40px;
+            width: 80%;
+            left: 20px;
+            top: -20px;
+            position: absolute;
+            /*background-color: mediumvioletred;*/
+        }
+    </style>
+</head>
+<body>
+
+<div id="firkant">
+    <div id="sfirkant">
+
+    </div>
+    <div id="hfirkant"></div>
+    <div id="bfirkant"></div>
+    <div id="vfirkant"></div>
+    <div id="tfirkant"></div>
+</div>
+
+<script>
+
+    var firkant = document.getElementById("firkant");
+    var sfirkant = document.getElementById("sfirkant");
+    var bfirkant = document.getElementById("bfirkant");
+    var hfirkant = document.getElementById("hfirkant");
+    var vfirkant = document.getElementById("vfirkant");
+    var tfrikant = document.getElementById("tfrikant");
+
+
+    sfirkant.onmousemove = function mouseMove(ev) {
+        console.log("sfirkant");
+        if(ev.which==1) {
+            var x = event.clientX;
+            var y = event.clientY;
+            var xPos = Number(x);
+            var yPos = Number(y);
+            var v = firkant.offsetLeft;
+            var t = firkant.offsetTop;
+
+            firkant.style.width = xPos - v + "px";
+
+            firkant.style.height = yPos - t + "px";
+        } else {
+
+        }
+    };
+    hfirkant.onmousemove = function mouseMove(ev) {
+        console.log("bfirkant");
+        if(ev.which==1) {
+            var x = event.clientX;
+            //var y = event.clientY;
+            var xPos = Number(x);
+            //var yPos = Number(y);
+
+            var v = firkant.offsetLeft;
+            firkant.style.width = (xPos - v) + "px";
+
+            //firkant.style.height = yPos + "px";
+        } else {
+
+        }
+    };
+    bfirkant.onmousemove = function mouseMove(ev) {
+        console.log("bfirkant");
+        if(ev.which==1) {
+            //var x = event.clientX;
+            var y = event.clientY;
+            //var xPos = Number(x);
+            var yPos = Number(y);
+
+            //firkant.style.width = xPos + "px";
+
+            var t = firkant.offsetTop;
+            firkant.style.height = yPos - t + "px";
+        } else {
+
+        }
+    };
+    vfirkant.onmousemove = function mouseMove(ev) {
+        console.log("bfirkant");
+        if(ev.which==1) {
+            var x = event.clientX;
+            //var y = event.clientY;
+            var xPos = Number(x);
+            //var yPos = Number(y);
+
+
+            firkant.style.left = xPos +"px";
+            //firkant.style.height = yPos + "px";
+        } else {
+
+        }
+    };
+    tfirkant.onmousemove = function mouseMove(ev) {
+        console.log("bfirkant");
+
+        if(ev.which==1) {
+            //var x = event.clientX;
+            var y = event.clientY;
+            //var xPos = Number(x);
+            var yPos = Number(y);
+
+            //firkant.style.width = xPos + "px";
+
+            firkant.style.top = yPos + "px";
+
+
+        } else {
+
+        }
+    };
+</script>
+</body>
+</html>

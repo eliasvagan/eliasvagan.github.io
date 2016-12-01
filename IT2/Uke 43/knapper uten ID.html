@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Litt om knapper</title>
+</head>
+<body>
+    <div id="sangDIV">
+        <button id="knapp1" data-sang="help.mp3" data-bilde="help.jpg">Help</button>
+        <button id="knapp2" data-sang="war.mp3" data-bilde="war.jpg">War</button>
+        <button id="knapp3" data-sang="spaceman.mp3" data-bilde="spaceman.jpg">Spaceman</button>
+        <button id="knapp4" data-sang="time.mp3" data-bilde="time.jpg">Time</button>
+        <button id="knapp5" data-sang="dota.mp3" data-bilde="dota.jpg">Dota</button>
+    </div>
+
+
+    <script>
+        var sanger = document.querySelectorAll("#sangDIV > button");
+
+        console.log(sanger);
+
+        function spillsang() {
+            var sang = this.getAttribute("data-sang");
+            var bilde = this.getAttribute("data-bilde");
+
+            console.log("Sang: " + sang + " Bilde: " + bilde)
+        }
+        for(var sang of sanger) {
+            sang.onclick = spillsang;
+        }
+
+    </script>
+
+</body>
+</html>

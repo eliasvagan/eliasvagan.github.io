@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>svg og sånt</title>
+    <style>
+        circle {
+            fill: red;
+
+            transform-origin: center center;
+        }
+        circle:hover {
+            fill: yellow;
+        }
+    </style>
+</head>
+<body>
+
+    <svg id="paper" width="500" height="500">
+
+        <circle r="200" cx="250" cy="250"></circle>
+
+    </svg>
+
+    <script>
+        var paper = document.getElementById("paper");
+        var radius = 250;
+
+
+
+        while (radius > 0) {
+            paper.innerHTML += `<circle r="${radius}" cx="250" cy="250"></circle>`;
+            radius = radius - 10;
+        }
+    </script>
+
+</body>
+</html>

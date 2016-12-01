@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WhileCanvas</title>
+</head>
+<body>
+
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        ctx.strokeStyle ="red";
+
+        var x = 1;
+        while(x < 400){
+            ctx.strokeStyle = "yellow";
+            if(x % 2 === 0){
+                ctx.strokeStyle = "red";
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(0, 400);
+            ctx.lineTo(150, x);
+            ctx.lineTo(400, 400);
+            ctx.closePath();
+            ctx.stroke();
+
+            x+= 7;
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Runding</title>
+</head>
+<body>
+
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        function degToRad(deg) {
+            return Math.PI * deg / 180;
+        }
+
+        function tegn() {
+
+            var dato = new Date();
+            var grader = dato.getSeconds() * 6;
+
+            ctx.fillRect(0, 0, 400, 400);
+            ctx.fillStyle = "white";
+
+            ctx.arc(200, 200, 200, degToRad(0),degToRad(360));
+            ctx.stroke();
+        }
+        setInterval(tegn, 100)
+    </script>
+
+</body>
+</html>

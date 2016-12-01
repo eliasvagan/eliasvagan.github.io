@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Superbase</title>
+    <style>
+        html {
+            background-color: #e3e3e3;
+            font-family: sans-serif;
+        }
+        section#main {
+            max-width: 35em;
+            margin: auto;
+            background-color: white;
+            padding: 2em;
+        }
+        input {
+            border: solid 0.1em gainsboro;
+            padding: 1em;
+            font-size: 1.1em;
+        }
+        button {
+            border: none;
+            background-color: slategray;
+            color: white;
+            padding: 1em;
+            font-size: 1.2em;
+
+        }
+        .flex {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+        .flex > * {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<section id="main">
+    <form id="regMelding" class="flex">
+        <input type="text" id="inpAvsender" placeholder="Ditt navn" required>
+        <input type="text" id="inpMelding" placeholder="Din melding" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <table id="tableMeldinger"></table>
+
+</section>
+
+
+
+
+
+
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyBUPcXMIeKrAzk6bn2L4uJk96SsYixdkp8",
+        authDomain: "itfredag.firebaseapp.com",
+        databaseURL: "https://itfredag.firebaseio.com",
+        storageBucket: "itfredag.appspot.com",
+        messagingSenderId: "397592999262"
+    };
+    firebase.initializeApp(config);
+</script>
+
+<script>
+
+    var regMelding = document.getElementById("regMelding");
+    var inpAvsender = document.getElementById("inpAvsender");
+    var inpMelding = document.getElementById("inpMelding");
+
+    var minDatabase = firebase.database();
+    var meldinger = minDatabase.ref("meldinger");
+
+    var tableMeldinger = document.getElementById("tableMeldinger");
+
+
+    function visMeldinger(snapshot) {
+        var melding = snapshot.val();
+        var key = snapshot.key;
+        var avsender = melding.avsender;
+        var tekst = melding.tekst;
+
+        tableMeldinger.innerHTML = `
+
+            <tr>
+                <td>${key}</td>
+                <td>${avsender}</td>
+                <td>${tekst}</td>
+            </tr>
+
+        ` + tableMeldinger.innerHTML;
+
+    }
+
+    meldinger.on("child_added", visMeldinger());
+
+    regMelding.onsubmit = function(evt) {
+
+        evt.preventDefault();
+
+        var melding = {
+            avsender: inpAvsender.value,
+            tekst: inpMelding.value
+        };
+        meldinger.push(melding);
+
+        inpMelding.value = "";
+        inpMelding.focus();
+    }
+
+
+</script>
+
+</body>
+</html>

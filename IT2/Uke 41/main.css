@@ -1,0 +1,67 @@
+html {
+    background-color: #e7e7e7;
+}
+body {
+    max-width: 40em;
+    position: relative;
+    margin: 2em auto;
+    font-family: sans-serif;
+    color: #4c4c4c;
+    padding:1em 1em 0 1em;
+
+}
+button {
+    background-color: #4c4c4c;
+    padding: 0.7em 2em;
+    border: none;
+    border-radius: 2em;
+    font-size: 1em;
+    color: #e7e7e7;
+    outline:none;
+}
+button:hover {
+    background-color: #6f6f6f;
+    cursor: pointer;
+}
+p {
+    transition: 0.5s ease;
+}
+code {
+    color: #0015ff;
+    font-size: 1.1em;
+}
+.oppgave {
+    border-left: solid 0.2em darkgray;
+    padding: 0 1em;
+}
+.boks {
+    margin-left: 1em;
+    border-left: solid 0.2em #c7c7c7;
+    padding: 1em;
+}
+.boks > p {
+    font-size: 0.9em;
+}
+canvas {
+    border: solid 0.2em lightgray;
+}
+a {
+    padding: 1em;
+    float: right;
+    background-color: #484848;
+    color: #e7e7e7;
+    text-decoration: none;
+    border-radius: 4em;
+
+}
+table {
+    width: 100%;
+}
+th {
+    text-align: left;
+}
+input {
+    font-size: 1.1em;
+    padding: 0.5em;
+    background-color: white;
+}

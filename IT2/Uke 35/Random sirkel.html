@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sirkel</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+        html {
+            background-color: lightgray;
+            overflow: hidden;
+        }
+        html, body {
+            height: 100%;
+
+        }
+        body {
+            display: flex;
+            align-items: center;
+        }
+        #sirkel {
+            border-radius: 50%;
+            width: 10em;
+            height: 20em;
+            background-color: red;
+            transform: rotate(20deg);
+            margin: auto;
+            transition: 0.5s;
+
+        }
+        #inpRadius {
+            position: fixed;
+            left: 2em;
+            top: 1em;
+            font-size: 1.4em;
+            padding: 0.4em;
+        }
+        #info {
+            font-size: 1.3em;
+            position: fixed;
+            left: 2.15em;
+            top: 3.4em;
+            padding: 0.4em;
+            background-color: white;
+            font-family: sans-serif;
+            color: #717171;
+
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sirkel"></div>
+    <input type="number" id="inpRadius" placeholder="Radius">
+    <p id="info"></p>
+
+
+    <script>
+        var inpRadius = document.getElementById("inpRadius");
+        var info = document.getElementById("info");
+        var sirkel = document.getElementById("sirkel");
+
+        inpRadius.oninput = function() {
+            var r = Number(inpRadius.value);
+
+            r = Math.sqrt(Math.pow(r,2));
+
+            var areal = Math.PI * Math.pow(r, 2);
+            var omkrets = Math.PI * r * 2;
+
+            info.innerHTML = `Areal = ${areal.toFixed(1)} <br> Omkrets = ${omkrets.toFixed(1)}`;
+            sirkel.style.width = `${r * 2}px`;
+            sirkel.style.height = `${r * 2}px`;
+        };
+
+
+
+    </script>
+
+</body>
+</html>

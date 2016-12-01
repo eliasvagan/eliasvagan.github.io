@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sortering</title>
+</head>
+<body>
+
+<script>
+
+    var tallene = [1, 2, 5, 2000, 231, 123 , 11512];
+
+    tallene.sort(function(a, b){    //sortere med minste først
+        return a - b;
+    });
+    document.write(tallene);
+
+    tallene.sort(function(a, b) {   //sortere med størst først
+        return b - a;
+    });
+    document.write("<br>" + tallene);
+
+    //Finne top 3
+    tallene.splice(3, tallene.length - 3);
+    document.write("<br>" + tallene);
+
+</script>
+
+</body>
+</html>

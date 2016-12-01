@@ -21,19 +21,68 @@
             padding: 1em 0 1em 0;
             border-bottom: 0.1em darkgray solid;
         }
+        oppgave:last-of-type {
+            border:none;
+        }
+        .StolperLiggende > *{
+            height: 30px;
+            background-color: lightblue;
+            border:solid dodgerblue 0.1em;
+            margin: 0.5em 0;
+            color: dodgerblue;
+            line-height: 30px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        .StolperStående {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+        }
+        .StolperStående > * {
+            background-color: lightblue;
+            border:solid dodgerblue 0.1em;
+            margin: 0 0.5em;
+            color: dodgerblue;
+            text-align: center;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
 <section class="side">
-    <h1>Side </h1>
+    <h1>Oppgaver side 240 </h1>
     <div class="oppgave">
-        <h3>Oppgave 1</h3>
+        <h3>1</h3>
+        <p>Liggende stolepdiagram</p>
+        <div id="stolpediagram1" class="StolperLiggende"></div>
+        <p>Stående stolpediagram</p>
+        <div id="stolpediagram1_1" class="StolperStående"></div>
+        <script>
+            var stolpediagram1 = document.getElementById("stolpediagram1");
+            var stolpediagram1_1 = document.getElementById("stolpediagram1_1");
 
+            var vekter = [2.1, 1.7, 2.4, 0.2];
+            for(var vekt of vekter) {
 
+                var stolpe1 = document.createElement("div");
+                stolpe1.style.width = 100 * vekt + "px";
+                stolpe1.innerHTML = vekt + "kg";
+                stolpediagram1.appendChild(stolpe1);
+
+                var stolpe2 = document.createElement("div");
+                stolpe2.style.height = 100 * vekt + "px";
+                stolpe2.innerHTML = vekt + "kg";
+                stolpediagram1_1.appendChild(stolpe2);
+            }
+        </script>
 
     </div>
     <div class="oppgave">
-        <h3></h3>
+        <h3>2</h3>
+
+
+
     </div>
     <div class="oppgave">
         <h3></h3>

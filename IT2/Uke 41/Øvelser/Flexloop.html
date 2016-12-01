@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #fleksboks {
+            background-color: #e7e7e7;
+            display:flex;
+            height: 30em;
+        }
+        #fleksboks > div {
+            background-color: darkturquoise;
+
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="fleksboks">
+
+    </div>
+
+    <script>
+
+        var fleksboks = document.getElementById("fleksboks");
+
+        var i = 1;
+        while (i < 400) {
+            var stripe = document.createElement("div");
+
+            stripe.style.transform = `scale(${i / 400})`;
+
+            fleksboks.appendChild(stripe);
+
+
+
+            i++;
+        }
+
+    </script>
+
+</body>
+</html>

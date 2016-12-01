@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casting</title>
+</head>
+<body>
+
+    <script>
+        var navn = "Shrek"; // String
+        var vekt = "200";// Number
+
+        // Casting betyr å gjøre om datatrype
+        // fra en type til en annen
+        // Som regel gjør vi det med tall
+
+        var antHerre = prompt("Antall herredeodoranter");
+        var antDame = prompt("Antall damedeodoranter");
+
+        document.write("Totalt antall deoer: ");
+        document.write(Number(antDame) + Number(antHerre));
+
+        antHerre = Number(antHerre);
+
+        document.write("<br>");
+        document.write(typeof antHerre);
+
+    </script>
+
+</body>
+</html>

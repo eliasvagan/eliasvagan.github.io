@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grien i verdensrommet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            background-image: url(space.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+        }
+        #astropig {
+            position: absolute;
+            left: calc(50% - 34px);
+            top: calc(50% - 50px);
+        }
+        #griseknapper > *  {
+            border: none;
+            padding: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<img src="astropig.png" id="astropig">
+<div id="griseknapper">
+    <button data-xdir="-1" data-ydir="0">Left</button>
+    <button data-xdir="1" data-ydir="0">Right</button>
+    <button data-xdir="0" data-ydir="-1">Up</button>
+    <button data-xdir="0" data-ydir="1">Down</button>
+</div>
+
+
+<script>
+
+    var astropig = document.getElementById("astropig");
+    var grisen = {
+        xpos: 200,
+        ypos: 300,
+        xspeed: 5,
+        yspeed: 3,
+        xdir: 1,
+        ydir: 0,
+        w: 67,
+        h: 108
+    };
+    function fly() {
+        grisen.xpos = grisen.xpos + (grisen.xspeed * grisen.xdir);
+        grisen.ypos = grisen.ypos + (grisen.yspeed * grisen.ydir);
+        if(grisen.xpos > innerWidth) {
+            grisen.xpos = -grisen.w;
+        }
+        if(grisen.xpos < -grisen.w) {
+            grisen.xpos = innerWidth;
+        }
+        if(grisen.ypos > innerHeight) {
+            grisen.ypos = -grisen.h;
+        }
+        if(grisen.ypos < -grisen.h) {
+            grisen.ypos = innerHeight;
+        }
+        // Flytter bildet
+        astropig.style.left = grisen.xpos + "px";
+        astropig.style.top = grisen.ypos + "px";
+        requestAnimationFrame(fly);
+    }
+    function setDir() {
+        grisen.xdir = Number(this.getAttribute("data-xdir"));
+        grisen.ydir = Number(this.getAttribute("data-ydir"));
+
+        grisedata.set({
+            x: xdir,
+            y: ydir
+        })
+    }
+    var knappene = document.querySelectorAll("#griseknapper > button");
+    for(var knapp of knappene) {
+        knapp.onclick = setDir;
+    }
+    fly();
+</script>
+
+
+</body>
+</html>

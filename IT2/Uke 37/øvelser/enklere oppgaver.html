@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Øvelser</title>
+    <style>
+        p, h1, h2, h3 {
+            font-family: arial, sans-serif;
+            color: #5d5d5d;
+        }
+        body {
+            background-color: #9f9f9f;
+        }
+        section#middle {
+            position: relative;
+            padding: 1em 0;
+            background-color: white;
+            margin: auto;
+            max-width: 34em;
+        }
+        div.oppgave {
+            border-bottom: solid 0.1em lightgray;
+            padding: 0 2em;
+        }
+        div.oppgave:last-of-type {
+            border: none;
+        }
+        button, input {
+            padding: 0.5em;
+            font-size: 1.1em;
+        }
+        p {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <section id="middle">
+        <div class="oppgave">
+            <h2>Input-felt og navn</h2>
+            <form id="form1">
+                <input type="text" id="inpnavn" placeholder="Ditt navn" autocomplete="off" required>
+                <button type="submit">OK</button>
+            </form>
+            <p id="p1"></p>
+
+
+            <script>
+                var form1 = document.getElementById("form1");
+                var inpnavn = document.getElementById("inpnavn");
+                var p1 = document.getElementById("p1");
+
+                form1.onsubmit = function(evt) {
+                    evt.preventDefault();
+                    var navn = inpnavn.value;
+                    p1.innerHTML = `
+                           <h3>Hei, ${navn}!</h3>
+                           <p>Du klarte å trykke på knappen, og har dermed bestått den første testen.</p>
+                    `;
+                }
+
+            </script>
+        </div>
+        <div class="oppgave">
+            <h2>Tilfeldig farge</h2>
+            <button id="btnFarge">Generer</button>
+            <p id="pfarge">Vi endrer fargen på denne teksten.</p>
+
+            <script>
+                var btnFarge = document.getElementById("btnFarge");
+                var pfarge = document.getElementById("pfarge");
+
+                btnFarge.onclick = function() {
+
+                    var randomH = (Math.random() * 5 + 1).toFixed(0);
+                    var farge =`hsl(${(randomH - 1)* 42.5}, 100%, 50%)`;
+                    pfarge.style.backgroundColor = farge;
+                    pfarge.innerHTML = "Vi endrer fargen på denne teksten.<br>Hue: " + randomH;
+                }
+
+            </script>
+
+
+        </div>
+    </section>
+</body>
+</html>

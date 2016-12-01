@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Klokka</title>
+</head>
+<body>
+
+<script>
+    var dato = new Date();
+
+    var time = dato.getHours();
+    var minutt = dato.getMinutes();
+
+    if(time > 12) {
+        document.write("God morgon")
+    } else {
+        doument.write("God kveld")
+    }
+
+    console.log(time);
+
+</script>
+
+</body>
+</html>

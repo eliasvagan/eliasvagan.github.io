@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #fleksboks {
+            background-color: #e7e7e7;
+            display:flex;
+            height: 30em;
+        }
+        #fleksboks > div {
+            background-color: darkturquoise;
+
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="fleksboks"></div>
+
+<script>
+
+    var fleksboks = document.getElementById("fleksboks");
+
+    var i = 0;
+    var antall = 60;
+
+    function loop() {
+
+        var stripe = document.appendChild("div");
+        stripe.style.transform = `scale(${i / 60})`;
+
+        fleksboks.appendChild(stripe);
+
+        i++;
+
+        if(i < antall) {
+            requestAnimationFrame(loop);
+        }
+    }
+
+    loop();
+
+</script>
+
+</body>
+</html>

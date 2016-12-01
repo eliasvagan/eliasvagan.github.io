@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Noter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+        }
+
+        @keyframes pulse {
+            0%      {transform: translateY(0)}
+            100%    {transform: translateY(-0.2em)}
+        }
+        button, .repeatcheck, input[type=checkbox] {
+
+            margin: 0.1em;
+            padding: 1em;
+            background-color: lightgray;
+            color: black;
+            font-size: 1.2em;
+            transition: 0.5s ease;
+            outline: none;
+            border: none;
+            border-radius: 0.2em;
+        }
+        p {
+            font-size: 1.2em;
+            text-align: center;
+        }
+        button:hover, .repeatcheck:hover {
+            box-shadow: #949494 0 0.2em 0;
+            transform: translateY(-0.2em);
+            transition: 0.1s ease;
+            background-color: #eaeaea;
+        }
+        button:active, .repeatcheck:active {
+            animation: pulse 0.2s;
+
+        }
+        .rad {
+            display: flex;
+            flex-direction: row;
+        }
+        .rad > * {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+
+        }
+        #knapper > *{
+            flex: 1;
+        }
+        #volume {
+            flex: 3;
+        }
+        #ui {
+            max-width: 40em;
+            position: relative;
+            margin: auto;
+            padding: 1em;
+            background-color: white;
+            z-index: 20;
+        }
+        img {
+            margin-bottom: 1em;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 100%;
+            width: 4em;
+            border-radius: 2em;
+            background: #afafaf;
+            cursor: pointer;
+            transition: 0.1s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+        input[type=range]::-webkit-slider-thumb:active {
+            background-color: #8d8d8d;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            border-radius: 2em;
+            background: #e3e3e3;
+        }
+        .inputTekst {
+            font-size: 1.2em;
+            text-align: center;
+            display: block;
+
+        }
+        .rangeRad {
+            border: solid 0.2em #657ba9;
+            padding: 0.2em;
+            border-radius: 2em;
+            margin-bottom: 1em;
+        }
+        .rangeRad > * {
+            padding-left: 1em;
+        }
+        .rangeRad > p {
+            width: 200px;
+
+        }
+
+        .repeatcheck {
+            padding: 0;
+        }
+        input[type=checkbox] {
+            -webkit-appearance:button;
+            width: 100%;
+            border: none;
+            background-image: url(repeat.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        input[type=checkbox]:checked {
+            background-color: #e8e9e9;
+        }
+
+        input[type=checkbox]:hover {
+
+        }
+        .repeatcheck label {
+            position: absolute;
+            color: black;
+        }
+        #noteark > div:nth-child(4n + 0) > .taktDiv{
+            border-right: solid 0.1em black;
+        }
+         #noteark {
+
+
+             min-height: 2em;
+             display: block;
+
+             margin: auto;
+             overflow-x: scroll;
+             height: 14em;
+             width: 100%;
+             position: absolute;
+             box-sizing: border-box;
+             background-color: white;
+             box-shadow: #d2d2d2 0 -4em 8em;
+
+
+         }
+        #startsheet{
+            position: absolute;
+            width: 10em;
+            left: 2em;
+            height: 10em;
+            top: 1em;
+            background-image: url(sheetpart.png);
+            background-repeat: repeat-x;
+            box-sizing: border-box;
+            border-right: solid 0.2em black;
+            z-index: 1;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #e3e3e3;
+            -webkit-border-radius: 2em;
+            border-radius: 0;
+            padding: 1em;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background-color: #afafaf;
+        }
+        ::-webkit-slider-thumb:hover {
+            cursor: pointer;
+        }
+        ::-webkit-scrollbar-thumb:window-inactive {
+            background: rgba(55, 63, 73, 0.4);
+        }
+        footer {
+            color: #545454;
+            font-size: 0.9em;
+            bottom: 0;
+            width: 100%;
+            position: fixed;
+            text-align: center;
+            background: linear-gradient(#f4f4f4, #d1d1d1);
+            height: 2em;
+            line-height: 2em;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <div class="rad">
+            <div class="rangeRad">
+                <p id="volumProsent" class="inputTekst">Volume: 30%</p>
+                <input id="volume" type="range" min="0" max="1" step="0.01" value="0.3"/>
+            </div>
+
+        </div>
+        <div class="rad">
+            <div class="rangeRad">
+                <p id="noteLengde" class="inputTekst">Notelengde: 1/4</p>
+                <input id="noteDurInput" type="range" min="0" max="3" step="1" value="2">
+            </div>
+        </div>
+        <div class="rad">
+            <div class="rangeRad">
+                <p id="BPMtekst">BPM: 60</p>
+                <input type="range" id="BPMinput" min="10" max="300" value="60">
+            </div>
+        </div>
+        <div class="rad">
+            <div id="knapper"></div>
+        </div>
+        <div class="rad">
+            <button id="play">Play</button>
+            <button id="clearBTN">Clear</button>
+            <div class="repeatcheck">
+                <input type="checkbox" id="loopCheck">
+                <label for="loopCheck"></label>
+
+            </div>
+        </div>
+    </div>
+    <div id="noteark">
+        <div id="startsheet"></div>
+    </div>
+    <footer>Elias B. Vågan 2016</footer>
+    <script>
+        var noteark = document.getElementById("noteark");
+        var knapper = document.getElementById("knapper");
+        var play = document.getElementById("play");
+        var clearBTN = document.getElementById("clearBTN");
+        var volume = document.getElementById("volume");
+        var volumProsent = document.getElementById("volumProsent");
+        var loopCheck = document.getElementById("loopCheck");
+
+
+
+        var noteLengde = document.getElementById("noteLengde");
+        var noteDurInput = document.getElementById("noteDurInput");
+        var noteDur = 4;
+        noteDurInput.addEventListener('input', function () {
+            noteDur = (Math.pow(2,this.value));
+            noteLengde.innerHTML = "Notelengde: 1/" + noteDur;
+        });
+
+
+        var BPMinput = document.getElementById("BPMinput");
+        var BPMtekst = document.getElementById("BPMtekst");
+        var bpm = 60;
+        var mspb = 1/(bpm/60000);
+        BPMinput.addEventListener('input', function(){
+            bpm = BPMinput.value;
+            mspb = 1/(bpm/60000);
+            BPMtekst.innerHTML = "BPM: " + bpm;
+            console.log("bpm = " + bpm + " mspb = " + mspb)
+        });
+
+
+
+
+        //AudioContext og volumbar
+        var ac = new AudioContext();
+        var noteVolume = 0.3;
+        volume.addEventListener('input', function() {
+            noteVolume = this.value;
+            volumProsent.innerHTML = "Volume: " + (noteVolume * 100).toFixed(0) + "%";
+        });
+
+        //Frekvensene defineres som noter
+        var Noter = { C:261.63, D:293.66, E:329.63, F:349.23, G:392.00, A:440.00, H:493.88, blank:0};
+
+        var notehoyde = {C:9.5, D:8.9, E:8.15, F:7.4, G:6.6, A:5.85, H:5.1, blank:5.1};
+        var gainNodes = {};
+        var oscillators = {};
+
+        for (var note in Noter){
+            gainNodes[note] = ac.createGain();
+            gainNodes[note].gain.value = 0;
+            gainNodes[note].connect(ac.destination);
+
+            oscillators[note] = ac.createOscillator();
+            oscillators[note].connect(gainNodes[note]);
+            oscillators[note].frequency.value = Noter[note];
+            oscillators[note].start();
+        }
+
+        function playNote(freq, gNode, startTime, duration){
+            gNode.gain.value = 0;
+
+            setTimeout(function(){
+                gNode.gain.value = noteVolume;
+                setTimeout(function(){
+                    gNode.gain.value = 0;
+                }, duration);
+            },(startTime));
+        }
+
+        var noteliste = [];
+
+        for(var note in Noter) {
+            var knapp = document.createElement("button");
+            knapp.innerHTML = note;
+            knapp.classname = "noteknapp";
+            knapper.appendChild(knapp);
+            knapp.onclick = leggTilNote;
+        }
+        var taktLeft = 1;
+        var margleft = 2;
+        var sheetcount = 1;
+        function leggTilNote() {
+            noteliste.push({note:this.innerHTML, freq:Noter[this.innerHTML], duration:noteDur, gainNode:gainNodes[this.innerHTML]});
+
+            var sheetDIV = document.createElement("div");
+            var noteDIV = document.createElement("div");
+            noteDIV.innerHTML = this.innerHTML;
+
+            sheetDIV.className = "sheetDiv";
+
+            console.log(notehoyde[this.innerHTML]);
+
+            sheetDIV.style = `
+                position: absolute;
+                width: 10em;
+                left: ${sheetcount * 10 + 2}em;
+                height: 11em;
+                top: 1em;
+                background-image: url(sheetpart.png);
+                background-repeat: repeat-x;
+                box-sizing: border-box;
+                border-right: solid 0.2em black;
+                z-index: 1;
+
+            `;
+            noteDIV.style = `
+
+                width: ${10/noteDur - 0.5}em;
+                left: ${margleft + 0.25}em;
+                top: ${notehoyde[this.innerHTML] + 0.3}em;
+                height: 1.4em;
+                border-radius: 2em;
+                background-color: #657ba9;
+                position: absolute;
+                z-index: 1000;
+                color: white;
+                text-align: center;
+                line-height: 1.5em;
+                overflow:hidden;
+
+            `;
+
+            taktLeft += 1/noteDur;
+            margleft += 10/noteDur;
+
+            console.log("taktLeft: " + taktLeft);
+
+            if(taktLeft >= 1) {
+                noteark.appendChild(sheetDIV);
+                sheetcount ++;
+                taktLeft = 0;
+            }
+
+            noteark.appendChild(noteDIV);
+        }
+        play.onclick = function addNotes() {
+            start = 0;
+            var repeat = document.getElementById("loopCheck");
+            for(var note in noteliste){
+                n = noteliste[note];
+                duration = mspb/n.duration;
+                playNote(n.freq, n.gainNode, start, duration-10);
+                start += duration + 10;
+            }
+            setTimeout(function(){
+                if (repeat.checked) {
+                    addNotes();
+                }
+            }, start);
+        };
+
+        start = 0;
+        function clear() {
+            noteliste = [];
+            noteark.innerHTML = '<div id="startsheet"></div>';
+            taktLeft=1;
+            margleft=2;
+            sheetcount = 1;
+        }
+        clearBTN.onclick = clear;
+        clear();
+    </script>
+
+
+
+
+    <!--<script>-->
+        <!--var noteark = document.getElementById("noteark");-->
+        <!--var knapper = document.getElementById("knapper");-->
+        <!--var play = document.getElementById("play");-->
+        <!--var clearBTN = document.getElementById("clearBTN");-->
+        <!--var volume = document.getElementById("volume");-->
+        <!--var volumProsent = document.getElementById("volumProsent");-->
+        <!--var loopCheck = document.getElementById("loopCheck");-->
+        <!---->
+
+        <!--//AudioContext og volumbar-->
+        <!--var ac = new AudioContext();-->
+        <!--var gainNode = ac.createGain();-->
+        <!--gainNode.gain.value = 0.3;-->
+        <!--volume.addEventListener('input', function() {-->
+            <!--gainNode.gain.value = this.value;-->
+            <!--volumProsent.innerHTML = "Volume: " + (gainNode.gain.value * 100).toFixed(0) + "%";-->
+        <!--});-->
+
+        <!--//Frekvensene defineres som noter-->
+        <!--var Noter = {C:261.63, D:293.66, E:329.63, F:349.23, G:392.00, A:440.00, H:493.88};-->
+
+        <!--for(var note in Noter) {-->
+            <!--var knapp = document.createElement("button");-->
+            <!--knapp.innerHTML = note;-->
+            <!--knapp.classname = "noteknapp";-->
+            <!--knapper.appendChild(knapp);-->
+            <!--knapp.onclick = leggTilNote;-->
+
+        <!--}-->
+
+        <!--var noteliste = [];-->
+
+        <!--function leggTilNote() {-->
+            <!--noteliste.push(this.innerHTML);-->
+            <!--console.log(noteliste);-->
+
+            <!--var sheetpart = document.createElement("img");-->
+            <!--sheetpart.className = "sheetpart";-->
+            <!--sheetpart.src = "note" + this.innerHTML + ".png";-->
+            <!--sheetpart.alt = this.innerHTML;-->
+
+            <!--noteark.appendChild(sheetpart);-->
+
+        <!--}-->
+
+
+        <!--var noteDuration = 0.4;-->
+
+        <!--play.onclick = function() {-->
+            <!--for (var i = 0; i < noteliste.length; i++) {-->
+
+                <!--var osc = ac.createOscillator();-->
+                <!--osc.connect(gainNode);-->
+                <!--gainNode.connect(ac.destination);-->
+
+                <!--var freq = Noter[(noteliste[i])]; //Jeg skjønte hva eval([...]) gjør fra kalkulatoren-->
+                <!--osc.frequency.value = freq;-->
+
+                <!--console.log(noteliste[i]);-->
+                <!--console.log(freq);-->
+
+
+
+                <!--osc.start(ac.currentTime + i / 3);-->
+                <!--osc.stop(ac.currentTime + i / 3+ noteDuration);-->
+            <!--}-->
+        <!--};-->
+
+        <!--function clear() {-->
+            <!--noteliste = [];-->
+            <!--var sheetstart = document.createElement("img");-->
+            <!--sheetstart.src = "sheetstart.png";-->
+            <!--noteark.innerHTML = [];-->
+            <!--noteark.appendChild(sheetstart);-->
+        <!--}-->
+        <!--clearBTN.onclick = clear;-->
+        <!--clear();-->
+    <!--</script>-->
+
+</body>
+</html>

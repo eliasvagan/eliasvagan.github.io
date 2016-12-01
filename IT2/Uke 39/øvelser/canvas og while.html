@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>While canvas holy shiet</title>
+</head>
+<body>
+
+    <canvas id="canvas" width="800" height="800"></canvas>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+
+        var x = 1;
+        while (x < 800) {
+
+            ctx.strokeStyle = "red";
+            if(x % 2 == 0) {
+                ctx.strokeStyle = "green";
+            }
+            if(x % 5 == 0) {
+                ctx.strokeStyle = "blue";
+            }
+
+            ctx.beginPath();
+                ctx.moveTo(0, 800);
+                ctx.lineTo(200, x);
+                ctx.lineTo(400, 0);
+                ctx.lineTo(600, x);
+                ctx.lineTo(800,800);
+            ctx.closePath();
+            ctx.stroke();
+
+
+            x+= 3;
+        }
+
+
+    </script>
+
+</body>
+</html>

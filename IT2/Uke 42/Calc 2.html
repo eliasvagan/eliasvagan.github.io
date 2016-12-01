@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalkolotoror</title>
+    <style>
+        button, input {
+            border: none;
+            margin: 0.1em;
+            padding: 1em;
+            background-color: lightgray;
+            color: black;
+            font-family: sans-serif;
+            font-size: 1.2em;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <input type="text" id="skjerm">
+
+    <div id="kalkulator"></div>
+
+    <script>
+        var kalkulator = document.getElementById("kalkulator");
+
+        for(var i=0; i<10; i++) {
+            var knapp = document.createElement("button");
+            knapp.innerHTML = i;
+            knapp.classname = "tallknapp";
+            knapp.onclick = settInnTegn;
+
+            kalkulator.appendChild(knapp);
+        }
+        function settInnTegn() {
+            skjerm.value += this.innerHTML;
+        }
+
+    </script>
+
+</body>
+</html>

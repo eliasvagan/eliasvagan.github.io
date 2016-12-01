@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sirkler</title>
+</head>
+<body>
+
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "none";
+        ctx.strokeStyle = "red";
+
+        var r = 100;
+        var x = r + 10;
+        var y = r + 10;
+
+
+
+        function tegnSirkel() {
+
+
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.stroke();
+            x++;
+            y++;
+            ctx.closePath();
+
+        }
+        var i = 0;
+        while(i <= 270) {
+            tegnSirkel();
+            ctx.strokeStyle = "#" + 39999/i;
+            i++;
+        }
+
+    </script>
+
+</body>
+</html>

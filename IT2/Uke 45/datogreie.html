@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sdafsdf</title>
+</head>
+<body>
+
+<input type="date" id="inpDato">
+<br>
+<div id="info"></div>
+<ul id="dager"></ul>
+
+
+<script>
+    var dager = document.getElementById("dager");
+    var inpDato = document.getElementById("inpDato");
+    var info = document.getElementById("info");
+
+
+    var oppattteDager = new Set();
+
+    function fjern() {
+        oppattteDager.delete(dag);
+        visDager();
+
+    }
+
+    function visDager() {
+
+        for(var dag of oppattteDager) {
+            dager.innerHTML += `<li id="${dag}" onclick="fjern()"></li>`;
+        }
+
+    }
+
+
+    inpDato.onchange = function () {
+
+        var valgtDag = inpDato.value;
+        if( oppattteDager.has(valgtDag)){
+            info.innerHTML = "Du er allerede opptatt.";
+        } else {
+            info.innerHTML = "Dag satt.";
+            oppattteDager.add(valgtDag);
+        }
+
+
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bestill hagenisse i dag!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.3/foundation-flex.css">
+    <style>
+        html {
+            background-color: #44505f;
+        }
+        body {
+            max-width: 30em;
+            background-color: white;
+            padding: 1em;
+            position: relative;
+            margin: auto;
+
+        }
+    </style>
+</head>
+<body>
+
+    <form id="frmBestilling">
+
+        <input type="number" id="inpHerre" placeholder="Antall herre">
+        <input type="number" id="inpDame" placeholder="Antall dame">
+
+        <button class="button" type="submit">Bestill din hagenisse</button>
+
+    </form>
+
+    <p id="info"></p>
+
+    <script>
+
+        var frmBestilling = document.getElementById("frmBestilling");
+        var inpHerre = document.getElementById("inpHerre");
+        var inpDame = document.getElementById("inpDame");
+        var info = document.getElementById("info");
+
+        document.write(typeof inpDame);
+
+        frmBestilling.onsubmit = function(evt) {
+            evt.preventDefault();
+
+            inpHerre = Number(inpHerre.value);
+            inpDame = Number(inpDame.value);
+
+            info.innerHTML = "Total: " +(inpHerre + inpDame);
+        };
+
+
+    </script>
+
+
+</body>
+</html>

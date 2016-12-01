@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meget bra side</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+        }
+        html {
+            background-image: url(bg.jpg);
+            background-size: 30em;
+            background-attachment: fixed;
+        }
+        body {
+            max-width: 42em;
+            position: relative;
+            margin: auto;
+            padding: 0 1em;
+        }
+        .liste, .tabell, article, .script {
+            padding: 2em;
+            background-color: white;
+            box-shadow: 0 0.2em 0.5em black;
+            margin: 1em 0;
+            border-radius: 1em;
+        }
+        th, td {
+            padding: 0.2em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="script">
+        <h2>Vi tester scripts</h2>
+    </div>
+
+    <script>
+
+        alert(document.body.innerHTML);
+
+        document.body.innerHTML = "<h1>Heil Shrekler</h1>";
+
+
+    </script>
+
+
+
+    <div class="liste">
+        <h2>Shreks handleliste</h2>
+        <ul>
+            <li>Lorem.</li>
+            <li>Quidem!</li>
+            <li>Nihil?</li>
+            <li>Illo.</li>
+            <li>Nihil?</li>
+        </ul>
+    </div>
+
+    <article>
+        <h1>Velkommen til Shrek</h1>
+        <p>Her er det veldig mye morsomt å finne på. Jeg anbefaler spesielt godteriavdelingen. Husk å handle godteri før helsetilsynet kommer på besøk.</p>
+    </article>
+
+    <div class="tabell">
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Swamp</th>
+                <th>Ogre</th>
+                <th>Onions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem, molestiae.</td>
+                <td>Corporis esse mollitia natus nemo nesciunt quidem repellendus voluptatibus voluptatum.</td>
+                <td>Aliquid consequuntur, laboriosam. Distinctio facere ipsum magni necessitatibus nihil ratione!</td>
+                <td>Blanditiis consequuntur corporis distinctio enim fugiat iste quas sapiente vero!</td>
+            </tr>
+            <tr>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, iste!</td>
+                <td>Animi aut consequuntur eius laborum possimus praesentium soluta tenetur ut?</td>
+                <td>Dolores, hic, repudiandae! Amet commodi dicta doloribus minus, recusandae vitae!</td>
+                <td>Animi, architecto aspernatur deserunt impedit laudantium natus non recusandae vel?</td>
+            </tr>
+            <tr>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, nulla.</td>
+                <td>A dignissimos incidunt minima mollitia natus tempore voluptatum? Eum, hic.</td>
+                <td>A facere fuga, ipsam laborum nisi omnis qui reprehenderit veniam.</td>
+                <td>Aliquam earum explicabo illo inventore nihil non odio placeat similique.</td>
+            </tr>
+            <tr>
+                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis, quos!</td>
+                <td>Blanditiis eaque hic ipsum nisi possimus ratione. Dolorem, expedita modi.</td>
+                <td>Asperiores cum dolores ea exercitationem minima natus numquam reprehenderit voluptatibus.</td>
+                <td>Eligendi inventore ipsam minus officiis perferendis provident reprehenderit. Esse, nam.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

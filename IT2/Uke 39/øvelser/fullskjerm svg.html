@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        #papir {
+            background: linear-gradient(to bottom, #00095b 0%,#007be8 100%);
+            position: fixed;
+            left: 0;
+            top:0;
+        }
+        #papir circle {
+            fill: rgba(255, 255, 255, 0.02);
+
+        }
+        button {
+            padding: 1em;
+            font-size: 1.5em;
+            position: fixed;
+            left: calc(50% - 4em);
+            top: 8em;
+            margin: auto;
+            z-index: 2;
+        }
+
+    </style>
+</head>
+<body>
+    <button id="btn">Lag skyer</button>
+    <svg id="papir" width="500" height="300">
+
+
+
+    </svg>
+
+
+    <script>
+        var papir = document.getElementById("papir");
+        var bredde = innerWidth;
+        var hoyde = innerHeight;
+        var btn = document.getElementById("btn");
+        
+
+        papir.style.width = bredde + "px";
+        papir.style.height = hoyde + "px";
+
+        //Antall sirkler
+
+        btn.onclick = function sirkler(){
+            var i = 200;
+            while(i > 10) {
+                var x = Math.random() * bredde;
+                var y = Math.random() * hoyde;
+                var r = Math.random() * i;
+
+
+                papir.innerHTML += `<circle cx="${x}" cy="${y}" r="${r}"></circle>`;
+
+                i = i - 20;
+
+
+            }
+
+            btn.parentNode.removeChild(btn);
+            setInterval(sirkler, 5)
+        }
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>

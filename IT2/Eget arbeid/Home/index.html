@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="jquery-1.11.3.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        body {
+            background-image: url(img/BG1.png);
+            background-attachment: fixed;
+            background-position: -50px -50px;
+            color: black;
+
+        }
+        #BG2 {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background-image: url(img/BG2.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        nav#main{
+            z-index: 3;
+            font-weight: bold;
+
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            font-size: 3em;
+            width: 20em;
+            top: calc(50% - 3em);
+            left: calc(50% - 10em);
+            text-align: center;
+            justify-content: center;
+            color: white;
+        }
+        nav#main > a {
+            transition: 0.2s ease;
+            padding: 0.1em 1em;
+        }
+
+        div#content {
+            z-index: 3;
+            position: fixed;
+            visibility: hidden;
+            max-width: 40em;
+            padding: 1em;
+            top: 3em;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+        }
+
+        h1, h2, h3, h4, h5 {
+            padding: 0.2em 0;
+            font-weight: bold;
+        }
+        div.download > .flexrow > a {
+            width: 8em;
+            height: 8em;
+            background-image: url(img/download.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-color: #cbebff;
+        }
+        .flexrow {
+            display: flex;
+            flex-direction: row;
+        }
+        .flexrow > div {
+            padding: 0 0.5em;
+        }
+        div.download {
+            margin-bottom: 1em;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <nav id="main">
+        <a href="#" onclick="loadDoc('pages/info.html')">Info</a>
+        <a href="#" onclick="loadDoc('pages/downloads.html')">Downloads</a>
+        <a href="#" onclick="loadDoc('pages/contact.html')">Contact</a>
+    </nav>
+    <div id="BG2"></div>
+    <div id="content"></div>
+
+
+<script>
+    var main = document.getElementById("main");
+    var content = document.getElementById("content");
+
+
+    main.onclick = function() {
+        main.style = `
+            flex-direction: row;
+            top: 0;
+            position: absolute;
+            background-color: white;
+            color: black;
+            width: 100%;
+            left: 0;
+            font-size: 1.9em;
+
+
+        `;
+        content.style = `
+            position: relative;
+            visibility: visible;
+
+
+
+
+        `;
+        console.log(content.width)
+    };
+
+
+
+    $( document ).ready( function() {loadDoc('info.html')});
+    function loadDoc(link){
+        $("#content").load(link);
+    }
+
+
+
+</script>
+
+
+
+
+</body>
+</html>

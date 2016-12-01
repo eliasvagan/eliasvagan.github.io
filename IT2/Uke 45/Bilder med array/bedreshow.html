@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            color: white;
+        }
+        html {
+            background-color: dimgray;
+        }
+        #bildeshow {
+            background: url(img01.jpg);
+            width: 600px;
+            height: 400px;
+            box-shadow: 0 1em 5em #2b2b2b;
+        }
+        #main {
+            padding: 2em;
+            width: 600px;
+            position: relative;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="bildeshow"></div>
+        <p id="tekst"></p>
+    </div>
+
+
+    <script>
+        var bildeshow = document.getElementById("bildeshow");
+        var tekst = document.getElementById("tekst");
+        
+
+        var bilder = [
+            {poster: "img01.jpg", tekst: "Stones i støtet"},
+            {poster: "img02.jpg", tekst: "Mick synger av full hals"},
+            {poster: "img03.jpg", tekst: "Fin dag på konsert"},
+            {poster: "img04.jpg", tekst: "God stemning"},
+            {poster: "img05.jpg", tekst: "Siste sang"}
+        ];
+
+        var i = 0;
+
+        bildeshow.onclick = function() {
+
+            var x = event.clientX - (document.body.clientWidth / 2 - 300);
+
+            if(i>=bilder.length - 1 && x > 300) {
+                i = 0;
+            } else if(x > 300) {
+                i++;
+            } else if(i <= 0 && x < 300){
+                i= bilder.length - 1;
+            } else {
+                i--;
+            }
+
+            console.log(i);
+            console.log(x);
+            bildeshow.style.background = "url(" + bilder[i].poster + ")";
+            tekst.innerHTML = "Bilde nummer " + (i+1) + "<br>" + bilder[i].tekst;
+        }
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Firkantar while :D</title>
+    <style>
+        body {
+            max-width: 50em;
+            margin: auto;
+            position: relative;
+        }
+        .firkant {
+            width: 3em;
+            height: 3em;
+            background-color: cyan;
+            border: solid 0.2em darkcyan;
+            color: #00777c;
+            float: left;
+            margin: 0.3em;
+            text-align: center;
+            line-height: 3em;
+            font-family: sans-serif;
+        }
+        .firkant:nth-child(odd) {
+            background-color: greenyellow;
+            border-color: green;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+    <script>
+
+        var i = 0;
+
+        while(i<=200) {
+            var firkant = document.createElement("div");
+            firkant.className = "firkant";
+            firkant.innerHTML = i;
+
+            firkant.style = `transform: rotate(${360/i}deg);`;
+
+            document.body.appendChild(firkant);
+
+            firkant.animate([
+                {transform: "rotateY(0) translateX(30px"},
+                {transform: "rotate(1turn) translateX(0)"}
+            ], {
+                duration: 1000,
+                delay: i*10
+            });
+
+            i++;
+        }
+
+    </script>
+
+</body>
+</html>

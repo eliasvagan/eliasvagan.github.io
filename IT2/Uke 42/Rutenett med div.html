@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rutar</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #rutenett {
+            position: relative;
+            margin: auto;
+            width: 40em;
+            height: 40em;
+            border: solid lightgray 0.2em;
+            display: flex;
+            flex-direction: column;
+        }
+        .rad {
+            background-color: #00ae81;
+            flex: 1;
+            flex-direction: row;
+            display: flex;
+        }
+        .rute {
+            flex: 1;
+            background-color: #e8b358;
+            transition: 0.2s ease;
+            font-size: 4em;
+            line-height: 2.5em;
+            text-align: center;
+            margin: 0.1em;
+
+        }
+        .rute:hover {
+
+            box-shadow: 0 0 1em #fff5a1;
+            background-color: #fff5a1;
+        }
+        .rute:nth-of-type(3) {
+            background-color: lightgray;
+        }
+        .rute:nth-of-type(3):hover {
+            box-shadow: 0 0 1em #ffffff;
+            background-color: #ffffff;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div id="rutenett">
+    <div class="rad">
+        <div class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+        <div id="bokstav1" class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+    </div>
+    <div class="rad">
+        <div class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+        <div id="bokstav2" class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+    </div>
+    <div class="rad">
+        <div class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+        <div id="bokstav3" class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+    </div>
+    <div class="rad">
+        <div class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+        <div id="bokstav4" class="rute" contenteditable="true"></div>
+        <div class="rute" contenteditable="true"></div>
+    </div>
+</div>
+
+<button id="btnSjekkSvar">Sjekk om det er riktig</button>
+<div id="info">Løs kryssordet og trykk på knappen</div>
+
+<script>
+    var svar1 = "N";
+    var svar2 = "I";
+    var svar3 = "S";
+    var svar4 = "E";
+    var btnSjekkSvar = document.getElementById("btnSjekkSvar");
+    var info = document.getElementById("info");
+    var bokstav1 = document.getElementById("bokstav1");
+    var bokstav2 = document.getElementById("bokstav2");
+    var bokstav3 = document.getElementById("bokstav3");
+    var bokstav4 = document.getElementById("bokstav4");
+    function sjekkSvar() {
+        if(bokstav1.innerHTML === svar1 && bokstav2.innerHTML === svar2 && bokstav3.innerHTML === svar3 && bokstav4.innerHTML === svar4) {
+            info.innerHTML = "Du har løst kryssordet";
+        } else {
+            info.innerHTML = "Det gikk ikke så bra!";
+        }
+    }
+    btnSjekkSvar.onclick = sjekkSvar;
+
+    var alleRutene = document.querySelectorAll(".rute");
+    for(var rute of alleRutene) {
+        rute.oninput = sjekkSvar();
+    }
+
+</script>
+
+</body>
+</html>

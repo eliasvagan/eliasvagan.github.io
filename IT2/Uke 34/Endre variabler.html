@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancer</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        html {
+            background-color: #676767;
+        }
+        body {
+            max-width: 40em;
+            margin: 1em auto;
+            padding: 3em;
+            font-family: Arial, sans-serif;
+            font-size: 1.2em;
+            background-color: white;
+        }
+        h1, p {
+            padding: 0.3em 0;
+        }
+    </style>
+</head>
+<body>
+    <button id="Freepoeng">FREE POINTS</button>
+    <script>
+    //Når spillet starter har vi 0 poeng
+        var poeng = 0;
+
+    //Nå får jeg 10 poeng
+        poeng = poeng + 10;
+
+    //Få et poeng
+        poeng++;
+    //Det er det samme som å si
+        poeng = poeng + 1;
+    document.getElementById("Freepoeng").onclick = function(){
+        poeng = poeng + 10;
+
+    };
+
+    document.write("Du har " + poeng + " poeng.")
+
+
+    </script>
+
+
+</body>
+</html>

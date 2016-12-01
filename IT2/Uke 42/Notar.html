@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+    <style>
+        .takt {
+            height: 20em;
+            width:30em;
+            background-color: lightgray;
+            display: flex;
+            flex-direction: row;
+        }
+        .slag {
+            display: flex;
+            flex-direction: column;
+            background-color: #007be8;
+            margin: 0.2em 0.1em;
+            flex: 1;
+        }
+        .note {
+            flex: 1;
+            background-color: white;
+            margin: 0.2em;
+        }
+        .note:hover {
+            background-color: #00e6ae;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="takt">
+        <div class="slag">
+            <div class="note">C</div>
+            <div class="note">D</div>
+            <div class="note">E</div>
+            <div class="note">F</div>
+            <div class="note">G</div>
+            <div class="note">A</div>
+            <div class="note">H</div>
+        </div>
+        <div class="slag">
+            <div class="note">C</div>
+            <div class="note">D</div>
+            <div class="note">E</div>
+            <div class="note">F</div>
+            <div class="note">G</div>
+            <div class="note">A</div>
+            <div class="note">H</div>
+        </div>
+        <div class="slag">
+            <div class="note">C</div>
+            <div class="note">D</div>
+            <div class="note">E</div>
+            <div class="note">F</div>
+            <div class="note">G</div>
+            <div class="note">A</div>
+            <div class="note">H</div>
+        </div>
+        <div class="slag">
+            <div class="note">C</div>
+            <div class="note">D</div>
+            <div class="note">E</div>
+            <div class="note">F</div>
+            <div class="note">G</div>
+            <div class="note">A</div>
+            <div class="note">H</div>
+        </div>
+    </div>
+
+    <script>
+        var takt = document.getElementsByClassName("takt");
+        var slag = document.getElementsByClassName("slag");
+        var note = document.getElementsByClassName("note");
+
+        var ac = new AudioContext();
+        var osc = ac.createOscillator();
+        osc.connect(ac.destination);
+
+        var frekvenser = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+        var C = frekvenser[1];
+        var D = frekvenser[2];
+        var E = frekvenser[3];
+        var F = frekvenser[4];
+        var G = frekvenser[5];
+        var A = frekvenser[6];
+        var H = frekvenser[7];
+
+        note.onclick = function () {
+            var notefrekvens = this.innerHTML;
+            osc.frequency.value = notefrekvens + i * 16;
+            osc.start(ac.currentTime);
+            osc.stop(ac.currentTime + 0.5);
+        };
+
+        //osc.start(ac.currentTime);
+        //osc.stop(ac.currentTime + 0.5);
+
+    </script>
+
+</body>
+</html>

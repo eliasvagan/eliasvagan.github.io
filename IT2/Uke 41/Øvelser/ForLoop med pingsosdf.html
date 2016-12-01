@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plingerino dingerino</title>
+</head>
+<body>
+
+<script>
+
+    var frekvenser = [440, 880, 440, 780, 900];
+    var ac = new AudioContext();
+
+    for (var i = 0; i < frekvenser.length; i++) {
+
+        var frekvens = frekvenser[i];
+
+        var osc = ac.createOscillator();
+        osc.connect(ac.destination);
+
+        osc.frequency.value = frekvens + i * 16;
+        osc.start(i / 5);
+        osc.stop(i / 5+ 0.2);
+    }
+
+
+
+</script>
+
+</body>
+</html>

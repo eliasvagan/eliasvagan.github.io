@@ -1,0 +1,63 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+body {
+    background-color: lightgray;
+    padding: 0 0.5em;
+
+}
+div.side {
+    position: relative;
+    margin: 1em auto;
+    background-color: white;
+    padding: 2em;
+    border-radius: 0.3em;
+    max-width: 40em;
+}
+.oppgave {
+    padding: 1em 0;
+    border-bottom: solid 0.1em #9f9f9f;
+}
+.oppgave:last-of-type {
+    border: none;
+}
+button {
+    padding: 0.6em;
+    font-size: 1.2em;
+    text-align: center;
+    min-width: 2em;
+    color: white;
+    background-color: #ff6a7e;
+    border: none;
+    margin: 0.5em 0;
+    border-radius: 0.5em;
+    outline: none;
+    border-bottom: solid 0.3em #bb3543;
+    box-shadow: 0 0.2em 0 rgba(0,0,0,0.15);
+    display: inline-block;
+    box-sizing: border-box;
+    cursor: pointer;
+
+
+}
+button:hover {
+    background-color: #ff3d64;
+    cursor: hand;
+}
+button:active {
+    /*margin: 0.7em 0 0.55em 0;*/
+    transform: translateY(0.3em);
+    border-bottom: solid 0.1em #8a3b3d;
+    box-shadow: 0 0.1em 0 rgba(0, 0, 0, 0.15);
+    margin-bottom: 0.75em;
+}
+img {
+    max-width: 100%;
+
+}
+canvas {
+    border: 0.2em lightgray dashed;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Tester Firebase</title>
+    <style>
+
+        .prikk {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #c68045;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAUUMx5J-RrH5bzCxUzX4Oxw7nvyOldRD0",
+        authDomain: "shrek.firebaseio.com",
+        databaseURL: "https://shrek.firebaseio.com/",
+        storageBucket: "shrek.appspot.com",
+        messagingSenderId: "426833609145"
+    };
+    firebase.initializeApp(config);
+
+
+    var refPrikker = firebase.database().ref('prikker');
+
+    document.onclick = function(evt) {
+        var xpos = evt.clientX;
+        var ypos = evt.clientY;
+
+        refPrikker.push({
+            x: xpos,
+            y: ypos
+        });
+
+    };
+
+    refPrikker.on('child_added', function(snap){
+        var data = snap.val();
+        var prikk = document.createElement("div");
+        prikk.className = "prikk";
+        document.body.appendChild(prikk);
+        prikk.style.left = data.x - 10 + "px";
+        prikk.style.top = data.y -10 + "px";
+    });
+
+
+</script>
+
+</body>
+</html>

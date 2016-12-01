@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stjerner</title>
+</head>
+<body>
+
+<script>
+
+    var tallene = [2, 4, 6, 7, 7];
+
+    var mineTall = new Set(); //Kan ikke ha flere av samme verdi
+    mineTall.add(2);
+    mineTall.add(4);
+    mineTall.add(6);
+    mineTall.add(7);
+    mineTall.add(9);
+
+    mineTall.delete(6);
+    
+    //Sjekker om settet har tallet 9
+    console.log(mineTall.has(6));
+    
+
+    console.log(mineTall);
+    
+</script>
+
+</body>
+</html>

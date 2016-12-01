@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Last opp vilder</title>
+    <style>
+        html {
+            background-color: lightgray;
+        }
+        body {
+            max-width: 32em;
+            margin: auto;
+            padding: 2em;
+            font-family: sans-serif;
+            font-size: 1.2em;
+            background-color: white;
+            box-shadow: rgba(0,0,0,0.1) 0 0.2em 0.3em;
+        }
+    </style>
+</head>
+<body>
+<form action="" id="regBilde">
+    <input type="file" id="inpBilde" placeholder="Upload image" required>
+    <input type="text" id="bildeTekst" placeholder="Beskrivelse" required>
+    <button type="submit">OK</button>
+</form>
+
+<div id="visBilder"></div>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyBUPcXMIeKrAzk6bn2L4uJk96SsYixdkp8",
+        authDomain: "itfredag.firebaseapp.com",
+        databaseURL: "https://itfredag.firebaseio.com",
+        storageBucket: "itfredag.appspot.com",
+        messagingSenderId: "397592999262"
+    };
+    firebase.initializeApp(config);
+</script>
+<script>
+
+    var database = firebase.database();
+    var storage = firebase.storage();
+
+    var regBilde = document.getElementById("regBilde");
+    var bildeTekst = document.getElementById("bildeTekst");
+    var visBilder = document.getElementById("visBilder");
+    var inpBilde = document.getElementById("inpBilde");
+    var mineBilder = database.ref("minebilder");
+
+    var bildeURL;
+
+    inpBilde.onchange = function() {
+
+        var file = inpBilde.files[0];
+        var imageRef = storage.ref("/images/" + new Date() + "/");
+        imageRef.put(file).then(function(snapshot){
+            bildeURL = snapshot.downloadURL;
+            console.log(bildeURL);
+        });
+    };
+
+    regBilde.onsubmit = function(evt) {
+        evt.preventDefault();
+        mineBilder.push({
+            bildetekst: bildeTekst.value,
+            url: bildeURL
+        });
+
+        inpBilde.value = "";
+        bildeTekst.value = "";
+
+    };
+    mineBilder.on("child_added", function(snap){
+        var data = snap.val();
+        visBilder.innerHTML += `<img height="250px" src="${data.url}">`
+    });
+
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

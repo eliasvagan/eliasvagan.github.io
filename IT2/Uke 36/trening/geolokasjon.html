@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <script>
+
+        navigator.geolocation.getCurrentPosition(
+
+                function(pos) {
+                    var lat = pos.coords.latitude;
+                    var long = pos.coords.longitude;
+                    if( lat.toFixed(3) == 59.893 && long.toFixed(3) == 10.518 ) {
+                        document.write("Du er på Sandvika VGS.")
+                    } else {
+                        document.write("Du er ikke på skolen.")
+                    }
+
+                }
+
+        )
+
+
+    </script>
+
+</body>
+</html>

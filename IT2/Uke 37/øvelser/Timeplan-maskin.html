@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TIMEPLANZOMG!!</title>
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Tamma" rel="stylesheet">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+        }
+        *:focus {
+            outline: none;
+        }
+        body {
+            background-color: lightgray;
+        }
+        section#main {
+            position: relative;
+            margin: 1em auto;
+            padding: 1.5em;
+            background-color: white;
+            box-shadow: 0 0.1em 0.3em #a4a4a4;
+            max-width: 50em;
+        }
+        table {
+            width: 100%;
+            margin-top: 1em;
+            border: none;
+            border-spacing: 0;
+            border-radius: 1em;
+
+        }
+        table * {
+            text-align: center;
+            border: none;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1em;
+        }
+        #timeplan tr:first-of-type {
+            font-weight: bold;
+            background-color: #f4f4f4;
+            font-size: 1.4em;
+
+        }
+        #timeplan tr:last-of-type > td {
+            border-bottom: none;
+        }
+        #timeplan td {
+            border-right: darkgray solid 0.1em;
+            border-bottom: lightgray solid 0.1em;
+            padding: 0.5em;
+            height: 2em;
+            font-size: 1.2em;
+
+        }
+        #timeplan td:last-of-type {
+            border-right: none;
+        }
+
+        input {
+            width: 100%;
+            height: 100%;
+            padding:0.4em 0 ;
+            font-size: 1.4em;
+            border: solid 0.2em #d2d2d2;
+            border-right: 0;
+            text-align: center;
+            transition: 0.5s ease;
+            z-index: 300;
+        }
+        input:last-of-type {
+            border-right: solid 0.1em lightgray;
+        }
+        button {
+            width: 100%;
+            margin: 0.5em 0 1em 0;
+            position: relative;
+            padding: 0.2em;
+
+            background-color: #74a8e6;
+            border-radius: 0.5em;
+            border: none;
+            color: white;
+            transition: 0.5s ease;
+            z-index: 1;
+        }
+        button > p {
+            padding: 0.5em 0 0 0;
+            font-size:2em;;
+            font-family: 'Baloo Tamma', cursive;
+        }
+        button:hover {
+            background-color: deepskyblue;
+            cursor: pointer;
+        }
+
+        .flex{
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+
+    <datalist id="ukedagListe">
+        <option value="Mandag"></option>
+        <option value="Tirsdag"></option>
+        <option value="Onsdag"></option>
+        <option value="Torsdag"></option>
+        <option value="Fredag"></option>
+    </datalist>
+
+    <datalist id="timeListe">
+        <option value="1"></option>
+        <option value="2"></option>
+        <option value="3"></option>
+        <option value="4"></option>
+    </datalist>
+
+
+
+    <section id="main">
+
+        <form id="formen" >
+            <h3>Bruk denne formen til å legge til timer i planen.</h3>
+            <div class="flex">
+                <input autocomplete="off" type="text" name="ukedag" list="ukedagListe" placeholder="Ukedag" required>
+                <input autocomplete="off" type="number" name="timeNummer" list="timeListe" placeholder="Timenummer" required>
+                <input autocomplete="off" type="text" name="fagNavn" placeholder="Fagnavn" required>
+                <input autocomplete="off" type="text" name="romNummer" placeholder="Romnummer">
+            </div>
+                <button type="submit"><p>Trykk for å legge til</p></button>
+        </form>
+        
+        <table id="timeplan">
+            <tr>
+                <td>Mandag</td>
+                <td>Tirsdag</td>
+                <td>Onsdag</td>
+                <td>Torsdag</td>
+                <td>Fredag</td>
+            </tr>
+            <tr id="time1">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="time2">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="time3">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="time4">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <script>
+
+            var time = [
+                    "",
+                document.getElementById("time1"),
+                document.getElementById("time2"),
+                document.getElementById("time3"),
+                document.getElementById("time4")
+            ];
+
+            var formen = document.getElementById("formen");
+
+            formen.onsubmit = function(evt){
+                evt.preventDefault();
+
+                var ukedag = formen.ukedag.value;
+                var timeNummer = formen.timeNummer.value;
+                var fagNavn = formen.fagNavn.value;
+                var romNummer = formen.romNummer.value;
+
+                var info = `    <p>
+                                    <b>${fagNavn}</b><br>
+                                    ${romNummer}
+                                </p>`;
+
+                if      (ukedag == "Mandag")    {time[timeNummer].childNodes[1].innerHTML = info;}
+                else if (ukedag == "Tirsdag")   {time[timeNummer].childNodes[3].innerHTML = info;}
+                else if (ukedag == "Onsdag")    {time[timeNummer].childNodes[5].innerHTML = info;}
+                else if (ukedag == "Torsdag")   {time[timeNummer].childNodes[7].innerHTML = info;}
+                else if (ukedag == "Fredag")    {time[timeNummer].childNodes[9].innerHTML = info;}
+                else    {alert("Skriv en gyldig ukedag!")}
+
+                formen.reset();
+            };
+
+
+        </script>
+        
+    </section>
+
+</body>
+</html>

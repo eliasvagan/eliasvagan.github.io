@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgaver s.99</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<a href="Oppgaver%202.html"> Side 105</a>
+    <h1>Oppgaver side 99</h1>
+    <div class="oppgave">
+        <h2>1</h2>
+        <p id="P1"></p>
+        <script>
+            var P1 = document.getElementById("P1");
+            function navnet() {
+                P1.innerHTML += "Jeg heter Elias. <br>";
+            }
+            navnet();
+            navnet();
+            navnet();
+
+        </script>
+    </div>
+
+
+    <div class="oppgave">
+        <h2>2</h2>
+        <p id="P2"></p>
+        <button id="B2">Endre ting</button>
+        <script>
+            var P2 = document.getElementById("P2");
+            var B2 = document.getElementById("B2");
+
+            P2.innerHTML = "Dette er en p-tag med tekst i seg. Denne teksten er skrevet i JS. <br><br> Lorem ipsum dolor sit " +
+                    "amet, consectetur adipisicing elit. Animi ea, hic id nemo neque officia omnis praesentium, quam quibusdam " +
+                    "quod sed vitae? Dolores excepturi labore possimus saepe, sint suscipit ut?";
+            B2.onclick = function() {
+                P2.style = `
+            background-color: lightblue;
+            font-size: 1.4em;
+            `
+            }
+
+        </script>
+    </div>
+
+
+    <div class="oppgave">
+        <h2>3</h2>
+        <p id="P3"></p>
+        <script>
+            var P3 = document.getElementById("P3");
+            var x = 1;
+            var sum = 0;
+            while(x <= 100) {
+
+                //sum = sum + x;
+                sum += x;
+
+                x++;
+
+
+            }
+            function summer() {
+                P3.innerHTML += "Sum = " + sum + "<br>";
+            }
+            summer();
+            summer();
+
+
+        </script>
+    </div>
+
+
+
+    <div class="oppgave">
+        <h2>4</h2>
+        <p>Det kan være hensiktsmessig å bruke funksjoner når du skal gjøre én ting mange ganger.</p>
+    </div>
+
+
+    <div class="oppgave">
+        <h2>5</h2>
+        <p>Oppgave 1</p>
+        <div class="boks">
+
+            <code>
+                var P1 = document.getElementById("P1");<br>
+            </code>
+            <p>Definer P1 fra det elementet med ID-en "P1".</p>
+            <code>
+                function navnet() {<br>
+                P1.innerHTML += "Jeg heter Elias.";<br>
+                }
+                <br>
+            </code>
+            <p>Funksjonen "navnet" sier at P1 skal legge til teksten "Jeg heter Elias".</p>
+            <code>
+                navnet();
+                <br>
+                navnet();
+                <br>
+                navnet();
+            </code>
+            <p>Vi utfører funksjonen "navnet" tre ganger.</p>
+        </div>
+
+
+
+        <p>Oppgave 2</p>
+        <div class="boks">
+            <code> var P2 = document.getElementById("P2");</code>
+            <p>Definer P2 som variabel til elementet med ID "P2" (en p-tag)</p>
+            <code>var B2 = document.getElementById("B2");</code>
+            <p>Definer B2 som variabel til elementet med ID "B2" (en knapp)</p>
+            <code>P2.innerHTML = "Dette er en p-tag med tekst i seg. Denne teksten er skrevet i JS.<br>Lorem ipsum dolor sit
+                "amet, consectetur adipisicing elit. Animi ea, hic id nemo neque officia omnis praesentium, quam quibusdam
+                "quod sed vitae? Dolores excepturi labore possimus saepe, sint suscipit ut?";</code>
+            <p>P2 sit innhold er "Dette er en p-tag med [ ... ]".</p>
+            <code>B2.onclick = function() { <br>
+                P2.style = `                <br>
+                background-color: lightblue;<br>
+                font-size: 1.4em;           <br>
+                `
+                }</code>
+            <p>Når man trykker på B2, endres stilen på P2 med følgende informasjon:</p>
+            <p>  - Bakgrunnsfargen blir blå</p>
+            <p>  - Font-størrelsen blir 1,4em.</p>
+        </div>
+
+        <p>Oppgave 3</p>
+        <div class="boks">
+            <code>var P3 = document.getElementById("P3");</code>
+            <p>Variabelen P3 er elementet på siden med ID-en "P3" (en p-tag).</p>
+            <code>var x = 1;</code>
+            <p>Variabelen "x" er tallet 1.</p>
+            <code>var sum = 0;</code>
+            <p>Variabelen "sum" er tallet 0.</p>
+            <code>
+                while(x <= 100) { <br><br>
+
+                sum += x;<br>
+
+                x++;<br>
+
+
+                }
+            </code>
+            <p>Så lenge x er mindre/lik 100, fortsetter de følgende tingene å skje:</p>
+            <p>     - Variabelen "sum" er lik seg selv pluss "x".</p>
+            <p>     - Variabelen "x" øker sin egen verdi med én.</p>
+        </div>
+    </div>
+<div class="oppgave">
+    <h2>6</h2>
+
+    <canvas id="C6" width="400" height="300"></canvas>
+    <br>
+    <button id="BTN6">Start</button>
+    <script>
+        var BTN6 = document.getElementById("BTN6");
+
+        var C6 = document.getElementById("C6");
+        var ctx = C6.getContext("2d");
+        ctx.strokeStyle = "red";
+        var x = 30;
+        var y = 30;
+
+        function degToRad(deg) {
+            return Math.PI * deg / 180;
+        }
+
+        function tegnSirkel() {
+            ctx.beginPath();
+            ctx.moveTo(x + 20, y);
+            ctx.arc(x, y, r, degToRad(0),degToRad(360));
+
+            ctx.stroke();
+            ctx.closePath();
+        }
+        function flyttX() {
+            x += 20;
+        }
+        function flyttY() {
+            y+= 20;
+        }
+        var i = 0, antallGanger = 10;
+        BTN6.onclick = function f() {
+            tegnSirkel();
+            flyttX();
+            flyttY();
+
+            i++;
+            if( i < antallGanger ){
+                setTimeout( f, 100 );
+            }
+        }
+    </script>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+</body>
+</html>

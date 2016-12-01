@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bilder</title>
+    <style>
+        img {
+            height: 30em;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="bilde1.jpg" id="plakat" title="Phantom Assassin">
+    <br>
+    <button id="knapp">Bytt</button>
+
+    <script>
+
+        document.getElementById("knapp").onclick = function() {
+
+            document.getElementById("plakat").title = "Dazzle";
+            document.getElementById("plakat").src = "bilde2.png";
+
+
+        }
+
+
+    </script>
+
+</body>
+</html>

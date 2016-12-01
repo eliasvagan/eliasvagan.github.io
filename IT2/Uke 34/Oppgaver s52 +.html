@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgaver</title>
+    <link rel="icon" href="favicon.png">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        html {
+            background-color: #d9d9d9;
+            background-image: url(bg.png);
+            background-attachment: fixed;
+        }
+        body {
+            max-width: 40em;
+            margin: 1em auto;
+
+
+            font-family: Arial, sans-serif;
+            font-size: 1.2em;
+        }
+        div.oppgave {
+            padding: 2.4em;
+
+            border-bottom: 0.2em #e3e3e3 dashed;
+        }
+        div.oppgave:last-of-type {
+            border: none;
+        }
+        h1, p {
+            padding: 0.3em 0;
+        }
+        h1 {
+            float: right;
+            color: #818181;
+            padding-right: 1em;
+            padding-top: 1em;
+        }
+        button {
+            padding: 0.5em;
+            font-size: 0.9em;
+            text-align: center;
+            min-width: 2em;
+            color: white;
+            background-color: #cc4b5a;
+            border: none;
+            margin: 0.5em 0;
+            border-radius: 0.5em;
+            outline: none;
+            border-bottom: solid 0.3em #851d1d;
+            box-shadow: 0 0.2em 0 rgba(0,0,0,0.15);
+            display: inline-block;
+            box-sizing: border-box;
+            cursor: pointer;
+
+        }
+        button:hover {
+            background-color: #e04f5f;
+            cursor: hand;
+        }
+        button:active {
+            /*margin: 0.7em 0 0.55em 0;*/
+            transform: translateY(0.3em);
+            border-bottom: solid 0.1em #851d1d;
+            box-shadow: 0 0.1em 0 rgba(0, 0, 0, 0.15);
+            margin-bottom: 0.75em;
+
+        }
+
+        div.side {
+            margin-bottom: 1em;
+            background-color: white;
+            box-shadow: 0 0.2em 0.6em rgba(0,0,0,0.3);
+        }
+        div.side:last-of-type {
+            margin: 0;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: #454545;
+            padding-top: 0.5em;
+        }
+        canvas {
+            border: dashed 0.15em darkgray;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <section id="main">
+        <div class="side">
+            <h1>s.52</h1>
+            <div class="oppgave">
+
+                <h4>Oppgave 1</h4>
+                <script>
+                    var navn = "Simen";
+                    document.write("Hallo, jeg heter " + navn + ".");
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 2</h4>
+                <script>
+                    var navn1 = "Simen";
+                    var navn2 = "Elias";
+                    document.write("Hallo, dette er skrevet av " + navn1 + " og " + navn2 + ".");
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 3</h4>
+                <script>
+                    var fornavn = "Henrik";
+                    var etternavn = "Ibsen";
+                    document.write(
+                            "Et Dukkehjem er skrevet av forfatteren " + fornavn + " " + etternavn + ". <br>" +
+                            etternavn + " hadde fint skjegg i en periode."
+                            );
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 4</h4>
+                <button id="nameInput">TRYKK PÅ MEG, DIN NISSE</button>
+                <p id="historien"></p>
+                <script>
+                    document.getElementById("nameInput").onclick = function(){
+                        var dittNavn = prompt("Hva heitar do? Nisse.");
+                        document.getElementById("historien").innerHTML = ("Velkommen, din " + dittNavn + "-nisse.")
+                    };
+
+
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 5</h4>
+                <button id="bursdagsNavn">DU HAR FÅTT EN INVITASJON!!! TRYKK HER FOR Å LESE DEN!</button>
+                <p id="bursdagsInv"></p>
+                <script>
+                    document.getElementById("bursdagsNavn").onclick = function(){
+                        var BursdagsNavn = prompt("Hva heter du?");
+                        document.getElementById("bursdagsInv").innerHTML = (`
+                           <p>Kjære ${BursdagsNavn}, velkommen til fest!</p>
+                           <p>Du er offisielt invitert til kongen på bursdag. Jeg snakker selvfølgelig om swag-kongen. Jeg er best.</p>
+                           <p>Ikke glem å ta med gaver, jeg foretrekker Champagne, men Prosecco er også greit hvis jeg får mange flasker.</p>
+                        `);
+                    };
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 6</h4>
+                <button id="adjektiver">Skriv adjektiv-historie!</button>
+                <p id="adjektivHistorie"></p>
+                <script>
+                    document.getElementById("adjektiver").onclick = function(){
+
+                        var adj1 = prompt("Adjektiv nummer 1");
+                        var adj2 = prompt("Adjektiv nummer 2");
+                        var adj3 = prompt("Adjektiv nummer 3");
+                        var adj4 = prompt("Adjektiv nummer 4");
+                        var adj5 = prompt("Adjektiv nummer 5");
+                        var adj6 = prompt("Adjektiv nummer 6");
+
+                        document.getElementById("adjektivHistorie").innerHTML = (`
+
+                            <h3>En historie om en ${adj1} fisk</h3>
+                            <p>Det var en gang en veldig ${adj2} dam.
+                            Her bodde det mange fisker som var ${adj3}, men det var bare én som var ${adj1}.</p>
+                            <p>Denne fisken het Kåre.</p>
+                            <p>Kåre likte å ta med sin ${adj4} kåpe når han besøker sin mor i julen. Her feirer den
+                            ${adj5} tradisjonen med hele familien.</p>
+                            <p>Julenissefisken kommer alltid på besøk med sin ${adj2} kone og masse ${adj6} pakker.</p>
+                        `)
+                    };
+                </script>
+            </div>
+        </div>
+        <div class="side">
+            <h1>s.60</h1>
+            <div class="oppgave">
+                <h4>Oppgave 1</h4>
+                <button id="s60o1">Areal og omkrets av rektangel</button>
+                <p id="rektangel"></p>
+                <script>
+                    document.getElementById("s60o1").onclick = function(){
+
+                        //Definerer høyde og lager tall
+                        var rektHoyde = prompt("Høyde");
+                        rektHoyde = Number(rektHoyde);
+
+                        //Definerer bredde og lager tall
+                        var rektBredde = prompt("Bredde");
+                        rektBredde = Number(rektBredde);
+
+                        //Regner og skriver teksten i p-taggen
+                        document.getElementById("rektangel").innerHTML = ("Arealet av rektangelet er " + rektBredde * rektHoyde +
+                        "<br>Omkretsen er " + (rektBredde * 2 + rektHoyde * 2)) +
+                        "<br>Bredde = " + rektBredde +
+                        "<br>Høyde = " + rektHoyde;
+
+                    };
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 2</h4>
+                <p>Du kan trykke så mange ganger du vil.</p>
+                <button id="RNG">Random numbers</button>
+                <p id="random1"></p>
+                <p id="random2"></p>
+                <p id="random3"></p>
+
+                <script>
+                    document.getElementById("RNG").onclick = function() {
+
+                        var RNG1 = Math.random()*5 + 1;
+                        RNG1 = Math.round(RNG1);
+                      document.getElementById("random1").innerHTML = (
+                              "Tall fra 1 - 6: " + RNG1
+                      );
+
+                        var RNG2 = Math.random()*10;
+                        RNG2 = Math.round(RNG2);
+                      document.getElementById("random2").innerHTML = (
+                              "Tall fra 0 - 10: " + RNG2
+                      );
+
+                        var RNG3 = Math.random()*10 + 10;
+                        RNG3 = Math.round(RNG3);
+                      document.getElementById("random3").innerHTML = (
+                              "Tall fra 10 - 20: " + RNG3
+                      );
+                    };
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 3</h4>
+                <p>Vi beregner tall ut ifra radiusen på en kule i JS.</p>
+                <button id="s60o3">Radius av kule</button>
+                <p id="kule"></p>
+                <script>
+
+                    document.getElementById("s60o3").onclick = function(){
+
+                        //Vi definerer radius og gjør om til tall
+                        var kulerRadius = prompt("Radius til kulen?");
+                        kuleRadius = Number(kulerRadius);
+
+                        //Vi regner ut ting med JS
+                        var kuleOmkrets = kulerRadius * 2 * Math.PI;
+                        kuleOmkrets = kuleOmkrets.toFixed(1);
+
+                        var kuleVolum = (4 * Math.PI * Math.pow(kulerRadius, 3)/3);
+                        kuleVolum = kuleVolum.toFixed(1);
+
+                        var kuleAreal = 4 * Math.PI * Math.pow(kulerRadius, 2);
+                        kuleAreal = kuleAreal.toFixed(1);
+
+                        document.getElementById("kule").innerHTML = (`
+
+                            <p>Radius: <b>${kuleRadius}</b></p>
+                            <p>Omkrets: <b>${kuleOmkrets}</b></p>
+                            <p>Volum: <b>${kuleVolum}</b></p>
+                            <p>Areal: <b>${kuleAreal}</b></p>
+
+                        `);
+                    };
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 4</h4>
+                <p>Skriv først inn antall poeng, deretter antall mulige poeng.</p>
+                <button id="s60o4">Vi regner karakter</button>
+                <p id="karakter"></p>
+                <script>
+                    document.getElementById("s60o4").onclick = function(){
+
+                        var antallPoeng = prompt("Antall poeng");
+                        var maksPoeng = prompt("Maks poeng");
+                        var karakter = (Number(antallPoeng)/Number(maksPoeng)) * 6;
+                        karakter = karakter.toFixed();
+
+                        document.getElementById("karakter").innerHTML = (`
+
+                            <p>Poeng: ${antallPoeng}/${maksPoeng}</p>
+                            <p>Karakter: ${karakter}</p>
+
+                        `);
+                    };
+                </script>
+            </div>
+
+            <div class="oppgave">
+                <h4>Oppgave 5</h4>
+                <p>BMI: Body mass index</p>
+                <button id="BMIbutton">Din vekt / høyde</button>
+                <p id="BMI"></p>
+                <script>
+                    document.getElementById("BMIbutton").onclick = function () {
+                        var kroppsHoyde = prompt("Din høyde (i centimeter)");
+                        kroppsHoyde = Number(kroppsHoyde) / 100;
+
+                        var kroppsVekt = prompt("Din vekt (i KG)");
+                        kroppsVekt = Number(kroppsVekt);
+
+                        var BMI = kroppsVekt/Math.pow(kroppsHoyde,2);
+                        BMI = BMI.toFixed(2);
+
+                        document.getElementById("BMI").innerHTML = (`
+                            <p>Din BMI er <b>${BMI}</b>.</p>
+                        `);
+                    };
+                </script>
+            </div>
+        </div>
+        <div class="side">
+            <h1>Ekstraoppgave 3</h1>
+            <div class="oppgave">
+                <h2>Oppgave 1</h2>
+                <p>Vi bruker canvas-elementet til å generere tilfeldige firkanter.</p>
+                <button id="firkantRNG">Generer firkant</button>
+                <canvas id="randomFirkant" width="400" height="400"></canvas>
+                <script>
+                    var myCanvas = document.getElementById("randomFirkant");
+                    var ctx = myCanvas.getContext("2d");
+                    //Lager firkant
+                    document.getElementById("firkantRNG").onclick = function() {
+
+
+
+                        var randomHoyde = Math.random()*300 + 100;
+                        var randomBredde = Math.random()*300 + 100;
+
+                        var randomL = Math.random() * 70 + 30;
+                        var randomH = Math.random() * 255;
+                        var randomColor =`hsl(${randomH}, ${randomL}%, ${randomL}%)`;
+                        ctx.fillStyle = randomColor;
+
+
+
+                        var randomFirkant = {
+                            x: 200 - (randomBredde / 2),
+                            y: 200 - (randomHoyde / 2),
+                            w: randomBredde,
+                            h: randomHoyde
+                        };
+
+                        ctx.fillRect(
+                                randomFirkant.x,
+                                randomFirkant.y,
+                                randomFirkant.w,
+                                randomFirkant.h
+                        );
+                    };
+
+                </script>
+            </div>
+            <div class="oppgave" style="min-height: 25em;">
+                <h2>Oppgave 2</h2>
+                <button id="storTekst">+</button>
+                <button id="vanligTekst">=</button>
+                <button id="litenTekst">-</button>
+                <div id="variabelTekst">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aspernatur doloribus eligendi
+                        error exercitationem fugiat fugit in libero molestiae nihil odio quae, quas quasi rem repellat
+                        repudiandae voluptate? Aspernatur, reiciendis?</p>
+                    <p>A asperiores at, aut consequatur culpa, cum ex expedita explicabo ipsum, magnam magni minus neque
+                        nobis porro praesentium provident qui quibusdam quis quod repellendus rerum sapiente totam unde
+                        voluptates voluptatum!</p>
+                    <p>Aliquam dolor doloremque, eius enim labore laboriosam magni nihil officia optio pariatur placeat
+                        quidem quis reprehenderit similique, voluptatibus. Accusamus consequuntur deleniti dolorem eos
+                        exercitationem expedita explicabo harum officia quasi voluptas.</p>
+                </div>
+                <script>
+
+                    var tekst = document.getElementById("variabelTekst");
+                    var tekstStorrelse = 1.1;
+                    var storTekst = document.getElementById("storTekst");
+                    var vanligTekst = document.getElementById("vanligTekst");
+                    var litenTekst = document.getElementById("litenTekst");
+
+
+                    //Øker størrelse med 0.1em
+                    storTekst.onclick = function() {
+                        tekstStorrelse = tekstStorrelse + 0.1;
+                        if(tekstStorrelse >= 3.0) {
+                            tekstStorrelse = 3.0;
+                        }
+                        tekst.style.fontSize = tekstStorrelse + "em";
+                        console.log(tekstStorrelse);
+                    };
+
+                    //Minker størrekse med 0.1em
+                    litenTekst.onclick = function() {
+                        tekstStorrelse = tekstStorrelse - 0.1;
+                        if(tekstStorrelse <= 0.3) {
+                            tekstStorrelse = 0.3;
+                        }
+                        tekst.style.fontSize = tekstStorrelse + "em";
+                        console.log(tekstStorrelse);
+                    };
+
+                    //Nullstiller størrelse
+                    vanligTekst.onclick = function() {
+                        tekstStorrelse = 1.0;
+                        tekst.style.fontSize = tekstStorrelse + "em";
+                        console.log(tekstStorrelse);
+                    };
+
+                </script>
+            </div>
+        </div>
+    </section>
+    <footer>Laget av Simen og Elias 25.Aug 2016</footer>
+</body>
+</html>
