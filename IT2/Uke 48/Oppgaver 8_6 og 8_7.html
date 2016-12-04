@@ -12,7 +12,7 @@
         .side {
             background-color: white;
             padding: 1.5em;
-            border-radius: 0.8em;
+            box-shadow: 0 0.2em 1em rgba(0, 0, 0, 0.16);
             max-width: 32em;
             box-sizing:border-box;
             margin: 1em auto;
@@ -46,6 +46,9 @@
             color: dodgerblue;
             text-align: center;
             font-size: 0.9em;
+        }
+        svg {
+            border: dashed 0.1em lightblue;
         }
     </style>
 </head>
@@ -143,6 +146,44 @@
     </div>
     <div class="oppgave">
         <h3>4</h3>
+        <svg width="400" height="350" id="stromChart">
+            <defs>
+                <marker id="sirkel" markerWidth="15" markerHeight="15" refX="7.5" refY="7.5">
+                    <circle cx="7.5" cy="7.5" r="7" fill="Blue"></circle>
+                </marker>
+            </defs>
+
+        </svg>
+        <script>
+            var stromChart = document.getElementById("stromChart");
+            var data = [
+                {mnd: "Jan", verdi:650  },
+                {mnd: "Feb", verdi:400  },
+                {mnd: "Mar", verdi:350  },
+                {mnd: "Jun", verdi:300  },
+                {mnd: "Jul", verdi:200  }
+            ];
+
+            for(var i = 0; i<8; i++){
+                stromChart.innerHTML += `
+                <line stroke="LightGray" x1="0" y1="${50 + i*50}" x2="400" y2="${50 + i*50}"></line>
+            `;
+            }
+
+            for(var i = 0; i<7; i++){
+                stromChart.innerHTML += `
+                <line stroke="LightGray" x1="${50 + i*50}" y1="0" x2="${50 + i*50}" y2=" 350"></line>
+            `;
+            }
+            var punkter="";
+            data.forEach(function (element, index) {
+                punkter += `${index * 100},${350-element.verdi/2} `;
+
+            });
+            stromChart.innerHTML += `<polyline fill="none" stroke="blue" points="${punkter}" marker-mid="url(#sirkel)"/>`;
+            console.log(punkter + stromChart.innerHTML);
+
+        </script>
     </div>
 </section>
 <section class="side">
