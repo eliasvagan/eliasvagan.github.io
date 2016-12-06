@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0101)https://dl2.pushbulletusercontent.com/d33hCCDcc4uBdHq3sC86bYJKf6YQ8ZTE/Oppgaver%208_6%20og%208_7.html -->
+<html lang="en" wtx-context="69D1FC1D-59D0-424E-8FC6-603B0386CA95"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <title>Title</title>
     <style>
         html {
@@ -12,8 +12,8 @@
         .side {
             background-color: white;
             padding: 1.5em;
-            border-radius: 0.8em;
-            max-width: 25em;
+            box-shadow: 0 0.2em 1em rgba(0, 0, 0, 0.16);
+            max-width: 32em;
             box-sizing:border-box;
             margin: 1em auto;
         }
@@ -21,7 +21,7 @@
             padding: 1em 0 1em 0;
             border-bottom: 0.1em darkgray solid;
         }
-        oppgave:last-of-type {
+        .oppgave:last-of-type {
             border:none;
         }
         .StolperLiggende > *{
@@ -46,6 +46,9 @@
             color: dodgerblue;
             text-align: center;
             font-size: 0.9em;
+        }
+        svg {
+            border: dashed 0.1em lightblue;
         }
     </style>
 </head>
@@ -80,15 +83,107 @@
     </div>
     <div class="oppgave">
         <h3>2</h3>
+        <p>Diagram over brødskiver i klassen</p>
+        <div id="sd2" class="StolperStående"></div>
+        <script>
+            var sd2 = document.getElementById("sd2");
+            var brodskiver = [
+                {navn:"Elias" , antall: 10},
+                {navn:"Simen" , antall: 12.3},
+                {navn:"Andreas" , antall: 19},
+                {navn:"Trym" , antall: 15},
+                {navn:"Sondre" , antall: 12},
+                {navn:"Shrek" , antall: 46}
+            ];
+            for(var brodskive of brodskiver) {
+                var skive = document.createElement("div");
+                skive.style.height = 10 * brodskive.antall + "px";
+                skive.innerHTML = brodskive.navn + "<br>" + brodskive.antall;
+                sd2.appendChild(skive);
+            }
+
+        </script>
 
 
 
     </div>
     <div class="oppgave">
-        <h3></h3>
+        <h3>3</h3>
+        <div id="tempDiagram"></div>
+        <script>
+            //            var tempDiagram = document.getElementById("tempDiagram");
+            //            var temp = [
+            //                {n: 1,  m:"Jan", t:1.2  }  ,
+            //                {n: 2,  m:"Feb", t:1.1  }  ,
+            //                {n: 3,  m:"Mar", t:2.8  }  ,
+            //                {n: 4,  m:"Apr", t:5.5  }  ,
+            //                {n: 5,  m:"Mai", t:9.9  }  ,
+            //                {n: 6,  m:"Jun", t:12.8 }  ,
+            //                {n: 7,  m:"Jul", t:14.1 }  ,
+            //                {n: 8,  m:"Aug", t:14.4 }  ,
+            //                {n: 9,  m:"Sep", t:11.7 }  ,
+            //                {n: 10, m:"Okt", t:8.8  }  ,
+            //                {n: 11, m:"Nov", t:4.8  }  ,
+            //                {n: 12, m:"Des", t:2.5  }
+            //            ];
+            //            for (var temper of temp){
+            //                var tempSoyle = document.createElement("div");
+            //                tempSoyle.style = `
+            //                    margin-bottom: ${14 * temper.t}px;
+            //                    backgroundColor: black;
+            //                    width: 10px;
+            //                    height: 10px;
+            //                    margin-left: ${20 * temper.n}px;
+            //                `;
+            //
+            //                tempSoyle.innerHTML = temper.m + "<br>" + tempter.t;
+            //                tempDiagram.appendChild(tempSoyle);
+            //            }
+            //
+            //            JEG GLEMTE MEG OG SKREV ALT DETTE I JAVASCRIPT FØR JEG SKJØNTE AT DET VAR SVG
+            //            Lesson learned: Les boken før du gjør oppgavene.
+        </script>
     </div>
     <div class="oppgave">
-        <h3></h3>
+        <h3>4</h3>
+        <svg width="400" height="350" id="stromChart">
+            <defs>
+                <marker id="sirkel" markerWidth="15" markerHeight="15" refX="7.5" refY="7.5">
+                    <circle cx="7.5" cy="7.5" r="7" fill="Blue"></circle>
+                </marker>
+            </defs>
+
+        </svg>
+        <script>
+            var stromChart = document.getElementById("stromChart");
+            var data = [
+                {mnd: "Jan", verdi:650  },
+                {mnd: "Feb", verdi:400  },
+                {mnd: "Mar", verdi:350  },
+                {mnd: "Jun", verdi:300  },
+                {mnd: "Jul", verdi:200  }
+            ];
+
+            for(var i = 0; i<8; i++){
+                stromChart.innerHTML += `
+                <line stroke="LightGray" x1="0" y1="${50 + i*50}" x2="400" y2="${50 + i*50}"></line>
+            `;
+            }
+
+            for(var i = 0; i<7; i++){
+                stromChart.innerHTML += `
+                <line stroke="LightGray" x1="${50 + i*50}" y1="0" x2="${50 + i*50}" y2=" 350"></line>
+            `;
+            }
+            var punkter="";
+            data.forEach(function (element, index) {
+                punkter += `${index * 100},${350-element.verdi/2} `;
+
+            });
+            stromChart.innerHTML += `<polyline fill="none" stroke="blue" points="${punkter}" marker-mid="url(#sirkel)"/>`;
+            console.log(punkter + stromChart.innerHTML);
+
+        </script>
     </div>
 </section>
 <section class="side">
@@ -109,5 +204,5 @@
 
 
 
-</body>
-</html>
+
+</body></html>
