@@ -4,6 +4,9 @@
 
     <title>Title</title>
     <style>
+        img {
+            max-width: 6em;
+        }
         html {
             background-color: lightgray;
             font-family: sans-serif;
@@ -54,7 +57,7 @@
 </head>
 <body>
 <section class="side">
-    <h1>Oppgaver side 240 </h1>
+    <h1>Oppgaver s.240 </h1>
     <div class="oppgave">
         <h3>1</h3>
         <p>Liggende stolepdiagram</p>
@@ -187,19 +190,77 @@
     </div>
 </section>
 <section class="side">
-    <h1></h1>
+    <h1>s.217</h1>
     <div class="oppgave">
-        <h3></h3>
+        <h3>1</h3>
+        <div class="spill">
+            <h1>Spill</h1>
+            <table>
+                <tbody id="tblSpill"></tbody>
+            </table>
+
+        </div>
+        <div class="handlekurv">
+            <h1>Handlekurv</h1>
+            <table>
+                <tbody id="tblHandlekurv"></tbody>
+            </table>
+            <p id="txtPris"></p>
+        </div>
     </div>
-    <div class="oppgave">
-        <h3></h3>
-    </div>
-    <div class="oppgave">
-        <h3></h3>
-    </div>
-    <div class="oppgave">
-        <h3></h3>
-    </div>
+    <script src="spilldata.js"></script>
+    <script>
+        var tblSpill = document.getElementById("tblSpill"),
+            tblHandlekurv = document.getElementById("tblHandlekurv"),
+            spillene = new Map(),          //En tom map for spillene
+            kjopteSpill = new Map(),
+            txtPris = document.getElementById("txtPris");    //Tom map for handlekurven
+
+        for(var spill of spillbutikken.spillene) { //Traverserer og legger alle spillene fra arrayet inn i map
+            spillene.set(spill.id, spill)
+        }
+        for( spill of spillene.values()) {
+            tblSpill.innerHTML += `
+                <tr>
+                    <td><img src="${spill.poster}"></td>
+                    <td>${spill.tittel}</td>
+                    <td><button onclick="kjop('${spill.id}')">Kjøp</button></td>
+                </tr>
+            `;
+        }
+        function visHandlekurv() {
+            tblHandlekurv.innerHTML = "";
+            for(var spill of kjopteSpill.values()) {
+                tblHandlekurv.innerHTML += `
+                <tr>
+                    <td><img src="${spill.poster}"></td>
+                    <td>${spill.tittel} <b>${spill.pris}</b></td>
+                    <td><button onclick="slett('${spill.id}')">Kjøp</button></td>
+                </tr>
+                `;
+            }
+            beregnPris(); //Regner ut prisen
+            console.log("Kjøpte spill = " + kjopteSpill);
+        }
+        function slett(spillID) {
+            kjopteSpill.delete(spillID);
+            visHandlekurv(); //Oppdaterer handlekurv
+        }
+        function kjop(spillID){
+            console.log(spillID);
+            var kjoptSpill = spillene.get(spillID);
+            console.log(kjoptSpill);
+            kjopteSpill.set(spillID, kjoptSpill);
+            visHandlekurv();
+        }
+        function beregnPris() {
+            var pris = 0;
+            for (var spill of kjopteSpill.values()) {
+                pris += spill.pris;
+            }
+            txtPris.innerHTML = "Sum: kr" + pris;
+        }
+    </script>
 </section>
 
 
