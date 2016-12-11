@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgave 1</title>
+    <style>
+        html {
+            background-color: #dadada;
+            font-family: sans-serif;
+        }
+        body {
+            max-width: 40em;
+            background-color: white;
+            padding: 1em;
+            position: relative;
+            margin: auto;
+        }
+        form {
+            display: flex;
+
+        }
+        form > * {
+            flex: 1;
+            padding: 1em;
+        }
+        table {
+            width: 100%;
+            border: solid 0.1em lightgray;
+            margin-top: 1em;
+        }
+        tr {
+            border-bottom: dashed lightgray 0.2em;
+        }
+        tr:last-child {
+            padding: 0;
+
+        }
+        td {
+            padding: 1em;
+        }
+        form > p > img {
+            width: 30px;
+            height: 30px;
+        }
+        form > p {
+            padding: 0;
+        }
+        thead {
+            background-color: #d6f5ff;
+        }
+        thead > td {
+            text-align: center;
+        }
+
+
+        h1 > i {
+            font-weight: normal;
+        }
+        a {
+            background-color: #00ae81;
+            padding: 1em;
+            width: 5em;
+            border-radius: 0 0 0 50%;
+            text-align: center;
+            color: white;
+            position: absolute;
+            right: 0;
+            top:0;
+            z-index: 100;
+            text-decoration: none;
+        }
+        .flex {
+            display: flex;
+            flex-direction: row;
+        }
+        .flex > * {
+            flex: 1;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <p>Elias B. Vågan</p>
+    <a href="prove2.html"> Gå til oppgave 2</a>
+</header>
+<h1>Oppgave 1: <i>Filmanmeldelser</i></h1>
+
+
+<form action="">
+    <input type="text" placeholder="Filmens tittel" id="inpTittel" required>
+    <input type="text" placeholder="Kort beskrivelse" id="inpBeskrivelse" required>
+    <input type="range" placeholder="Terningkast" id="inpScore" max="6" min="1" step="1" value="1" required>
+    <p id="terningPreview">
+        <img src="terning01.png" alt="">
+    </p>
+    <button type="submit" id="btnOK">OK</button>
+</form>
+<br>
+<div class="flex">
+    <p>Sorter etter terningkast:</p>
+    <button class="sort" id="sortScoreA">Synkende</button>
+    <button class="sort" id="sortScoreB">Stigende</button>
+</div>
+
+
+<table>
+    <thead>
+        <tr>
+            <th><b>Tittel</b></th>
+            <th><b>Beskrivelse</b></th>
+            <th><b>Terningkast</b></th>
+        </tr>
+
+    </thead>
+    <tbody id="filmTbl">
+
+    </tbody>
+</table>
+
+<script>
+    var filmTbl = document.getElementById("filmTbl");
+    var inpTittel = document.getElementById("inpTittel");
+    var inpBeskrivelse = document.getElementById("inpBeskrivelse");
+    var inpScore = document.getElementById("inpScore");
+    var btnOK = document.getElementById("btnOK");
+    var terningPreview = document.getElementById("terningPreview");
+    var sortScoreA = document.getElementById("sortScoreA");
+    var sortScoreB = document.getElementById("sortScoreB");
+
+
+
+    var anmeldelser = [];
+    btnOK.onclick = function submit(evt) {
+        evt.preventDefault();
+        anmeldelser.push({
+            tittel: inpTittel.value,
+            beskrivelse: inpBeskrivelse.value,
+            score: inpScore.value
+        });
+        inpTittel.value = "";
+        inpBeskrivelse.value = "";
+
+
+        oppdater();
+    };
+    function oppdater() {
+        filmTbl.innerHTML = "";
+        for(var anmeldelse of anmeldelser) {
+            filmTbl.innerHTML += `
+
+                <tr>
+                    <td><b>${anmeldelse.tittel}</b></td>
+                    <td>${anmeldelse.beskrivelse}</td>
+                    <td><img src="terning0${anmeldelse.score}.png" style="width: 45px; height: 45px;"></td>
+                </tr>
+
+            `;
+        }
+     }
+    inpScore.addEventListener("input", function(){
+        terningPreview.innerHTML = `<img src="terning0${inpScore.value}.png">`;
+
+    });
+    sortScoreA.onclick = function() {
+        anmeldelser.sort(function(a, b) {
+            return parseFloat(b.score) - parseFloat(a.score);
+        });
+        oppdater();
+    };
+    sortScoreB.onclick = function() {
+        anmeldelser.sort(function(a, b) {
+            return parseFloat(a.score) - parseFloat(b.score);
+        });
+        oppdater();
+    };
+
+
+
+
+</script>
+
+
+</body>
+</html>

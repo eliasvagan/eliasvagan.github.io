@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgave 2</title>
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+
+        }
+        input, button {
+            padding: 0.8em;
+            font-size: 1.1em;
+        }
+
+        form > p > img {
+            width: 30px;
+            height: 30px;
+        }
+        section#left {
+            width: 180px;
+            margin: 0;
+            height: 100%;
+            position: fixed;
+            left:0;
+            top:0;
+            padding: 0.5em;
+
+        }
+        p#footer {
+            bottom: 5px;
+            position: absolute;
+            font-size: 1em;
+            color: dimgray;
+            text-align: center;
+            width: 100%;
+        }
+        .flex {
+            display: flex;
+            flex-direction: row;
+        }
+        .flex > p {
+            flex: 2;
+        }
+        section#right {
+            position: fixed;
+            width: calc(100% - 200px);
+            height: 100%;
+            left: 200px;
+            top: 0;
+            background-color: #343434;
+
+        }
+        .fargeboks {
+            transition: 1s ease;
+        }
+        a {
+            background-color: #00ae81;
+            padding: 1em;
+            width: 5em;
+            border-radius: 0 0 50% 0;
+            text-align: center;
+            color: white;
+            position: absolute;
+            left: 0;
+            top:0;
+            z-index: 100;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+
+<section id="left">
+    <a href="prove1.html"> Gå til oppgave 1</a>
+    <br>
+    <br>
+    <br>
+    <h1>Oppgave 2: <i>Farger</i></h1>
+
+    <form action="" id="form">
+        <input type="text" id="inpNavn" placeholder="Navn" required>
+        <div class="flex" >
+            <p>Farge:</p>
+            <input type="color" id="inpFarge" value="#FFFFFF" required>
+        </div>
+        <button type="submit" id="btnOK">OK</button>
+    </form>
+
+    <p id="pSize"><b>Størrelse på stjerner:</b>10</p>
+    <input type="range" min="1" max="20" id="inpSize" value="10">
+    <button id="btnScramble">Scramble</button>
+    <p id="footer">Elias B. Vågan</p>
+    
+
+</section>
+<section id="right">
+
+</section>
+
+<script>
+    var right = document.getElementById("right");
+    var inpNavn = document.getElementById("inpNavn");
+    var inpFarge = document.getElementById("inpFarge");
+    var btnOK = document.getElementById("btnOK");
+    var form = document.getElementById("form");
+    var inpSize = document.getElementById("inpSize");
+    var btnScramble = document.getElementById("btnScramble");
+    var pSize = document.getElementById("pSize");
+    var size = 10;
+
+
+
+    form.onsubmit = function(evt) {
+        evt.preventDefault();
+
+        var navneboks = document.createElement("div");
+        navneboks.innerHTML = inpNavn.value;
+        navneboks.className = "fargeboks";
+        var x = Math.random() * (innerWidth - 240);
+        var y = Math.random() * (innerHeight - 40);
+
+        navneboks.style =  `
+
+            position: absolute;
+            left: ${x + 10}px;
+            top: ${y + 10}px;
+            background-color: ${inpFarge.value};
+            padding: 12px;
+            text-align: center;
+            font-size: ${(Math.random() * 10) + 15}px;
+            color: white;
+            text-shadow: black 0 0 2px;
+            border-radius: 50%;
+
+        `;
+
+
+
+        var i = 1;
+        while(i < 10) {
+            var fargekule = document.createElement("div");
+            fargekule.className = "fargeboks";
+            i++;
+            var widthAndHeight = Math.random() * size + 1;
+            x = Math.random() * (innerWidth - 240);
+            y = Math.random() * (innerHeight - 40);
+            fargekule.style  = `
+                position: absolute;
+                left: ${x + 10}px;
+                top: ${y + 10}px;
+                width: ${widthAndHeight}px;
+                height: ${widthAndHeight}px;
+                background-color: ${inpFarge.value};
+                border-radius: 50%;
+            `;
+
+            console.log(i);
+            right.appendChild(fargekule);
+
+
+
+        }
+        right.appendChild(navneboks);
+
+    };
+    btnScramble.onclick = function scramble() {
+        var fargebokser = document.querySelectorAll(".fargeboks");
+        for (var fargeboks of fargebokser) {
+            fargeboks.style.left = Math.random() * (innerWidth - 240) + "px";
+            fargeboks.style.top = Math.random() * (innerHeight - 40) + "px";
+
+        }
+    };
+    inpSize.addEventListener("input", function(){
+        pSize.innerHTML = "<b>Størrelse på stjerner:</b>" + inpSize.value;
+        size = inpSize.value;
+    });
+
+</script>
+
+</body>
+</html>
