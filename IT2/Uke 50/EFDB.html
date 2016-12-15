@@ -11,16 +11,20 @@
             background-color: white;
             padding: 1em;
             font-family: sans-serif;
-            max-width: 40em;
+            max-width: 60em;
             margin: 1em auto;
             border: solid 0.2em lightgray;
         }
         table {
             width: 100%;
             /*border: solid 0.1em lightgray;*/
+
         }
         table td {
             padding: 3px;
+        }
+        table tr:hover {
+            background-color: #c8f1ff;
         }
         h1 {
             font-size: 2em;
@@ -43,30 +47,56 @@
             font-size: 1.2em;
         }
         input {
-            width: auto;
+            width: calc(100%  - 1em);
         }
+        div.flexRow {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+        div.flexRow:first-child {
+            flex: 2;
+        }
+        div.flexRow:last-child {
+            flex: 1;
+        }
+        #artInfo {
+            padding: 1em;
+            flex: 1;
+            border-left: solid 0.1em lightgray;
+        }
+
 
     </style>
 </head>
 <body>
  <section id="middle">
-     <h1>EFDB</h1>
-     <h2>Elias sin filmdatabase</h2>
-
-     <input type="text" id="inpSearch">
-     <table>
-         <thead>
-            <tr>
-                <th><button id="btnTitle">Title</button></th>
-                <th><button id="btnDirector">Director</button></th>
-                <th><button id="btnMetascore">Metascore</button></th>
-                <th><button id="btnCost">Cost</button></th>
-            </tr>
-         </thead>
-         <tbody id="tblFilmer"></tbody>
-     </table>
+     <h1>EMDB</h1>
+     <h2>Elias' movie database</h2>
 
 
+
+
+     <div class="flexRow">
+         <div>
+             <input type="text" id="inpSearch" placeholder="Search by title">
+             <table>
+                 <thead>
+                 <tr>
+                     <th><button id="btnTitle">Title</button></th>
+                     <th><button id="btnDirector">Director</button></th>
+                     <th><button id="btnMetascore">Metascore</button></th>
+                     <th><button id="btnCost">Cost</button></th>
+                 </tr>
+                 </thead>
+                 <tbody id="tblFilmer"></tbody>
+             </table>
+         </div>
+         <div id="artInfo">
+             <p><i>(Click on a movie to display info)</i></p>
+         </div>
+
+     </div>
 
 
  </section>
@@ -95,16 +125,24 @@
     let btnMetascore = document.getElementById("btnMetascore");
     let btnCost = document.getElementById("btnCost");
     let inpSearch = document.getElementById("inpSearch");
+    let artInfo = document.getElementById("artInfo");
+    
 
     function visInfo(snapshot) {
         let data = snapshot.val();
+        artInfo.innerHTML = `
+            <img src="${data.Poster}">
+            <h2>${data.Title}</h2>
+            <p><b>Director:</b> ${data.Director}</p>
+            <p><b>Actors:</b> ${data.Actors}</p>
+            <p><b>Plot:</b> ${data.Plot}</p>
+        `;
     }
-
     function finnFilm(id) {
         let film = database.ref("filmer/" + id);
-        film.on("value, visInfo");
+        film.on("value", visInfo);
     }
-
+    
     function visFilmer(snapshot) {
         let film = snapshot.val();
         let rad = `
@@ -162,7 +200,7 @@
         tblFilmer.innerHTML = "";
         let tittel = this.value;
         filmer
-                .orderByChild("Tittel")
+                .orderByChild("Title")
                 .startAt(tittel)
                 .endAt(tittel + '\uf8ff')
                 .on("child_added", visFilmer);
