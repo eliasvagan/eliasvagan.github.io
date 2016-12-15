@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EFDB</title>
+    <style>
+        html {
+            background-color: #eeeeee;
+        }
+        body {
+            background-color: white;
+            padding: 1em;
+            font-family: sans-serif;
+            max-width: 40em;
+            margin: 1em auto;
+            border: solid 0.2em lightgray;
+        }
+        table {
+            width: 100%;
+            /*border: solid 0.1em lightgray;*/
+        }
+        table td {
+            padding: 3px;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h1, h2 {
+            text-align: center;
+            color: rgba(67, 67, 67, 0.88);
+        }
+        .metascore {
+            color: green;
+            text-align: center;
+        }
+        .cost {
+            color: blue;
+
+        }
+        button, input {
+            width: 100%;
+            padding: 0.5em;
+            font-size: 1.2em;
+        }
+        input {
+            width: auto;
+        }
+
+    </style>
+</head>
+<body>
+ <section id="middle">
+     <h1>EFDB</h1>
+     <h2>Elias sin filmdatabase</h2>
+
+     <input type="text" id="inpSearch">
+     <table>
+         <thead>
+            <tr>
+                <th><button id="btnTitle">Title</button></th>
+                <th><button id="btnDirector">Director</button></th>
+                <th><button id="btnMetascore">Metascore</button></th>
+                <th><button id="btnCost">Cost</button></th>
+            </tr>
+         </thead>
+         <tbody id="tblFilmer"></tbody>
+     </table>
+
+
+
+
+ </section>
+
+
+</body>
+
+
+<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAVmb7h-qZtIN6EVAoTpnbn9RVHK4l4_YI",
+        authDomain: "awesomeshit-d8966.firebaseapp.com",
+        databaseURL: "https://awesomeshit-d8966.firebaseio.com",
+        storageBucket: "awesomeshit-d8966.appspot.com",
+        messagingSenderId: "55141776021"
+    };
+    firebase.initializeApp(config);
+
+    let database = firebase.database();
+    let filmer = database.ref("filmer");
+    let tblFilmer = document.getElementById("tblFilmer");
+    let btnTitle = document.getElementById("btnTitle");
+    let btnDirector = document.getElementById("btnDirector");
+    let btnMetascore = document.getElementById("btnMetascore");
+    let btnCost = document.getElementById("btnCost");
+    let inpSearch = document.getElementById("inpSearch");
+
+    function visInfo(snapshot) {
+        let data = snapshot.val();
+    }
+
+    function finnFilm(id) {
+        let film = database.ref("filmer/" + id);
+        film.on("value, visInfo");
+    }
+
+    function visFilmer(snapshot) {
+        let film = snapshot.val();
+        let rad = `
+
+            <tr onclick="finnFilm('${snapshot.key}')">
+                <td>${film.Title}</td>
+                <td>${film.Director}</td>
+                <td class="metascore">${film.Metascore}</td>
+                <td class="cost">$${film.Cost}M</td>
+
+            </tr>
+
+        `;
+        tblFilmer.innerHTML = tblFilmer.innerHTML + rad;
+
+    }
+
+    filmer.on("child_added", visFilmer);
+
+    btnTitle.addEventListener("click", function(){
+        tblFilmer.innerHTML ="";
+        filmer
+
+            .orderByChild("Title")
+            .on("child_added", visFilmer);
+        visFilmer();
+    });
+    btnDirector.addEventListener("click", function(){
+        tblFilmer.innerHTML ="";
+        filmer
+
+            .orderByChild("Director")
+            .on("child_added", visFilmer);
+        visFilmer();
+    });
+    btnMetascore.addEventListener("click", function(){
+        tblFilmer.innerHTML ="";
+        filmer
+
+            .orderByChild("Metascore")
+            .on("child_added", visFilmer);
+        visFilmer();
+    });
+    btnCost.addEventListener("click", function(){
+        tblFilmer.innerHTML ="";
+        filmer
+
+            .orderByChild("Cost")
+            .on("child_added", visFilmer);
+        visFilmer();
+    });
+
+
+    function finnFilmer() {
+        tblFilmer.innerHTML = "";
+        let tittel = this.value;
+        filmer
+                .orderByChild("Tittel")
+                .startAt(tittel)
+                .endAt(tittel + '\uf8ff')
+                .on("child_added", visFilmer);
+    }
+    inpSearch.addEventListener("input", finnFilmer);
+
+
+</script>
+</html>

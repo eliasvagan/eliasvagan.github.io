@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Json</title>
+</head>
+<body>
+
+    <script>
+
+        let bil1 = {
+            merke: "Opel",
+            modell: "Ascona",
+            pris: 400
+        };
+
+        let bil2 = {
+            merke: "Nissan",
+            modell: "Skyline",
+            pris: 500
+        };
+
+        let bil3 = {
+            merke: "Toyota",
+            modell: "Yaris",
+            pris: 300
+        };
+
+        let biler = [bil1, bil2, bil3];
+        let jsonBiler = JSON.stringify(biler);
+
+        document.write(jsonBiler);
+
+
+
+
+    </script>
+
+</body>
+</html>
