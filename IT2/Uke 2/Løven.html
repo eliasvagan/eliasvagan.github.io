@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Løven</title>
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+        .ramme {
+            width: 600px;
+            height: 400px;
+            border: solid 10px lightblue;
+            position: relative;
+            margin: auto;
+            overflow: hidden;
+            transition: 1s;
+        }
+        .ramme > * {
+            position: absolute;
+
+        }
+        .ramme > img {
+            transform: translateY(100%);
+            width: 100%;
+            transition: 1s ease;
+        }
+        .ramme:hover > img {
+            transform: translateY(0);
+            transition: 0.5s ease;
+        }
+        .ramme:hover {
+            transform: scale(10) rotate(175deg);
+        }
+    </style>
+</head>
+<body>
+
+<div class="ramme">
+    <div style="padding: 1em;">
+        <h1>Løvegutten</h1>
+        <hr>
+        <p>Løven er et brutalt monster som elsker å denge demoner med sine enorme skumle klør.</p>
+    </div>
+    <img src="Side%20254%20lõve.jpg" alt="En skummel løve">
+</div>
+
+</body>
+</html>
