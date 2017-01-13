@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Gen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            background-color: lightgray;
+        }
+        #skjerm {
+            position: fixed;
+            width: calc(100% - 50px);
+            height: calc(100% - 50px);
+            left: 25px;
+            top: 25px;
+            overflow: hidden;
+            border: solid black 2px;
+        }
+        #player {
+            width: 40px;
+            height: 40px;
+            background-color: green;
+            position: absolute;
+            z-index: 2;
+            border: solid 2px white;
+        }
+        #info {
+            padding: 1em;
+            background-color: rgba(0, 0, 0, 0.46);
+            color: white;
+            font-family: monospace;
+            width: 100px;
+        }
+
+    </style>
+</head>
+<body>
+    <section id="skjerm">
+        <div id="player"></div>
+        <div id="info">
+
+        </div>
+    </section>
+    
+
+    <script>
+
+//            function makePlayer(x,y) {
+//                let playerDIV = document.createElement("div");
+//                playerDIV.ID = "player";
+//                player.style =`
+//                    position: absolute;
+//                    width: 40px;
+//                    height: 40px;
+//                    background-color: purple;
+//                    left: ${x}px;
+//                    top: ${y}px;
+//
+//
+//                `;
+//                document.appendChild(playerDIV);
+//            }
+
+    let skjerm = document.getElementById("skjerm");
+    let info = document.getElementById("info");
+
+
+
+    let keys = {};
+        keys.UP = 38;
+        keys.LEFT = 37;
+        keys.RIGHT = 39;
+        keys.DOWN = 40;
+
+
+    let player = {
+        x: window.innerWidth/2 - 20,
+        y: window.innerHeight/2 -20,
+        speedMultiplier: 4,
+        element: document.getElementById("player")
+    };
+
+
+    document.body.onkeyup =
+    document.body.onkeydown = function(evt){
+        if (evt.preventDefault) {
+            evt.preventDefault();
+        }
+        else {
+            evt.returnValue = false;
+        }
+        let kc = evt.keyCode || evt.which;
+        keys[kc] = evt.type == 'keydown';
+    };
+
+
+    let movePlayer = function(dx, dy){
+        player.x += (dx||0) * player.speedMultiplier;
+        player.y += (dy||0) * player.speedMultiplier;
+        player.element.style.left = player.x + 'px';
+        player.element.style.top = player.y + 'px';
+    };
+
+    /// player control
+    let detectPlayerMovement = function(){
+        if ( keys[keys.LEFT] ) {
+            movePlayer(-1, 0);
+        }
+        if ( keys[keys.RIGHT] ) {
+            movePlayer(1, 0);
+        }
+        if ( keys[keys.UP] ) {
+            movePlayer(0, -1);
+        }
+        if ( keys[keys.DOWN] ) {
+            movePlayer(0, 1);
+        }
+        info.innerHTML = "<p>X: " + player.x + "</p><p>Y: " + player.y + "</p>"
+    };
+
+    /// update current position on screen
+    movePlayer();
+
+
+    /// game loop
+    setInterval(function(){
+        detectPlayerMovement();
+    }, 1000/30);
+
+    let squares = [
+        {x:1, y:1, color: "green"},
+        {x:2, y:2, color: "red"},
+        {x:3, y:3, color: "green"}
+    ];
+    for(let object of squares) {
+        square = document.createElement("div");
+        square.style = `
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            box-sizing: border-box;
+            background-color: ${object.color};
+            top: ${object.y*200}px;
+            left: ${object.x*200}px;
+
+            z-index: 1;
+
+        `;
+
+        skjerm.appendChild(square);
+        console.log(square)
+    }
+    </script>
+</body>
+</html>
