@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>JS Gen</title>
     <style>
+        @keyframes pulse {
+            100%    {transform: scale(1)   }
+            0%      {transform: scale(1.2)   }
+            50%     {transform: scale(1)   }
+
+        }
         * {
             margin: 0;
             padding: 0;
@@ -27,6 +33,9 @@
             position: absolute;
             z-index: 2;
             border: solid 2px white;
+            color: white;
+            text-align: center;
+
         }
         #info {
             padding: 1em;
@@ -41,9 +50,8 @@
 <body>
     <section id="skjerm">
         <div id="player"></div>
-        <div id="info">
-
-        </div>
+        <div id="info"></div>
+        <div id="ground"></div>
     </section>
     
 
@@ -67,6 +75,7 @@
 
     let skjerm = document.getElementById("skjerm");
     let info = document.getElementById("info");
+    let ground = document.getElementById("ground");
 
 
 
@@ -119,7 +128,38 @@
         if ( keys[keys.DOWN] ) {
             movePlayer(0, 1);
         }
-        info.innerHTML = "<p>X: " + player.x + "</p><p>Y: " + player.y + "</p>"
+        info.innerHTML = "<p>X: " + player.x + "</p><p>Y: " + player.y + "</p>";
+
+        //Hitting sides
+        for(let object of squares) {
+            //Hit left
+            if(object.x*200 + 5 > player.x && object.x*200 - 5 < player.x && object.y*200 < player.y && object.y*200 +200 >player.y) {
+                console.log("hit left");
+                player.element.innerHTML = "Left"
+            } else
+            //Hit right
+            if(object.x*200 + 205 > player.x && object.x*200 + 195 < player.x && object.y*200 < player.y && object.y*200 +200 >player.y) {
+                console.log("hit right");
+                if(squares.indexOf('{x:1, y:1, color: "green"}')==-1){ //Noe stemmer ikke ennå
+                    console.log("true")
+                } else {
+                    console.log("false")
+                }
+                player.element.innerHTML = "Right"
+            } else
+            //Hit top
+            if(object.y*200 + 5 > player.y && object.y*200 - 5 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
+                console.log("hit top");
+                player.element.innerHTML = "Top"
+            } else
+            //Hit bottom
+            if(object.y*200 + 205 > player.y && object.y*200 + 195 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
+                console.log("hit bot");
+                player.element.innerHTML = "Bottom"
+            }
+
+
+        }
     };
 
     /// update current position on screen
@@ -151,7 +191,7 @@
 
         `;
 
-        skjerm.appendChild(square);
+        ground.appendChild(square);
         console.log(square)
     }
     </script>
