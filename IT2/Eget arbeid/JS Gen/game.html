@@ -92,7 +92,7 @@
     let player = {
         x: window.innerWidth/2 - 20,
         y: window.innerHeight/2 -20,
-        speedMultiplier: 20,
+        speedMultiplier: 12,
         element: document.getElementById("player")
     };
 
@@ -215,7 +215,7 @@
     /// game loop
     setInterval(function(){
         detectPlayerMovement();
-    }, 1000/24);
+    }, 1000/60);
 
     let squares = [
         {x:1, y:1, color: "green"},
