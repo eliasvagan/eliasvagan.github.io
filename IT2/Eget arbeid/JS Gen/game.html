@@ -44,6 +44,7 @@
             color: white;
             font-family: monospace;
             display: inline-block;
+            z-index: 10;
         }
 
     </style>
@@ -138,15 +139,19 @@
             //Hit left
             if(object.x*200 + 5 > player.x && object.x*200 - 5 < player.x && object.y*200 < player.y && object.y*200 +200 >player.y) {
                 console.log("hit left");
+
+                if(xyExists(object.x-1, object.y) === false) {
+                    squares.push({x: object.x-1, y: object.y, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
+                } else {
+                    console.log("not generated");
+                }
+
                 player.element.innerHTML = "Left"
             } else
             //Hit right
             if(object.x*200 + 205 > player.x && object.x*200 + 195 < player.x && object.y*200 < player.y && object.y*200 +200 >player.y) {
-                console.log("hit right");
-                console.log("hit right");
-
-                console.log(xyExists(object.x+1, object.y)); //false
-
                 if(xyExists(object.x+1, object.y) === false) {
                     squares.push({x: object.x+1, y: object.y, color: "blue"});
                     updateSquares();
@@ -154,19 +159,34 @@
                 } else {
                     console.log("not generated");
                 }
-
-
-
                 player.element.innerHTML = "Right"
             } else
             //Hit top
             if(object.y*200 + 5 > player.y && object.y*200 - 5 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
                 console.log("hit top");
+
+                if(xyExists(object.x, object.y-1) === false) {
+                    squares.push({x: object.x, y: object.y-1, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
+                } else {
+                    console.log("not generated");
+                }
+
                 player.element.innerHTML = "Top"
             } else
             //Hit bottom
             if(object.y*200 + 205 > player.y && object.y*200 + 195 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
                 console.log("hit bot");
+
+                if(xyExists(object.x, object.y+1) === false) {
+                    squares.push({x: object.x, y: object.y+1, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
+                } else {
+                    console.log("not generated");
+                }
+
                 player.element.innerHTML = "Bottom"
             }
 
@@ -218,6 +238,7 @@
             top: ${object.y*200}px;
             left: ${object.x*200}px;
             z-index: 1;
+            border: solid 0.1em gray;
         `;
             ground.appendChild(square);
             info2.innerHTML += "x: " + object.x + ", y: " + object.y + ", color: " + object.color + "<br>";
