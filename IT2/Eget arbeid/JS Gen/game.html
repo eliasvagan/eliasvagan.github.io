@@ -36,13 +36,14 @@
             color: white;
             text-align: center;
 
+
         }
-        #info {
+        .info {
             padding: 1em;
             background-color: rgba(0, 0, 0, 0.46);
             color: white;
             font-family: monospace;
-            width: 100px;
+            display: inline-block;
         }
 
     </style>
@@ -50,7 +51,8 @@
 <body>
     <section id="skjerm">
         <div id="player"></div>
-        <div id="info"></div>
+        <div id="info1" class="info"></div>
+        <div id="info2" class="info"></div>
         <div id="ground"></div>
     </section>
     
@@ -74,7 +76,8 @@
 //            }
 
     let skjerm = document.getElementById("skjerm");
-    let info = document.getElementById("info");
+    let info1 = document.getElementById("info1");
+    let info2 = document.getElementById("info2");
     let ground = document.getElementById("ground");
 
 
@@ -89,7 +92,7 @@
     let player = {
         x: window.innerWidth/2 - 20,
         y: window.innerHeight/2 -20,
-        speedMultiplier: 4,
+        speedMultiplier: 6,
         element: document.getElementById("player")
     };
 
@@ -128,7 +131,7 @@
         if ( keys[keys.DOWN] ) {
             movePlayer(0, 1);
         }
-        info.innerHTML = "<p>X: " + player.x + "</p><p>Y: " + player.y + "</p>";
+        info1.innerHTML = "<p>X: " + player.x + "</p><p>Y: " + player.y + "</p>";
 
         //Hitting sides
         for(let object of squares) {
@@ -140,11 +143,20 @@
             //Hit right
             if(object.x*200 + 205 > player.x && object.x*200 + 195 < player.x && object.y*200 < player.y && object.y*200 +200 >player.y) {
                 console.log("hit right");
-                if(squares.indexOf('{x:1, y:1, color: "green"}')==-1){ //Noe stemmer ikke ennå
-                    console.log("true")
+                console.log("hit right");
+
+                console.log(xyExists(object.x+1, object.y)); //false
+
+                if(xyExists(object.x+1, object.y) === false) {
+                    squares.push({x: object.x+1, y: object.y, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
                 } else {
-                    console.log("false")
+                    console.log("not generated");
                 }
+
+
+
                 player.element.innerHTML = "Right"
             } else
             //Hit top
@@ -161,7 +173,22 @@
 
         }
     };
+    function xExists(x) {
+        return squares.some(function(el) {
+            return el.x === x;
+        });
+    }
+    function xyExists(x, y) {
+        return squares.some(function(el) {
+            return el.x === x && el.y === y;
 
+        });
+    }
+    function yExists(y) {
+        return squares.some(function(el) {
+            return el.y === y;
+        });
+    }
     /// update current position on screen
     movePlayer();
 
@@ -169,16 +196,20 @@
     /// game loop
     setInterval(function(){
         detectPlayerMovement();
-    }, 1000/30);
+    }, 1000/24);
 
     let squares = [
         {x:1, y:1, color: "green"},
+        {x:0, y:3, color: "yellow"},
         {x:2, y:2, color: "red"},
         {x:3, y:3, color: "green"}
     ];
-    for(let object of squares) {
-        square = document.createElement("div");
-        square.style = `
+    function updateSquares() {
+        ground.innerHTML = "";
+        info2.innerHTML = "";
+        for(let object of squares) {
+            square = document.createElement("div");
+            square.style = `
             position: absolute;
             width: 200px;
             height: 200px;
@@ -186,14 +217,16 @@
             background-color: ${object.color};
             top: ${object.y*200}px;
             left: ${object.x*200}px;
-
             z-index: 1;
-
         `;
+            ground.appendChild(square);
+            info2.innerHTML += "x: " + object.x + ", y: " + object.y + ", color: " + object.color + "<br>";
+            console.log(square)
+        }
 
-        ground.appendChild(square);
-        console.log(square)
     }
+    updateSquares()
+
     </script>
 </body>
 </html>
