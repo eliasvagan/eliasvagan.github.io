@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Filmanmeldelser</title>
+    <style>
+        body {
+            background-color: #2b2b2b;
+        }
+        section#main  {
+            background-color: #3b3b3b;
+            padding: 2em;
+            max-width: 36em;
+            font-family: sans-serif;
+            color: #dddddd;
+            margin: auto;
+        }
+        input, button {
+            border: none;
+
+            width: 100%;
+            margin-bottom: 0.5em;
+            text-align: center;
+            box-sizing: border-box;
+            background-color: #dddddd;
+        }
+        input, button, select {
+            font-size: 1.1em;
+            padding: 0.5em;
+            background-color: #525252;
+            color: white;
+        }
+        input[name=rb] {
+            text-align: center;
+            background-color: red;
+        }
+        button[type=submit] {
+            margin-top: 1em;
+        }
+        .flex {
+            display: flex;
+            width: 100%;
+        }
+        .flex > * {
+            flex:1;
+
+            border: none;
+        }
+        .flex > *:first-child {
+            margin-right: 1em;
+        }
+        table {
+            width: 100%;
+            box-sizing: border-box;
+            border: 0.1em solid #9e9e9e;
+            border-top-width: 1em;
+        }
+        th, td {
+            padding: 1em;
+        }
+        td:last-of-type, th:last-of-type {
+            text-align: center;
+        }
+        td:first-of-type {
+            color: white;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        img {
+            width: 3em;
+            height: 3em;
+        }
+        #terningDIV {
+            padding: 0 1em 1em 1em;
+            box-sizing: border-box;
+            border: solid 0.5em #525252;
+            text-align: center;
+
+        }
+        label > * {
+            margin: auto;
+            width: 2em;
+        }
+
+    </style>
+</head>
+<body>
+
+    <section id="main">
+        <h1>Filmanmeldelser</h1>
+        <form action="" id="skjemaAnmeldelser">
+            <input type="text" id="inpTittel" required autocomplete="off" placeholder="Tittel">
+            <input type="text" id="inpBeskrivelse" required autocomplete="off" placeholder="Beskrivelse">
+            <div id="terningDIV">
+                <h3>Terningkast</h3>
+                <div class="flex">
+
+                    <label><input type="radio" value="1" name="rbTerning">1</label>
+                    <label><input type="radio" value="2" name="rbTerning">2</label>
+                    <label><input type="radio" value="3" name="rbTerning">3</label>
+                    <label><input type="radio" value="4" name="rbTerning">4</label>
+                    <label><input type="radio" value="5" name="rbTerning">5</label>
+                    <label><input type="radio" value="6" name="rbTerning">6</label>
+
+                </div>
+            </div>
+
+            <button type="submit">Send</button>
+
+
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tittel</th>
+                    <th>Beskrivelse</th>
+                    <th><button id="btnTerningkast">Terningkast</button></th>
+                </tr>
+            </thead>
+            <tbody id="tblFilmer">
+
+            </tbody>
+        </table>
+    </section>
+    <script>
+        let skjemaAnmeldelser = document.getElementById("skjemaAnmeldelser");
+        let inpTittel = document.getElementById("inpTittel");
+        let inpBeskrivelse = document.getElementById("inpBeskrivelse");
+        let inpTerningkast = document.getElementById("inpTerningkast");
+        let tblFilmer = document.getElementById("tblFilmer");
+        let btnTerningkast = document.getElementById("btnTerningkast");
+
+
+        let filmer = [];
+
+        function lagreFilm(evt) {
+            evt.preventDefault();
+
+            filmer.push({
+                tittel:inpTittel.value,
+                beskrivelse:inpBeskrivelse.value,
+                terningkast:document.querySelector("input[name=rbTerning]:checked").value
+            });
+            inpBeskrivelse.value = "";
+            inpTittel.value = "";
+
+            tblUpdate();
+        }
+        function tblUpdate() {
+            tblFilmer.innerHTML = "";
+            for(let film of filmer) {
+                tblFilmer.innerHTML += `
+
+                    <tr>
+                        <td>${film.tittel}</td>
+                        <td>${film.beskrivelse}</td>
+                        <td><img src="terninger/terning0${film.terningkast}.png" </img</td>
+
+                    </tr>
+
+                `
+            }
+        }
+        skjemaAnmeldelser.addEventListener("submit", lagreFilm);
+
+        let toggleTerningkast = 1;
+        
+        btnTerningkast.onclick = function() {
+            if(toggleTerningkast === 1) {
+                filmer.sort(function(a, b) {
+                    return parseFloat(b.terningkast) - parseFloat(a.terningkast);
+                });
+                toggleTerningkast = 0;
+            } else {
+                filmer.sort(function(a, b) {
+                    return parseFloat(a.terningkast) - parseFloat(b.terningkast);
+                });
+                toggleTerningkast = 1;
+
+            }
+
+
+            tblUpdate();
+        };
+
+
+    </script>
+
+
+</body>
+</html>
