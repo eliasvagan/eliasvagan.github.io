@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Gen</title>
+    <style>
+        @keyframes pulse {
+            100%    {transform: scale(1)   }
+            0%      {transform: scale(1.2)   }
+            50%     {transform: scale(1)   }
+
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            background-color: lightgray;
+        }
+        #skjerm {
+            position: fixed;
+            width: calc(100% - 50px);
+            height: calc(100% - 50px);
+            left: 25px;
+            top: 25px;
+            overflow: hidden;
+            border: solid black 2px;
+        }
+        #player {
+            width: 40px;
+            height: 40px;
+            background-color: green;
+            position: absolute;
+            z-index: 2;
+            border: solid 2px white;
+            color: white;
+            text-align: center;
+
+        }
+        .info {
+            padding: 1em;
+            background-color: rgba(0, 0, 0, 0.46);
+            color: white;
+            font-family: monospace;
+            display: inline-block;
+            z-index: 10;
+        }
+
+    </style>
+</head>
+<body>
+    <section id="skjerm">
+        <div id="player"></div>
+        <div id="info1" class="info"></div>
+        <div id="info2" class="info"></div>
+        <div id="ground"></div>
+    </section>
+    
+
+    <script>
+
+//            function makePlayer(x,y) {
+//                let playerDIV = document.createElement("div");
+//                playerDIV.ID = "player";
+//                player.style =`
+//                    position: absolute;
+//                    width: 40px;
+//                    height: 40px;
+//                    background-color: purple;
+//                    left: ${x}px;
+//                    top: ${y}px;
+//
+//
+//                `;
+//                document.appendChild(playerDIV);
+//            }
+
+    let skjerm = document.getElementById("skjerm");
+    let info1 = document.getElementById("info1");
+    let info2 = document.getElementById("info2");
+    let ground = document.getElementById("ground");
+
+
+
+    let keys = {};
+        keys.UP = 38;
+        keys.LEFT = 37;
+        keys.RIGHT = 39;
+        keys.DOWN = 40;
+
+
+    let player = {
+        x: window.innerWidth/2 - 20,
+        y: window.innerHeight/2 -20,
+        speedMultiplier: 12,
+        element: document.getElementById("player")
+    };
+
+
+    document.body.onkeyup =
+    document.body.onkeydown = function(evt){
+        if (evt.preventDefault) {
+            evt.preventDefault();
+        }
+        else {
+            evt.returnValue = false;
+        }
+        let kc = evt.keyCode || evt.which;
+        keys[kc] = evt.type == 'keydown';
+    };
+
+
+    let movePlayer = function(dx, dy){
+        player.x += (dx||0) * player.speedMultiplier;
+        player.y += (dy||0) * player.speedMultiplier;
+        player.element.style.left = player.x + 'px';
+        player.element.style.top = player.y + 'px';
+    };
+
+    /// player control
+    let detectPlayerMovement = function(){
+        if ( keys[keys.LEFT] ) {
+            movePlayer(-1, 0);
+        }
+        if ( keys[keys.RIGHT] ) {
+            movePlayer(1, 0);
+        }
+        if ( keys[keys.UP] ) {
+            movePlayer(0, -1);
+        }
+        if ( keys[keys.DOWN] ) {
+            movePlayer(0, 1);
+        }
+        info1.innerHTML = "<p>X: " + player.x + "</p><p>Y: " + player.y + "</p>";
+
+        //Hitting sides
+        for(let object of squares) {
+            //Hit left
+            if(object.x*200 + 5 > player.x && object.x*200 - 5 < player.x && object.y*200 < player.y && object.y*200 +200 >player.y) {
+                console.log("hit left");
+
+                if(xyExists(object.x-1, object.y) === false) {
+                    squares.push({x: object.x-1, y: object.y, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
+                } else {
+                    console.log("not generated");
+                }
+
+                player.element.innerHTML = "Left"
+            } else
+            //Hit right
+            if(object.x*200 + 205 > player.x && object.x*200 + 195 < player.x && object.y*200 < player.y && object.y*200 +200 >player.y) {
+                if(xyExists(object.x+1, object.y) === false) {
+                    squares.push({x: object.x+1, y: object.y, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
+                } else {
+                    console.log("not generated");
+                }
+                player.element.innerHTML = "Right"
+            } else
+            //Hit top
+            if(object.y*200 + 5 > player.y && object.y*200 - 5 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
+                console.log("hit top");
+
+                if(xyExists(object.x, object.y-1) === false) {
+                    squares.push({x: object.x, y: object.y-1, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
+                } else {
+                    console.log("not generated");
+                }
+
+                player.element.innerHTML = "Top"
+            } else
+            //Hit bottom
+            if(object.y*200 + 205 > player.y && object.y*200 + 195 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
+                console.log("hit bot");
+
+                if(xyExists(object.x, object.y+1) === false) {
+                    squares.push({x: object.x, y: object.y+1, color: "blue"});
+                    updateSquares();
+                    console.log("generated")
+                } else {
+                    console.log("not generated");
+                }
+
+                player.element.innerHTML = "Bottom"
+            }
+
+
+        }
+    };
+    function xExists(x) {
+        return squares.some(function(el) {
+            return el.x === x;
+        });
+    }
+    function xyExists(x, y) {
+        return squares.some(function(el) {
+            return el.x === x && el.y === y;
+
+        });
+    }
+    function yExists(y) {
+        return squares.some(function(el) {
+            return el.y === y;
+        });
+    }
+    /// update current position on screen
+    movePlayer();
+
+
+    /// game loop
+    setInterval(function(){
+        detectPlayerMovement();
+    }, 1000/60);
+
+    let squares = [
+        {x:1, y:1, color: "green"},
+        {x:0, y:3, color: "yellow"},
+        {x:2, y:2, color: "red"},
+        {x:3, y:3, color: "green"}
+    ];
+    function updateSquares() {
+        ground.innerHTML = "";
+        info2.innerHTML = "";
+        for(let object of squares) {
+            square = document.createElement("div");
+            square.style = `
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            box-sizing: border-box;
+            background-color: ${object.color};
+            top: ${object.y*200}px;
+            left: ${object.x*200}px;
+            z-index: 1;
+            border: solid 0.1em gray;
+        `;
+            ground.appendChild(square);
+            info2.innerHTML += "x: " + object.x + ", y: " + object.y + ", color: " + object.color + "<br>";
+            console.log(square)
+        }
+
+    }
+    updateSquares()
+
+    </script>
+</body>
+</html>

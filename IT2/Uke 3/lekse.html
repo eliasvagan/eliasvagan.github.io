@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lekse</title>
+    <style>
+        html {
+            background-color: lightgray;
+            color: dimgray;
+            font-family: sans-serif;
+        }
+        article {
+            max-width: 40em;
+            background-color: white;
+            padding: 1em;
+            margin: auto;
+
+        }
+        .oppgave {
+            padding: 0 1em;
+            border-left: solid #9c9c9c 0.5em;
+            margin: 1em 0;
+        }
+        i {
+            color: blue;
+        }
+        p {
+            font-size: 1.1em;
+        }
+
+        #superdiv {
+            width: 40px;
+            height: 40px;
+            margin: auto;
+            background-color: lightblue;
+            text-align: center;
+            transition: 0.4s ease-out;
+            line-height: 40px;
+        }
+        #superdiv:hover {
+            width: 200px;
+            height: 200px;
+            transition: 1s ease;
+            line-height: 200px;
+        }
+        #ultradiv {
+            background-color: rebeccapurple;
+            width: 100px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: auto;
+            color: white;
+
+            transition: 0.5s ease;
+            transform-origin: top right;
+        }
+        #ultradiv:hover {
+            transform: scale(2) rotate(60deg);
+            transition: 1s ease;
+
+        }
+        #ultradiv:active {
+            transform: rotate(0deg) translateX(-50px) translateY(20px);
+            box-shadow: green 10px 10px 20px;
+            transition: 2s;
+        }
+
+        article#ffxiv {
+            height: 21.3em;
+            overflow: hidden;
+            border-radius: 0.5em;
+        }
+        article#ffxiv > img {
+            position: absolute;
+            width: 38em;
+            z-index: 1;
+
+        }
+        article#ffxiv #hover {
+            z-index: 1000;
+            opacity: 0;
+            font-family: "Times New Roman", serif;
+            background-color: rgba(0,0,0,0);
+            position: absolute;
+            width: 38em;
+            transition: 0.5s ease;
+            height: 21.3em;
+            padding: 1em;
+            box-sizing: border-box;
+            color: rgb(255, 255, 255);
+            overflow: hidden;
+        }
+        #hover > * {
+            transform: scale(3);
+            transition: 2s transform, 0s 0.5s opacity;
+            opacity: 0;
+        }
+        #ffxiv:hover > #hover {
+            opacity: 100;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        #ffxiv:hover > #hover > * {
+            transform: scale(1);
+            transition: 0.7s 0.3s transform, 0.5s 0.5s ease opacity;
+            opacity: 100;
+        }
+        #hover h1, h4 {
+            text-align: center;
+        }
+        #hover h1 {
+            font-size: 2em;
+        }
+
+
+    </style>
+</head>
+<body>
+    <article>
+        <h1>s.253</h1>
+        <div class="oppgave">
+            <h2>1</h2>
+            <p><b>a) </b><i>transition: 1s width ease-in;</i><br> Denne gjør at bredden på noe får en gjevn inngang, og stopper brått.</p>
+            <p><b>b) </b><i>transition: 2s 2s width;</i><br> Overgangen på bredden varer i to sekunder, og har to sekunder delay.</p>
+            <p><b>c) </b><i>transition: 3s width;</i><br> Overgangen på bredden til elementet varer i 3 sekunder.</p>
+        </div>
+        <div class="oppgave">
+            <h2>2</h2>
+            <div id="superdiv">Hover!</div>
+        </div>
+        <div class="oppgave">
+            <div id="ultradiv">Hover/click</div>
+        </div>
+    </article>
+    <article>
+        <h1>s.257</h1>
+        <p>Hover</p>
+        <article id="ffxiv">
+
+            <div id="hover">
+                <h1>FFXXIV:AR</h1>
+                <h4>Final Fantasy XIV: A Realm Reborn</h4>
+                <p>Final Fantasy XIV: A Realm Reborn takes place in the fictional land of Eorzea, five years after the events of the original release. At the conclusion of Final Fantasy XIV, the primal dragon Bahamut escapes from its lunar prison to initiate the Seventh Umbral Calamity, an apocalyptic event which destroys much of Eorzea. Through the gods' blessing, the player character escapes the devastation by time traveling five years into the future. As Eorzea recovers and rebuilds, the player must deal with the impending threat of invasion by the Garlean Empire from the north.</p>
+
+            </div>
+            <img src="ffxivchoco.jpg">
+        </article>
+
+    </article>
+</body>
+</html>
