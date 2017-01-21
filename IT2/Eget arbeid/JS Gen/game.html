@@ -18,13 +18,14 @@
             background-color: lightgray;
         }
         #skjerm {
-            position: fixed;
+            position: absolute;
             width: calc(100% - 50px);
             height: calc(100% - 50px);
             left: 25px;
             top: 25px;
-            overflow: hidden;
+
             border: solid black 2px;
+
         }
         #player {
             width: 40px;
@@ -35,6 +36,7 @@
             border: solid 2px white;
             color: white;
             text-align: center;
+            transform: translateY(-20px) translateX(-20px);
 
         }
         .info {
@@ -44,6 +46,9 @@
             font-family: monospace;
             display: inline-block;
             z-index: 10;
+            position: fixed;
+            right: 0;
+            top:0;
         }
 
     </style>
@@ -90,9 +95,9 @@
 
 
     let player = {
-        x: window.innerWidth/2 - 20,
-        y: window.innerHeight/2 -20,
-        speedMultiplier: 12,
+        x: window.innerWidth/2 ,
+        y: window.innerHeight/2,
+        speedMultiplier: 9,
         element: document.getElementById("player")
     };
 
@@ -115,6 +120,8 @@
         player.y += (dy||0) * player.speedMultiplier;
         player.element.style.left = player.x + 'px';
         player.element.style.top = player.y + 'px';
+        skjerm.style.left = -player.x + window.innerWidth/2 + "px";
+        skjerm.style.top = -player.y + window.innerHeight/2 + "px";
     };
 
     /// player control
@@ -160,7 +167,7 @@
                 }
                 player.element.innerHTML = "Right"
             } else
-            //Hit top
+            //Hit bottom
             if(object.y*200 + 5 > player.y && object.y*200 - 5 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
                 console.log("hit top");
 
@@ -172,9 +179,9 @@
                     console.log("not generated");
                 }
 
-                player.element.innerHTML = "Top"
+                player.element.innerHTML = "bottom"
             } else
-            //Hit bottom
+            //Hit top
             if(object.y*200 + 205 > player.y && object.y*200 + 195 < player.y && object.x*200 < player.x && object.x*200 +200 >player.x) {
                 console.log("hit bot");
 
@@ -186,28 +193,20 @@
                     console.log("not generated");
                 }
 
-                player.element.innerHTML = "Bottom"
+                player.element.innerHTML = "top"
             }
 
 
         }
     };
-    function xExists(x) {
-        return squares.some(function(el) {
-            return el.x === x;
-        });
-    }
+
     function xyExists(x, y) {
         return squares.some(function(el) {
             return el.x === x && el.y === y;
 
         });
     }
-    function yExists(y) {
-        return squares.some(function(el) {
-            return el.y === y;
-        });
-    }
+
     /// update current position on screen
     movePlayer();
 
@@ -215,7 +214,7 @@
     /// game loop
     setInterval(function(){
         detectPlayerMovement();
-    }, 1000/60);
+    }, 1000/24);
 
     let squares = [
         {x:1, y:1, color: "green"},
