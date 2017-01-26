@@ -40,23 +40,35 @@
         ];
         let settings = {
             duration: 2000,
-            fill: "forwards",
-            iterations: Infinity
+            fill: "forwards"
         };
 
         let animasjon = bie.animate(keyframes,settings);
+        animasjon.pause();
 
         function voks() {
+
+            animasjon.playbackRate = 1;
             animasjon.play();
         }
         function stopp(){
             animasjon.pause();
+        }
+        function krymp() {
+            animasjon.playbackRate = -1;
+            animasjon.play();
+
         }
 
         blomst.addEventListener("mousedown", voks);
         blomst.addEventListener("touchstart", voks);
         blomst.addEventListener("mouseup", stopp);
         blomst.addEventListener("touchend", stopp);
+
+        honning.addEventListener("mousedown", krymp);
+        honning.addEventListener("touchstart", krymp);
+        honning.addEventListener("mouseup", stopp);
+        honning.addEventListener("touchend", stopp);
 
 
     </script>
