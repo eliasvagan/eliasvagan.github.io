@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Den onde bien</title>
+    <style>
+        #flex {
+            display: flex;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top:0;
+            width: 100vw;
+
+
+        }
+        #flex > img {
+            flex: 1;
+            margin: 10vh 5vw;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="flex">
+        <img src="blomst.svg" id="Blomst">
+        <img src="EvilBee.svg" id="Bie">
+        <img src="honning.svg" id="Honning">
+    </div>
+    <script>
+        let blomst = document.getElementById("Blomst");
+        let bie = document.getElementById("Bie");
+        let honning = document.getElementById("Honning");
+
+        let keyframes = [
+            {transform: "scale(1)"},
+            {transform: "scale(2)"}
+        ];
+        let settings = {
+            duration: 2000,
+            fill: "forwards",
+            iterations: Infinity
+        };
+
+        let animasjon = bie.animate(keyframes,settings);
+
+        function voks() {
+            animasjon.play();
+        }
+        function stopp(){
+            animasjon.pause();
+        }
+
+        blomst.addEventListener("mousedown", voks);
+        blomst.addEventListener("touchstart", voks);
+        blomst.addEventListener("mouseup", stopp);
+        blomst.addEventListener("touchend", stopp);
+
+
+    </script>
+</body>
+</html>
