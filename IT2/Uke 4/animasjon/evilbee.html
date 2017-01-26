@@ -16,7 +16,7 @@
         }
         #flex > img {
             flex: 1;
-            margin: 10vh 5vw;
+            margin: 10vh 10vw;
 
         }
 
@@ -35,11 +35,12 @@
         let honning = document.getElementById("Honning");
 
         let keyframes = [
-            {transform: "scale(1)"},
-            {transform: "scale(2)"}
+            {transform: "scale(1)", filter: "invert(0)"},
+            {transform: "scale(2.5)", filter: "invert(0)"},
+            {transform: "scale(4)", filter: "invert(100)"}
         ];
         let settings = {
-            duration: 2000,
+            duration: 4000,
             fill: "forwards"
         };
 
@@ -59,6 +60,15 @@
             animasjon.play();
 
         }
+        animasjon.addEventListener("finish", function(){
+            bie.animate([
+                {transform: "scale(4) rotate(0)"},
+                {transform: "scale(1) rotate(360deg)"}
+            ],{
+                duration: 200,
+                fill:"forwards"
+            })
+        });
 
         blomst.addEventListener("mousedown", voks);
         blomst.addEventListener("touchstart", voks);
