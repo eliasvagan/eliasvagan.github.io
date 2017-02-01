@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sykkel</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        #sykkel {
+            width: 182px;
+            height: 153px;
+            background-image: url(sykkel2.png);
+            background-repeat: no-repeat;
+
+            box-sizing: content-box;
+            position: relative;
+            margin: 225px auto 0 auto;
+
+
+            z-index: 200;
+        }
+        #sykkel > div {
+            width: 57px;
+            height: 57px;
+            position: absolute;
+            margin-top: 95px;
+
+            z-index: -100;
+            transform-origin: center;
+        }
+        #forhjul {
+            background-image: url(forhjul2.png);
+            margin-left: 131px;
+        }
+        #bakhjul {
+            background-image: url(bakhjul2.png);
+            margin-left: 3px;
+        }
+        #buttons {
+            display: flex;
+            margin: auto;
+            align-items: center;
+            justify-content: center;
+            padding: 0.2em;
+            position: fixed;
+            top:0;
+            left: 0;
+            width: 100vw;
+            background-color: lightgray;
+
+        }
+        button, input {
+            padding: 0.7em;
+            font-size: 1.2em;
+            border: none;
+            background-color: white;
+            margin: 0.2em;
+        }
+        #boks {
+            background-image: url(landscape-article.jpg);
+            background-repeat: repeat-x;
+            height: 388px;
+            position: fixed;
+            z-index: -200;
+            width: 100vw;
+            top: calc(50vh - 200px);
+
+        }
+        #bakken {
+            width: 100vw;
+            height: 20px;
+            position: absolute;
+            bottom: 0;
+            background-image: url(ground.jpg);
+
+        }
+    </style>
+</head>
+<body>
+    <div id="boks">
+        <div id="sykkel">
+            <div id="forhjul"></div>
+            <div id="bakhjul"></div>
+        </div>
+        <div id="bakken"></div>
+    </div>
+
+    <div id="buttons">
+        <button id="btnStart">Start</button>
+        <button id="btnStopp">Stop</button>
+        <input type="range" id="inpSpeed" min="0.01" max="0.9" value="0.2" step="0.01">
+        <p id="labelSpeed"></p>
+    </div>
+
+    <script>
+        let sykkel = document.getElementById("sykkel");
+        let btnStart = document.getElementById("btnStart");
+        let btnStopp = document.getElementById("btnStopp");
+        let forhjul = document.getElementById("forhjul");
+        let bakhjul = document.getElementById("bakhjul");
+        let boks = document.getElementById("boks");
+        let bakken = document.getElementById("bakken");
+        let inpSpeed = document.getElementById("inpSpeed");
+        let speedKonstant = 10000;
+        let labelSpeed = document.getElementById("labelSpeed");
+
+        let keyframes1 = [
+            {transform: "rotate(0)"},
+            {transform: "rotate(360deg)"}
+        ];
+        let settings1 = {
+            duration: speedKonstant,
+            fill: "forwards",
+            iterations: Infinity
+        };
+
+        let keyframes2 = [
+            {backgroundPosition: "580px 0px"},
+            {backgroundPosition: "0px 0px"}
+        ];
+
+        let settings2 = {
+            duration: speedKonstant,
+            iterations: Infinity
+        };
+        let keyframes3 = [
+            {backgroundPosition: "500px 0px"},
+            {backgroundPosition: "0 0px"}
+        ];
+        let settings3 = {
+            duration: speedKonstant,
+            iterations: Infinity
+        };
+
+        let snurr1 = bakhjul.animate(keyframes1, settings1);
+        let snurr2 = forhjul.animate(keyframes1, settings1);
+        let bakgrunnsAnimasjon = boks.animate(keyframes2, settings2);
+        let bakkenAnimasjon = bakken.animate(keyframes3, settings3);
+
+
+
+        let animationState = "stopp";
+        btnStopp.onclick = function() {
+            animationState = "stopp";
+            update();
+        };
+        btnStart.onclick = function() {
+            animationState = "play";
+            update();
+        };
+
+        function update() {
+            speedKonstant = (10000 * (1 - inpSpeed.value)).toFixed(0);
+            labelSpeed.innerHTML = speedKonstant;
+            if(animationState == "play") {
+                settings1.duration = speedKonstant;
+                settings2.duration = speedKonstant;
+                settings3.duration = speedKonstant;
+                snurr1.play();
+                snurr2.play();
+                bakgrunnsAnimasjon.play();
+                bakkenAnimasjon.play();
+
+            } else if(animationState == "stopp"){
+                snurr1.pause();
+                snurr2.pause();
+                bakgrunnsAnimasjon.pause();
+                bakkenAnimasjon.pause();
+            } else {
+                console.log("Feil")
+            }
+        }
+        inpSpeed.oninput = update;
+        update();
+
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>
