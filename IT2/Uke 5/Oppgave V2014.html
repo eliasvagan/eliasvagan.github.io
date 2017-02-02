@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgave 2a</title>
+    <style>
+
+        html {
+            background-color: #e1e1e1;
+            font-family: sans-serif;
+        }
+        body {
+            max-width: 30em;
+            margin: auto;
+            background-color: white;
+            padding: 2em;
+
+        }
+        input, button {
+            padding: 0.6em;
+            font-size: 1.1em;
+            background-color: #e9e9e9;
+            border: none;
+            width: 100%;
+            margin-top: 0.4em;
+            box-sizing: border-box;
+        }
+        button {
+            border-radius: 2em;
+            transition: 0.1s;
+        }
+        button:hover {
+            background-color: #f4f4f4;
+
+        }
+        #resultat {
+            border: solid 0.2em rgba(164, 164, 164, 0.51);
+            background-color: rgba(205, 205, 205, 0.5);
+            padding: 1em;
+            margin-top: 1em;
+            text-align: center;
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+
+    <form id="skjema">
+        <input type="number" list="aarstall" id="inpSok1" min="2002" max="2007" placeholder="År">
+        <input type="number" list="aarstall" id="inpSok2" min="2002" max="2007" placeholder="År">
+
+        <datalist id="aarstall">
+            <option value="2002"></option>
+            <option value="2003"></option>
+            <option value="2004"></option>
+            <option value="2005"></option>
+            <option value="2006"></option>
+            <option value="2007"></option>
+        </datalist>
+
+        <button type="submit">Se data</button>
+    </form>
+
+    <div id="resultat">
+
+    </div>
+    <script>
+        let inpSok1 = document.getElementById("inpSok1");
+        let inpSok2 = document.getElementById("inpSok2");
+        let skjema = document.getElementById("skjema");
+        let resultat = document.getElementById("resultat");
+
+        skjema.addEventListener("submit", function(evt){
+            evt.preventDefault();
+            let verdi1 = inpSok1.value;
+            let verdi2 = inpSok2.value;
+            let promille1 = lovbruddene.get(verdi1);
+            let promille2 = lovbruddene.get(verdi2);
+            let diff = promille1 - promille2;
+
+            if(diff > 0) {
+                resultat.style.color = "Green";
+                resultat.innerHTML = "Positiv utvikling";
+            } else {
+                resultat.innerHTML = "Negativ utvikling";
+                resultat.style.color = "Red";
+            }
+
+
+        });
+
+        let lovbruddene = new Map();
+        lovbruddene.set("2002", 9631);
+        lovbruddene.set("2003", 8593);
+        lovbruddene.set("2004", 8363);
+        lovbruddene.set("2005", 8128);
+        lovbruddene.set("2006", 5814);
+        lovbruddene.set("2007", 5834);
+
+
+    </script>
+
+</body>
+</html>
