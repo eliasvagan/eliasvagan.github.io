@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppgaver</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation-flex.css">
+    <style>
+        html {
+            background-color: #cbcbcb;
+        }
+        body {
+            width: 40em;
+            padding: 1em;
+            background-color: white;
+            margin: auto;
+            min-height: calc(100vh + 20em);
+        }
+        div#animasjon {
+            width: 600px;
+            height: 400px;
+            border: solid 2px #dcdcdc;
+        }
+        div#animasjon img {
+            position: absolute;
+            margin-left: 0;
+            margin-top:0;
+            opacity: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="oppgave">
+    <h1>Oppgave 1</h1>
+    <h2>Animasjon</h2>
+    <div id="animasjon"></div>
+    <button id="btnAnimasjon">Spill animasjon</button>
+</div>
+<script>
+    let btnAnimasjon = document.getElementById("btnAnimasjon");
+    let animasjon = document.getElementById("animasjon");
+
+    btnAnimasjon.onclick = function (){
+
+            let i = 1;
+
+            while(i <= 8) {
+                let frame = document.createElement("img");
+                frame.src = "frames/frame" + i + ".png";
+
+                frame.animate([
+                    {opacity: 0},
+                    {opacity: 100}
+                ], {
+                    duration: 1000,
+                    iterations: 1,
+
+                });
+
+                animasjon.appendChild(frame);
+                setTimeout( i++, i*1000); //Jeg prøver å bildene til å dukke opp etter  hverandre.
+            }
+
+
+    }
+
+</script>
+
+<div class="oppgave">
+    <h1>Oppgave 2</h1>
+    <h2>a</h2>
+    <table>
+        <tr>
+            <td>Innfør data fra et år</td>
+            <td>Innfør data fra et annet år</td>
+            <th>Svar</th>
+        </tr>
+        <tr>
+            <td><input type="number"id="inp1"></td>
+            <td><input type="number"id="inp2"></td>
+            <td id="svar1"></td>
+        </tr>
+    </table>
+    <script>
+        let inp1 = document.getElementById("inp1");
+        let inp2 = document.getElementById("inp2");
+        let svar1 = document.getElementById("svar1");
+
+        inp1.addEventListener("input", regnUt1);
+        inp2.addEventListener("input", regnUt1);
+        function regnUt1() {
+            let intervall =  inp2.value - inp1.value;
+            if(intervall > 0) {
+                svar1.innerHTML = "Tallene du førte inn tilsvarer en økning med " + intervall + " trær, eller <b>" + ((inp2.value/inp1.value)*100).toFixed(1) + "%"
+            } else if(intervall < 0) {
+                svar1.innerHTML = "Tallene du førte inn tilsvarer en synking på " + intervall + " trær, eller <b>" + ((inp2.value/inp1.value)*100 - 100).toFixed(1) + "%"
+            } else if(intervall == 0) {
+                svar1.innerHTML = "Ingen forandring"
+            }
+        }
+
+    </script>
+    <h2>b</h2>
+    <form>
+        <input type="text" id="inpTresort" list="tresorter" placeholder="Tresort" required>
+        <input type="number" placeholder="År 1" id="inpAar1" list="år" required>
+        <input type="number" placeholder="År 2" id="inpAar2" list="år" required>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Tresort</th>
+                <th>1915</th>
+                <th>1950</th>
+                <th>1970</th>
+                <th>1990</th>
+                <th>1992</th>
+                <th>2000</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="tr">
+
+            </tr>
+        </tbody>
+    </table>
+
+    <p id="pSvar"></p>
+    <datalist id="tresorter">
+        <option value="Furu">Furu</option>
+        <option value="Gran">Gran</option>
+        <option value="Lauvtre">Lauvtre</option>
+    </datalist>
+    <datalist id="år">
+        <option value="1915">1915</option>
+        <option value="1950">1950</option>
+        <option value="1970">1970</option>
+        <option value="1990">1990</option>
+        <option value="1992">1992</option>
+        <option value="2000">2000</option>
+    </datalist>
+    <script>
+        let tredata = new Map();
+        tredata.set("Furu", {1915:20, 1950:31, 1970:53, 1990:89, 1992:102, 2000:117});
+        tredata.set("Gran", {1915:23, 1950:39, 1970:72, 1990:89, 1992:92, 2000:88});
+        tredata.set("Lauvtre", {1915:4, 1950:6, 1970:8, 1990:12, 1992:15, 2000:18});
+        let tr = document.getElementById("tr");
+
+
+        let inpAar1 = document.getElementById("inpAar1");
+        let inpAar2 = document.getElementById("inpAar2");
+        let pSvar = document.getElementById("pSvar");
+        let inpTresort = document.getElementById("inpTresort");
+
+
+        inpTresort.addEventListener("input", finnTresort);
+
+        function finnTresort() {
+            tr.innerHTML = "<td>" + inpTresort.value + "</td>";
+
+            if(tredata.has(inpTresort.value)){
+                let tresort = tredata.get(inpTresort.value);
+                for(let aar in tresort) {
+                    let td = document.createElement("td");
+                    td.innerHTML = tresort[aar];
+                    tr.appendChild(td);
+                }
+            } else {
+
+            }
+        }
+        function regn() {
+            let tresort = tredata.get(inpTresort.value);
+            let tall1 = tresort[inpAar1.value];
+            let tall2 = tresort[inpAar2.value];
+            console.log(tresort);
+
+            let intervall =  tall2 - tall1;
+            if(intervall > 0) {
+                pSvar.innerHTML = "Tallene du førte inn tilsvarer en økning med <b> " + intervall + " trær </b>, eller <b>" + ((tall2/tall1)*100).toFixed(1) + "%"
+            } else if(intervall < 0) {
+                pSvar.innerHTML = "Tallene du førte inn tilsvarer en synking på <b> " + intervall + " trær </b>, eller <b>" + ((tall2/tall1)*100 - 100).toFixed(1) + "%"
+            } else if(intervall == 0) {
+                pSvar.innerHTML = "Ingen forandring"
+            }
+
+        }
+        inpAar1.addEventListener("input", regn);
+        inpAar2.addEventListener("input", regn);
+        inpTresort.addEventListener("input", regn);
+
+
+    </script>
+</div>
+
+
+
+</body>
+</html>
