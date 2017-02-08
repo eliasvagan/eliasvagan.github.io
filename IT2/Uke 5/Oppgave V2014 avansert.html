@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Noen greier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation-flex.css">
+    <style>
+        html {
+            background-color: #d1d1d1;
+        }
+
+        body {
+
+            max-width: 40em;
+            margin: auto;
+            background-color: white;
+        }
+
+
+    </style>
+</head>
+<body>
+<h3>Anmeldte lovbrudd</h3>
+<form id="skjerm">
+    <input type="number" id="inpAar"  placeholder="År">
+    <input type="number" id="inpPromille" placeholder="Promillekjøring">
+    <input type="number" id="inpFart" placeholder="Fartsovertredelser">
+    <button type="submit">OK</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>År</th>
+            <th>Promillekjøring</th>
+            <th>Ulovlig hastighet</th>
+            <th>Sum</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tabell">
+
+    </tbody>
+</table>
+
+</body>
+
+<script>
+    let tabell = document.getElementById("tabell");
+    let inpAar = document.getElementById("inpAar");
+    let inpPromille = document.getElementById("inpPromille");
+    let inpFart = document.getElementById("inpFart");
+    let skjerm = document.getElementById("skjerm");
+
+
+    let lovbruddene = new Map();
+    lovbruddene.set("2002", {promille: 9631, fart: 9863 });
+    lovbruddene.set("2003", {promille: 8593, fart: 11030});
+    lovbruddene.set("2004", {promille: 8363, fart: 12341});
+    lovbruddene.set("2005", {promille: 8128, fart: 13450});
+    lovbruddene.set("2006", {promille: 5814, fart: 17789});
+    lovbruddene.set("2007", {promille: 5834, fart: 19830});
+
+    function registrerData(evt) {
+        evt.preventDefault();
+        //Hvis det ikke finnes data for lovbrudd dette året,
+        //må vi legge til ny data
+        if( !lovbruddene.has(inpAar.value)) {
+            lovbruddene.set(inpAar.value, {})
+        }
+
+        let lovbrudd = lovbruddene.get(inpAar.value);
+        lovbrudd.promille = Number(inpPromille.value);
+        lovbrudd.fart = Number(inpFart.value);
+
+        lagTabell();
+    }
+
+    function finnLovbrudd() {
+        if(lovbruddene.has(inpAar.value)){
+            let lovbrudd = lovbruddene.get(inpAar.value);
+            inpPromille.value = lovbrudd.promille;
+            inpFart.value = lovbrudd.fart;
+        } else {
+
+        }
+    }
+
+    function lagTabell() {
+        tabell.innerHTML = "";
+        for(let [key, lovbrudd] of lovbruddene) {
+            tabell.innerHTML += `
+                <tr>
+                    <td>${key}</td>
+                    <td>${lovbrudd.promille}</td>
+                    <td>${lovbrudd.fart}</td>
+                    <td>${lovbrudd.promille + lovbrudd.fart}</td>
+                    <td><button onclick="slett('${key}')" class="button big">Slett</button></td>
+                </tr>
+
+            `;
+        }
+
+    }
+    lagTabell();
+    inpAar.addEventListener("input", finnLovbrudd);
+    skjerm.onsubmit = registrerData;
+    function slett(key) {
+        lovbruddene.delete(key);
+        lagTabell();
+    }
+    //let elementer = document.querySelectorAll("*");
+    //for(let element of elementer) {
+    //    let random = Math.random() * 10 - 5;
+    //    element.style= `
+    //        transform: rotate(${random}deg);
+    //        padding: ${Math.random()*20}px;
+    //    `
+    //}
+
+</script>
+
+</html>
