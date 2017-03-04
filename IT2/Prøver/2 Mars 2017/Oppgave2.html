@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Innkjøpslisten</title>
+    <style>
+        html {
+            background-color: lightgray;
+            font-family: Helvetica, sans-serif;
+        }
+        body {
+            margin: auto;
+            background-color: white;
+            width: 40em;
+            padding: 1em;
+            min-height: 100vh;
+
+        }
+        input {
+            width: 50%;
+            padding: 0.5em;
+            box-sizing: border-box;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        table {
+            margin-top: 1em;
+            width: 100%;
+            border: solid 0.1em lightgray;
+            font-size: 1.1em;
+        }
+        table td:nth-of-type(1), table th:nth-of-type(1) {
+            width: 100px;
+
+        }
+        table td:last-of-type, table th:last-of-type {
+            width: 80px;
+        }
+        th {
+            text-align: left;
+        }
+        th:first-of-type, th:last-of-type {
+            text-align: center;
+        }
+        form {
+            display: flex;
+        }
+
+        table button {
+            display: block;
+            margin: auto;
+            font-size: 1em;
+        }
+        table#liste tr:nth-of-type(2n) {
+            background-color: #ebebeb;
+        }
+        form > * {
+            flex: 1;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+            background-color: dimgray;
+            display: block;
+            float: right;
+            padding: 1em;
+        }
+        button {
+            font-size: 1.2em;
+        }
+        input[type=checkbox] {
+            align-self: center;
+            margin-left: 40%;
+        }
+
+        
+
+    </style>
+</head>
+
+<body>
+<a href="Oppgave1.html">Gå til Oppgave 1</a>
+<h1>Oppgave 2: Innkjøpslisten</h1>
+<p><i>Start med å legge til noe i listen ved å fylle inn formen nedenfor. </i></p>
+<form id="form" action="#">
+    <input type="text" id="inpBeskrivelse" placeholder="Beskrivelse" required>
+    <input type="number" id="inpAntall" placeholder="Antall" min="1" required>
+    <input type="number" id="inpPris" placeholder="Pris per vare" min="0" required>
+    <button type="submit">Legg til</button>
+</form>
+<table id="liste">
+    <thead>
+        <tr>
+            <th>Betalt</th>
+            <th>Beskrivelse</th>
+            <th>Antall</th>
+            <th>Beløp</th>
+            <th>Fjerne</th>
+        </tr>
+    </thead>
+    <tbody id="handleliste">
+
+    </tbody>
+</table>
+<table>
+    <tbody id="tabellSum"></tbody>
+</table>
+<script>
+    let form = document.getElementById("form");
+    let inpBeskrivelse = document.getElementById("inpBeskrivelse");
+    let inpAntall = document.getElementById("inpAntall");
+    let handleliste = document.getElementById("handleliste");
+    let inpPris = document.getElementById("inpPris");
+    let tabellSum = document.getElementById("tabellSum");
+    let sumBetalt = 0;
+
+    let varer = [];
+    form.onsubmit = function(evt) {
+        evt.preventDefault();
+        varer.push({sjekket: true, beskrivelse: inpBeskrivelse.value, antall: inpAntall.value, pris: inpPris.value*inpAntall.value});
+        inpBeskrivelse.value = "";
+        inpAntall.value = "";
+        inpPris.value = "";
+        inpBeskrivelse.select();
+        oppdater();
+    };
+    let k = 0;
+    let stadie = "checked";
+    function oppdater() {
+        handleliste.innerHTML = "";
+        for(let i=0; i<varer.length; i++) {
+            k = i;
+            if(varer[i].sjekket == true) {
+                stadie = "checked";
+            } else {
+                stadie = "";
+            }
+            handleliste.innerHTML +=
+            `
+            <tr>
+                <td><input type="checkbox" ${stadie} onclick="sjekkboks(${i})"></td>
+                <td>${varer[i].beskrivelse}</td>
+                <td>${varer[i].antall}</td>
+                <td>${varer[i].pris}kr</td>
+                <td><button onclick="slett(${i})">X</button></td>
+            </tr>
+            `;
+            }
+        regnUt();
+    }
+    function sjekkboks(nummer) {
+        if(varer[nummer].sjekket) {
+            varer[nummer].sjekket = false
+        } else {
+            varer[nummer].sjekket = true
+        }
+        oppdater();
+    }
+    let totalsum = 0;
+    function regnUt() {
+        sumBetalt = 0;
+        totalsum = 0;
+
+        for(let vare of varer) {
+
+            if(vare.sjekket) {
+                sumBetalt += vare.pris;
+            } else {
+
+            }
+            totalsum +=vare.pris;
+
+        }
+
+        tabellSum.innerHTML =
+            `
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Sum som er betalt</td>
+                    <td></td>
+                <td>${sumBetalt}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Sum som ikke er betalt</td>
+                <td></td>
+                <td>${totalsum - sumBetalt}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Totalsum</td>
+                <td></td>
+                <td><b>${totalsum}</b></td>
+
+            </tr>
+            `;
+    }
+    function slett(indeksen) {
+        varer.splice(indeksen, 1);
+        oppdater();
+    }
+
+
+
+
+</script>
+
+</body>
+</html>

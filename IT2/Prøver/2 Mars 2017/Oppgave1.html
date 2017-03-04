@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panteautomaten</title>
+    <style>
+        @keyframes pulse {
+            0%  {transform: scale(1)}
+            50% {transform: scale(0.9)   }
+            100%{transform: scale(1)   }
+        }
+        html {
+            background-color: lightgray;
+            font-family: Helvetica, sans-serif;
+        }
+        body {
+            padding: 1em;
+            width: 40em;
+            background-color: white;
+            margin: auto;
+            min-height: 100vh;
+        }
+        button {
+            width: 100%;
+            font-size: 1.2em;
+        }
+        #brus {
+            display: flex;
+
+        }
+        #brus > button {
+            transition: 0.1s;
+        }
+        #brus > button:active {
+            animation: pulse 0.1s ease;
+        }
+        #brus > button:hover {
+            transform: scale(1.1);
+        }
+        table {
+            width: 20em;
+            border: solid 0.2em lightgray;
+            margin: 1em auto;
+        }
+        h1 {
+            font-weight: normal;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+            background-color: dimgray;
+            display: block;
+            float: right;
+            padding: 1em;
+        }
+
+
+    </style>
+</head>
+
+
+<body>
+<a href="Oppgave2.html">Gå til Oppgave 2</a>
+
+
+    <h1><b>Oppgave 1:</b>Panteautomaten</h1>
+
+<p><i>Trykk på en brusflaske for å legge til i panteautomaten. Trykk deretter på pante-knappen for kvitering.
+    Den starter automatisk på nytt om du forsøker å legge på flere flasker etter du har trukket lapp.</i></p>
+<div id="brus">
+    <button onclick="leggTil('7up', 0)">
+        <img src="7up_mp_pack.png" class="brus">
+    </button>
+    <button onclick="leggTil('Battery', 1)">
+        <img src="battery052014.png" class="brus">
+    </button>
+    <button onclick="leggTil('Farris', 2.5)">
+        <img src="Farris-sitron.png" class="brus">
+    </button>
+    <button onclick="leggTil('Mozell', 1)">
+        <img src="mozell.png" class="brus">
+    </button>
+</div>
+<button id="btnPant">Få pantelapp</button>
+
+<table>
+    <tbody id="skjerm"></tbody>
+</table>
+<script>
+
+    let skjerm = document.getElementById("skjerm");
+    let btnPant = document.getElementById("btnPant");
+    let brusene = document.querySelectorAll(".brus");
+    let liste = [];
+    let sum = 0;
+    let panteStatus = 1;
+    function leggTil(navn, verdi) {
+        liste.push({value: verdi, name: navn});
+        console.log(liste);
+        if(verdi == 0) {
+            alert("Obs! 7UP har ingen pant.");
+        }
+        oppdaterSkjerm();
+        panteStatus = 1;
+
+    }
+    function oppdaterSkjerm() {
+        skjerm.innerHTML = "";
+        sum = 0;
+        for(let element of liste) {
+            sum += element.value;
+            skjerm.innerHTML += `
+                <tr>
+                    <td>${element.name}:</td>
+                    <td>${element.value}kr</td>
+                </tr>`
+        }
+        skjerm.innerHTML += `
+                <tr>
+                    <td><b>Sum:</b></td>
+                    <td>${sum}kr</td>
+                </tr>`
+    }
+
+    function panteLapp() {
+        if(panteStatus == 0) {
+            alert("Du kan ikke trekke flere lapper. Oppdater siden eller pant flere flasker.")
+        } else {
+            let lapp = document.createElement("table");
+            lapp.innerHTML += "<h2>Din pantelapp:</h2>";
+            lapp.innerHTML += skjerm.innerHTML;
+            lapp.style =    `
+                        background-color: lightyellow;
+                        padding: 2em;
+                        width: 300px;
+                        margin: 1em auto;
+
+
+                        `;
+
+
+            skjerm.innerHTML = "";
+            skjerm.appendChild(lapp);
+            sum = 0;
+            liste = [];
+            panteStatus = 0;
+        }
+
+    }
+
+    btnPant.onclick = panteLapp;
+
+
+
+
+</script>
+
+</body>
+</html>
