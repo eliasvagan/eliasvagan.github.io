@@ -1,2 +1,12 @@
+title: Elias Vagan
+description: Personal site and small web tools
+url: https://eliasvagan.github.io
+
 gems:
   - jekyll-sitemap
+
+exclude:
+  - .git
+  - .gitignore
+  - README.md
+  - .idea
