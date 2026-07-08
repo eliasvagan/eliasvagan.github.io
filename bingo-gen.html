@@ -5,6 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Elias sin magiske bingogenerator</title>
 	<style>
+		@font-face {
+			font-family: "Beautifully Delicious Script";
+			src: url("resources/fonts/Beautifully_Delicious_Script_Regular.ttf") format("truetype");
+			font-weight: normal;
+			font-style: normal;
+		}
 		body {
 			font-family: Georgia, "Times New Roman", serif;
 			max-width: 52rem;
@@ -14,9 +20,10 @@
 			color: #222;
 		}
 		h1 {
-			font-family: "Playfair Display", Georgia, serif;
-			font-weight: 700;
-			letter-spacing: -.02em;
+			font-family: "Beautifully Delicious Script", Georgia, serif;
+			font-weight: normal;
+			font-size: 2.75rem;
+			letter-spacing: 0;
 		}
 		form {
 			display: flex;
@@ -138,6 +145,48 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 		const countEl = document.getElementById('count');
 		const downloadEl = document.getElementById('download');
 
+		const HEADING_FONT_FILE = "Beautifully_Delicious_Script_Regular.ttf";
+		const HEADING_FONT_FAMILY = "BeautifullyDelicious";
+		const HEADING_FONT_URL = "resources/fonts/Beautifully_Delicious_Script_Regular.ttf";
+		let headingFontBase64 = null;
+		let headingFontPromise = null;
+
+		function arrayBufferToBase64(buffer) {
+			const bytes = new Uint8Array(buffer);
+			let binary = "";
+			const chunkSize = 0x8000;
+			for (let i = 0; i < bytes.length; i += chunkSize) {
+				binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+			}
+			return btoa(binary);
+		}
+
+		function loadHeadingFontData() {
+			if (headingFontBase64) {
+				return Promise.resolve(headingFontBase64);
+			}
+			if (!headingFontPromise) {
+				headingFontPromise = fetch(HEADING_FONT_URL)
+					.then((response) => {
+						if (!response.ok) {
+							throw new Error(`Kunne ikke laste skrift (${response.status})`);
+						}
+						return response.arrayBuffer();
+					})
+					.then(arrayBufferToBase64)
+					.then((base64) => {
+						headingFontBase64 = base64;
+						return base64;
+					});
+			}
+			return headingFontPromise;
+		}
+
+		function registerHeadingFont(doc, base64) {
+			doc.addFileToVFS(HEADING_FONT_FILE, base64);
+			doc.addFont(HEADING_FONT_FILE, HEADING_FONT_FAMILY, "normal");
+		}
+
 		function negotiate(evt) {
 			const text = thingsEl.value.trim();
 			const items = text
@@ -200,11 +249,20 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 			}
 
 			const { jsPDF } = window.jspdf;
+			let headingFontData;
+			try {
+				headingFontData = await loadHeadingFontData();
+			} catch (error) {
+				alert("Kunne ikke laste overskriftsskriften. Sjekk at fontfilen finnes og prøv på nytt.");
+				return;
+			}
+
 			const doc = new jsPDF({
 				orientation: "portrait",
 				unit: "mm",
 				format: "a4"
 			});
+			registerHeadingFont(doc, headingFontData);
 
 			const pageWidth = doc.internal.pageSize.getWidth();
 			const pageHeight = doc.internal.pageSize.getHeight();
@@ -218,9 +276,9 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 
 				// Overskrift med mal (erstatt $n med nummer)
 				const headerText = headerTemplate.replace(/\$n/g, (c + 1));
-				doc.setFont("helvetica", "bold");
-				doc.setFontSize(24);
-				doc.text(headerText, pageWidth / 2, margin + 10, { align: "center" });
+				doc.setFont(HEADING_FONT_FAMILY, "normal");
+				doc.setFontSize(30);
+				doc.text(headerText, pageWidth / 2, margin + 12, { align: "center" });
 
 				// Underoverskrift fra textarea
 				doc.setFont("helvetica", "normal");

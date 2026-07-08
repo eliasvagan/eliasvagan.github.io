@@ -19,6 +19,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 .
 ├── index.html        # Site homepage
 ├── bingo-gen.html    # Wedding bingo PDF generator
+├── resources/fonts/  # Custom fonts embedded in generated PDFs
 ├── _config.yml       # Jekyll / GitHub Pages config
 └── IT2/              # Archived IT coursework (HTML, CSS, JavaScript exercises)
 ```
