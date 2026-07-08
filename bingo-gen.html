@@ -171,6 +171,8 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 			canvas.width = widthPx * scale;
 			canvas.height = heightPx * scale;
 			ctx.scale(scale, scale);
+			ctx.fillStyle = "#ffffff";
+			ctx.fillRect(0, 0, widthPx, heightPx);
 			ctx.font = fontSpec;
 			ctx.fillStyle = "#000000";
 			ctx.textAlign = "center";
@@ -178,7 +180,7 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 			ctx.fillText(text, widthPx / 2, heightPx / 2);
 
 			return {
-				dataUrl: canvas.toDataURL("image/png"),
+				dataUrl: canvas.toDataURL("image/jpeg", 0.92),
 				widthPx,
 				heightPx,
 			};
@@ -190,7 +192,7 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 			const heightMm = widthMm * (headingImage.heightPx / headingImage.widthPx);
 			const x = (pageWidth - widthMm) / 2;
 			const y = margin - 2;
-			doc.addImage(headingImage.dataUrl, "PNG", x, y, widthMm, heightMm);
+			doc.addImage(headingImage.dataUrl, "JPEG", x, y, widthMm, heightMm);
 			return y + heightMm;
 		}
 
