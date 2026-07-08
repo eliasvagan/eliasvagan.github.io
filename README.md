@@ -22,6 +22,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 ├── bingo-gen.html    # Wedding bingo PDF generator
 ├── notar/            # Melody composer (Web Audio + staff notation)
 ├── resources/fonts/  # Custom fonts embedded in generated PDFs
+├── test/             # Playwright + pytest integration tests
 ├── _config.yml       # Jekyll / GitHub Pages config
 └── IT2/              # Archived IT coursework (HTML, CSS, JavaScript exercises)
 ```
@@ -37,6 +38,14 @@ python -m http.server 8000
 ```
 
 Then visit `http://localhost:8000`.
+
+## Tests
+
+Integration tests live in [`test/`](test/). They start a local static server and use Playwright to exercise the browser apps end-to-end.
+
+```bash
+./test/run_tests.sh
+```
 
 ## Deployment
 

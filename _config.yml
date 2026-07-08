@@ -10,3 +10,4 @@ exclude:
   - .gitignore
   - README.md
   - .idea
+  - test

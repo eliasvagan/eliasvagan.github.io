@@ -8,3 +8,7 @@ _site/
 .jekyll-cache/
 .jekyll-metadata
 vendor/
+test/output/
+test/.pytest_cache/
+test/__pycache__/
+test/**/__pycache__/
