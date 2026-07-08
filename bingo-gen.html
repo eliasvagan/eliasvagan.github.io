@@ -5,12 +5,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Elias sin magiske bingogenerator</title>
 	<style>
-		@font-face {
-			font-family: "Beautifully Delicious Script";
-			src: url("resources/fonts/Beautifully_Delicious_Script_Regular.ttf") format("truetype");
-			font-weight: normal;
-			font-style: normal;
-		}
 		body {
 			font-family: Georgia, "Times New Roman", serif;
 			max-width: 52rem;
@@ -20,10 +14,8 @@
 			color: #222;
 		}
 		h1 {
-			font-family: "Beautifully Delicious Script", Georgia, serif;
-			font-weight: normal;
-			font-size: 2.75rem;
-			letter-spacing: 0;
+			font-weight: 700;
+			letter-spacing: -.02em;
 		}
 		form {
 			display: flex;
@@ -145,14 +137,17 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 		const countEl = document.getElementById('count');
 		const downloadEl = document.getElementById('download');
 
-		const HEADING_FONT_FAMILY = '"Beautifully Delicious Script", Georgia, serif';
+		const PDF_HEADING_FONT = "BingoPdfHeading";
 		const HEADING_FONT_URL = "resources/fonts/Beautifully_Delicious_Script_Regular.ttf";
 		let headingFontReady = null;
 
 		function ensureHeadingFont() {
 			if (!headingFontReady) {
-				headingFontReady = document.fonts.load(`64px ${HEADING_FONT_FAMILY}`)
-					.catch(() => document.fonts.ready);
+				headingFontReady = (async () => {
+					const face = new FontFace(PDF_HEADING_FONT, `url(${HEADING_FONT_URL})`);
+					await face.load();
+					document.fonts.add(face);
+				})();
 			}
 			return headingFontReady;
 		}
@@ -166,7 +161,7 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 			const scale = 3;
 			const canvas = document.createElement("canvas");
 			const ctx = canvas.getContext("2d");
-			const fontSpec = `${fontSizePx}px ${HEADING_FONT_FAMILY}`;
+			const fontSpec = `${fontSizePx}px "${PDF_HEADING_FONT}", Georgia, serif`;
 
 			ctx.font = fontSpec;
 			const metrics = ctx.measureText(text);
@@ -381,7 +376,6 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 
 		// Initialiser forhåndsvisning
 		negotiate();
-		ensureHeadingFont();
 	</script>
 
 </body>
