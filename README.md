@@ -11,6 +11,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 | Project | Description | Link |
 | --- | --- | --- |
 | **Bingo generator** | Generate randomized, unique wedding bingo sheets as PDFs | [bingo-gen.html](https://eliasvagan.github.io/bingo-gen.html) |
+| **Notar** | Browser-based melody composer with staff notation and Web Audio playback | [notar/](https://eliasvagan.github.io/notar/) |
 | **MineSweeper JS** | Browser-based Minesweeper game | [minesweeper-js](https://eliasvagan.github.io/minesweeper-js/) |
 
 ## Repository layout
@@ -19,6 +20,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 .
 ├── index.html        # Site homepage
 ├── bingo-gen.html    # Wedding bingo PDF generator
+├── notar/            # Melody composer (Web Audio + staff notation)
 ├── resources/fonts/  # Custom fonts embedded in generated PDFs
 ├── _config.yml       # Jekyll / GitHub Pages config
 └── IT2/              # Archived IT coursework (HTML, CSS, JavaScript exercises)
