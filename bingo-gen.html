@@ -295,12 +295,19 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 					grid.push(selected.slice(i * size, (i + 1) * size));
 				}
 
-				// Beregn plassering og størrelse på rutenettet
+				// Beregn plassering og størrelse på rutenettet (kvadratiske celler)
 				const gridTop = margin + 26;
 				const availableWidth = pageWidth - margin * 2;
-				const cellWidth = availableWidth / size;
-				const maxCellHeight = 26;
-				const cellHeight = Math.min((pageHeight - gridTop - margin - 35) / size, maxCellHeight);
+				const rulesAreaHeight = 35;
+				const maxGridHeight = pageHeight - gridTop - margin - rulesAreaHeight;
+				const maxCellSize = 26;
+				const cellSize = Math.min(
+					availableWidth / size,
+					maxGridHeight / size,
+					maxCellSize
+				);
+				const gridWidth = cellSize * size;
+				const gridLeft = margin + (availableWidth - gridWidth) / 2;
 
 				// Fontstørrelse tilpasset rutenett
 				let fontSize = 9.5;
@@ -310,30 +317,30 @@ Fullt brett = 1. premie – valgfri drink til alle på bordet</textarea>
 
 				for (let row = 0; row < size; row++) {
 					for (let col = 0; col < size; col++) {
-						const x = margin + col * cellWidth;
-						const y = gridTop + row * cellHeight;
+						const x = gridLeft + col * cellSize;
+						const y = gridTop + row * cellSize;
 
 						// Cellekant
 						doc.setDrawColor(80);
-						doc.rect(x, y, cellWidth, cellHeight);
+						doc.rect(x, y, cellSize, cellSize);
 
 						// Tekst, sentrert og automatisk linjebryt
 						const cellText = grid[row][col];
-						const lines = doc.splitTextToSize(cellText, cellWidth - 5);
+						const lines = doc.splitTextToSize(cellText, cellSize - 5);
 
 						const textHeight = lines.length * (fontSize * 0.38);
-						const textY = y + (cellHeight - textHeight) / 2 + fontSize * 0.32;
+						const textY = y + (cellSize - textHeight) / 2 + fontSize * 0.32;
 
 						doc.setTextColor(30);
-						doc.text(lines, x + cellWidth / 2, textY, {
+						doc.text(lines, x + cellSize / 2, textY, {
 							align: "center",
-							maxWidth: cellWidth - 5
+							maxWidth: cellSize - 5
 						});
 					}
 				}
 
 				// Regler / premier under rutenettet
-				const rulesStartY = gridTop + size * cellHeight + 6;
+				const rulesStartY = gridTop + size * cellSize + 6;
 				doc.setFontSize(7.5);
 				doc.setTextColor(60);
 				doc.setFont("helvetica", "normal");
