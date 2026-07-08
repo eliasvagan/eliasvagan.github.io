@@ -1,0 +1,6 @@
+[submodule "projects/bingo-gen"]
+	path = projects/bingo-gen
+	url = https://github.com/eliasvagan/bingo-gen.git
+[submodule "projects/notar"]
+	path = projects/notar
+	url = https://github.com/eliasvagan/notar.git

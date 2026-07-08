@@ -45,3 +45,9 @@ test/
 ```
 
 Tests start their own static server on a random local port, so you do not need to run `python -m http.server` manually.
+
+Submodule content must be present. From the repo root:
+
+```bash
+git submodule update --init --recursive
+```

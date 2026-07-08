@@ -8,7 +8,7 @@ from playwright.sync_api import Page
 from helpers.browser import computed_font_family, save_blob_link
 from helpers.pdf import image_stats_for_page, summarize_pdf
 
-BINGO_URL = "/bingo-gen.html"
+BINGO_URL = "/projects/bingo-gen/"
 SAMPLE_ITEMS = [
     "Eple", "Pære", "Banan", "Appelsin",
     "Druer", "Mango", "Kiwi", "Ananas",

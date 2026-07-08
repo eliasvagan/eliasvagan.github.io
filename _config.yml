@@ -11,3 +11,4 @@ exclude:
   - README.md
   - .idea
   - test
+  - projects/README.md
