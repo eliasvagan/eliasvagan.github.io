@@ -14,7 +14,9 @@ def wait_for_blob_download_link(page: Page, link_selector: str, timeout_ms: int 
     page.wait_for_function(
         """(selector) => {
             const link = document.querySelector(selector);
-            return link && link.style.display !== 'none' && link.href.startsWith('blob:');
+            if (!link) return false;
+            const hidden = link.style.display === 'none' || link.getAttribute('hidden') !== null;
+            return !hidden && link.href.startsWith('blob:');
         }""",
         arg=link_selector,
         timeout=timeout_ms,

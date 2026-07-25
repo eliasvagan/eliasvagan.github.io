@@ -27,7 +27,8 @@ def fill_bingo_form(page: Page, base_url: str, board_count: int = 2) -> None:
 
 def generate_pdf(page: Page, destination: Path) -> None:
     page.click('button[type="submit"]')
-    save_blob_link(page, "#download", destination)
+    # Newest export is prepended; each card has its own blob download link.
+    save_blob_link(page, ".export-download", destination)
 
 
 class TestBingoPage:
@@ -37,6 +38,16 @@ class TestBingoPage:
         assert "BingoPdfHeading" not in font_family
         assert "Beautifully" not in font_family
         assert "Georgia" in font_family
+
+    def test_keeps_multiple_exports_in_session_list(self, page: Page, base_url: str) -> None:
+        fill_bingo_form(page, base_url, board_count=1)
+        page.click('button[type="submit"]')
+        page.wait_for_selector(".export-card", state="visible")
+        page.click('button[type="submit"]')
+        page.wait_for_function("() => document.querySelectorAll('.export-card').length >= 2")
+        assert page.locator(".export-card").count() >= 2
+        assert page.locator(".export-download").count() >= 2
+        assert page.locator("#exportsEmpty").is_hidden()
 
 
 class TestBingoPdf:
