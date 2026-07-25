@@ -65,8 +65,7 @@ def image_stats_for_page(path: Path, page_index: int = 0) -> list[ImageStats]:
         if obj.get("/Subtype") != "/Image":
             continue
 
-        data = obj.get_data()
-        image = Image.open(BytesIO(data)).convert("RGB")
+        image = _pdf_xobject_to_rgb(obj)
         pixels = list(image.get_flattened_data())
         total = len(pixels)
         white = sum(1 for r, g, b in pixels if r + g + b > 700)
@@ -81,3 +80,46 @@ def image_stats_for_page(path: Path, page_index: int = 0) -> list[ImageStats]:
             )
         )
     return stats
+
+
+def _pdf_xobject_to_rgb(obj) -> Image.Image:
+    """Decode a PDF image XObject to RGB, compositing soft masks on white."""
+    data = obj.get_data()
+    # Embedded JPEG/PNG streams open directly; Flate RGB (jsPDF PNG) does not.
+    try:
+        raw = Image.open(BytesIO(data))
+        if raw.mode in ("RGBA", "LA") or (raw.mode == "P" and "transparency" in raw.info):
+            rgba = raw.convert("RGBA")
+            bg = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+            return Image.alpha_composite(bg, rgba).convert("RGB")
+        return raw.convert("RGB")
+    except Exception:
+        pass
+
+    width = int(obj["/Width"])
+    height = int(obj["/Height"])
+    color_space = obj.get("/ColorSpace")
+    if color_space == "/DeviceRGB" or getattr(color_space, "name", None) == "/DeviceRGB":
+        mode = "RGB"
+        expected = width * height * 3
+    elif color_space == "/DeviceGray" or getattr(color_space, "name", None) == "/DeviceGray":
+        mode = "L"
+        expected = width * height
+    else:
+        raise ValueError(f"Unsupported ColorSpace for image stats: {color_space}")
+
+    if len(data) < expected:
+        raise ValueError(f"Image data too short: {len(data)} < {expected}")
+    image = Image.frombytes(mode, (width, height), data[:expected])
+    if mode != "RGB":
+        image = image.convert("RGB")
+
+    if "/SMask" in obj:
+        smask = obj["/SMask"].get_object()
+        alpha = _pdf_xobject_to_rgb(smask).convert("L")
+        rgba = image.convert("RGBA")
+        rgba.putalpha(alpha)
+        bg = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+        image = Image.alpha_composite(bg, rgba).convert("RGB")
+
+    return image

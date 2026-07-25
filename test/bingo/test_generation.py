@@ -51,19 +51,21 @@ class TestBingoPdf:
         summary = summarize_pdf(pdf_path)
         assert summary.page_count == 2
 
-    def test_contains_subtitle_and_sample_items(self, pdf_path: Path) -> None:
+    def test_contains_sample_items(self, pdf_path: Path) -> None:
         summary = summarize_pdf(pdf_path)
-        assert "Testbingo lokalt" in summary.text
+        # Heading/subtitle are rasterized with custom fonts (not extractable text).
         for item in SAMPLE_ITEMS:
             assert item in summary.text
 
-    def test_embeds_heading_images(self, pdf_path: Path) -> None:
+    def test_embeds_heading_and_subtitle_images(self, pdf_path: Path) -> None:
         summary = summarize_pdf(pdf_path)
         assert summary.has_images
-        assert summary.image_count >= 2
+        # Two pages × (heading + subtitle) images
+        assert summary.image_count >= 4
 
-    def test_heading_images_have_visible_ink(self, pdf_path: Path) -> None:
+    def test_title_images_have_visible_ink(self, pdf_path: Path) -> None:
         for page_index in range(2):
             stats = image_stats_for_page(pdf_path, page_index=page_index)
             assert stats, f"Expected image objects on page {page_index + 1}"
-            assert any(image.dark_ratio >= 0.03 and image.white_ratio >= 0.85 for image in stats)
+            inked = [image for image in stats if image.dark_ratio >= 0.02 and image.white_ratio >= 0.80]
+            assert len(inked) >= 2, f"Expected heading+subtitle ink on page {page_index + 1}, got {stats}"
