@@ -12,3 +12,9 @@ exclude:
   - .idea
   - test
   - projects/README.md
+  # Setting `exclude` replaces Jekyll's defaults, so the build tooling has to be named here or it ships.
+  - node_modules
+  - package.json
+  - package-lock.json
+  - projects.json
+  - scripts

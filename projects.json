@@ -1,0 +1,77 @@
+{
+  "$comment": [
+    "The projects the front page lists, and where each one's version comes from.",
+    "Run `npm run projects` after changing this; it rewrites the block between the markers in index.html.",
+    "version.from is one of: package.json (path, relative to this repo) | submodule (path) | github (repo).",
+    "shot.steps walks the page to the frame worth showing: { key } | { click: selector } | { scrollY } | { waitMs }."
+  ],
+  "projects": [
+    {
+      "id": "celestial-alliance-3",
+      "title": "Celestial Alliance 3",
+      "blurb": "A space-opera RPG that runs in the browser — fly, trade, walk stations and cities, and hire a crew who remember you.",
+      "href": "/projects/celestial-alliance-3/",
+      "version": {
+        "from": "package.json",
+        "path": "../celestial-alliance-3/package.json"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/projects/celestial-alliance-3/",
+        "settleMs": 6000
+      }
+    },
+    {
+      "id": "notar",
+      "title": "Notar",
+      "blurb": "Compose melodies on a scrolling staff and play them in the browser.",
+      "href": "/projects/notar/",
+      "version": {
+        "from": "submodule",
+        "path": "projects/notar"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/projects/notar/",
+        "settleMs": 2500
+      }
+    },
+    {
+      "id": "bingo-gen",
+      "title": "Bingo generator",
+      "blurb": "Create randomized wedding bingo sheets and download them as PDFs.",
+      "href": "/projects/bingo-gen/",
+      "version": {
+        "from": "submodule",
+        "path": "projects/bingo-gen"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/projects/bingo-gen/",
+        "settleMs": 2500
+      }
+    },
+    {
+      "id": "minesweeper-js",
+      "title": "MineSweeper JS",
+      "blurb": "Classic Minesweeper, playable in the browser.",
+      "href": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
+      "version": {
+        "from": "github",
+        "repo": "eliasvagan/minesweeper-js"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
+        "settleMs": 2000,
+        "steps": [
+          {
+            "click": "#board tr:nth-child(5) td:nth-child(4)"
+          },
+          {
+            "scrollY": 178
+          },
+          {
+            "waitMs": 800
+          }
+        ]
+      }
+    }
+  ]
+}

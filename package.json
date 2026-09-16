@@ -1,0 +1,11 @@
+{
+  "name": "eliasvagan.github.io",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "projects": "node scripts/update-projects.mjs"
+  },
+  "devDependencies": {
+    "puppeteer": "^25.11.0"
+  }
+}
