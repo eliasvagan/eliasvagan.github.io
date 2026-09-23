@@ -62,7 +62,7 @@
         "settleMs": 2500,
         "steps": [
           {
-            "click": ".views button[data-view=\"open\"]"
+            "scrollY": 420
           },
           {
             "waitMs": 1400
