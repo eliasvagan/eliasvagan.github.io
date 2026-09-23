@@ -2,7 +2,7 @@
   "$comment": [
     "The projects the front page lists, and where each one's version comes from.",
     "Run `npm run projects` after changing this; it rewrites the block between the markers in index.html.",
-    "version.from is one of: package.json (path, relative to this repo) | submodule (path) | github (repo).",
+    "version.from is one of: package.json (path, relative to this repo) | submodule (path) | github (repo) | path (folder in this repo; last commit touching it).",
     "shot.steps walks the page to the frame worth showing: { key } | { click: selector } | { scrollY } | { waitMs }."
   ],
   "projects": [
@@ -46,6 +46,28 @@
       "shot": {
         "url": "https://eliasvagan.github.io/projects/bingo-gen/",
         "settleMs": 2500
+      }
+    },
+    {
+      "id": "thank-you-gen",
+      "title": "Thank-you card generator",
+      "blurb": "Print-ready wedding thank-you cards — one photo, one message per card, folded to stand on their own.",
+      "href": "/projects/thank-you-gen/",
+      "version": {
+        "from": "path",
+        "path": "projects/thank-you-gen"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/projects/thank-you-gen/",
+        "settleMs": 2500,
+        "steps": [
+          {
+            "click": ".views button[data-view=\"open\"]"
+          },
+          {
+            "waitMs": 1400
+          }
+        ]
       }
     },
     {

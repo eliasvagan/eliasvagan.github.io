@@ -23,8 +23,8 @@ def wait_for_blob_download_link(page: Page, link_selector: str, timeout_ms: int 
     )
 
 
-def save_blob_link(page: Page, link_selector: str, destination: Path) -> None:
-    wait_for_blob_download_link(page, link_selector)
+def save_blob_link(page: Page, link_selector: str, destination: Path, timeout_ms: int = 15000) -> None:
+    wait_for_blob_download_link(page, link_selector, timeout_ms)
     blob_b64 = page.evaluate(
         """async (selector) => {
             const href = document.querySelector(selector).href;

@@ -41,6 +41,8 @@ test/
 │   └── server.py        # Local static file server for tests
 ├── bingo/
 │   └── test_generation.py
+├── thank_you/
+│   └── test_generation.py
 └── output/              # Generated artifacts (gitignored)
 ```
 

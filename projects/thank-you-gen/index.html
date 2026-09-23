@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Line og Elias sin takkekortgenerator</title>
+	<style>
+		/* Same palette as bingo-gen: light by default, Monokai when the OS prefers dark. PDF output unchanged. */
+		:root {
+			color-scheme: light;
+			--bg: #ffffff;
+			--surface: #fafafa;
+			--surface-2: #f0f0f0;
+			--border: #d2d2f2;
+			--fg: #222222;
+			--muted: #555555;
+			--accent: #222222;
+			--accent-2: #222222;
+			--orange: #222222;
+			--warn: #9a4a00;
+			--input-bg: #ffffff;
+			--focus: #6666aa;
+			--btn-bg: #222222;
+			--btn-fg: #ffffff;
+			--form-shadow: none;
+			--field-hover-border: #9999cc;
+			--focus-ring: color-mix(in srgb, #6666aa 28%, transparent);
+			--table: linear-gradient(180deg, #f4f2ee 0%, #ebe7e0 100%);
+			--sheet-bg: #e9e7e2;
+		}
+		@media (prefers-color-scheme: dark) {
+			:root {
+				color-scheme: dark;
+				--bg: #272822;
+				--surface: #3e3d32;
+				--surface-2: #34352f;
+				--border: #49483e;
+				--fg: #f8f8f2;
+				--muted: #a59f85;
+				--accent: #a6e22e;
+				--accent-2: #66d9ef;
+				--orange: #fd971f;
+				--warn: #fd971f;
+				--input-bg: #1e1f1c;
+				--focus: #66d9ef;
+				--btn-bg: #a6e22e;
+				--btn-fg: #1e1f1c;
+				--form-shadow: 0 8px 28px rgba(0, 0, 0, .28);
+				--field-hover-border: color-mix(in srgb, #66d9ef 45%, #49483e);
+				--focus-ring: color-mix(in srgb, #66d9ef 28%, transparent);
+				--table: linear-gradient(180deg, #34352f 0%, #2b2c26 100%);
+				--sheet-bg: #2b2c26;
+			}
+		}
+		* { box-sizing: border-box; }
+		[hidden] { display: none !important; }
+		body {
+			font-family: Georgia, "Times New Roman", serif;
+			max-width: 78rem;
+			margin: 2rem auto;
+			padding: 0 1rem 3rem;
+			line-height: 1.5;
+			color: var(--fg);
+			background: var(--bg);
+		}
+		.page-header {
+			max-width: 44rem;
+			margin-bottom: 1.5rem;
+		}
+		h1 {
+			font-weight: 700;
+			letter-spacing: -.02em;
+			color: var(--accent);
+			margin: 0 0 .5rem;
+		}
+		.lead {
+			color: var(--muted);
+			margin: 0;
+		}
+		.workspace {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+			align-items: start;
+		}
+		.side {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+			min-width: 0;
+		}
+		@media (min-width: 62rem) {
+			.workspace {
+				grid-template-columns: minmax(0, 1fr) minmax(22rem, 29rem);
+				gap: 1.75rem;
+			}
+			.side {
+				position: sticky;
+				top: 1rem;
+				max-height: calc(100vh - 2rem);
+				overflow: auto;
+			}
+		}
+		form,
+		.panel {
+			border: 1px solid var(--border);
+			background: var(--surface);
+			border-radius: 8px;
+			box-shadow: var(--form-shadow);
+			min-width: 0;
+		}
+		form {
+			display: flex;
+			flex-direction: column;
+			gap: 1.6rem;
+			padding: 1.5rem;
+		}
+		@media (min-width: 40rem) {
+			form { padding: 2rem; }
+		}
+		.panel {
+			padding: 1.1rem 1.15rem 1.25rem;
+		}
+		.panel h2 {
+			margin: 0 0 .25rem;
+			font-size: 1rem;
+			font-weight: 700;
+			color: var(--accent-2);
+			letter-spacing: .01em;
+		}
+		.panel-intro {
+			margin: 0 0 1rem;
+			font-size: .82rem;
+			color: var(--muted);
+			line-height: 1.4;
+		}
+		.group-title {
+			margin: 0 0 -.6rem;
+			padding-top: .9rem;
+			border-top: 1px solid var(--border);
+			font-size: .75rem;
+			font-weight: 600;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+			color: var(--muted);
+		}
+		.field {
+			display: flex;
+			flex-direction: column;
+			gap: .4rem;
+			min-width: 0;
+		}
+		.field-row {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+			gap: 1.25rem 1.5rem;
+		}
+		.field-label {
+			display: block;
+			font-weight: 600;
+			font-size: 1rem;
+			color: var(--accent-2);
+			line-height: 1.3;
+		}
+		.field-hint {
+			display: block;
+			margin: 0;
+			font-size: .82rem;
+			font-weight: 400;
+			line-height: 1.4;
+			color: var(--muted);
+			max-width: 42rem;
+		}
+		.field-hint code {
+			font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+			font-size: .9em;
+			padding: .05em .35em;
+			border-radius: 3px;
+			background: var(--input-bg);
+			border: 1px solid var(--border);
+			color: var(--fg);
+		}
+		.is-warn { color: var(--warn) !important; }
+		.field-meta {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: .35rem .75rem;
+		}
+		textarea,
+		select,
+		input[type="text"],
+		input[type="number"] {
+			width: 100%;
+			padding: .75rem;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+			font-size: 16px; /* avoids iOS zoom-on-focus */
+			color: var(--fg);
+			background: var(--input-bg);
+			resize: vertical;
+			transition: border-color .15s, box-shadow .15s;
+		}
+		select,
+		input[type="text"],
+		input[type="number"] {
+			padding: .5rem .65rem;
+			resize: none;
+		}
+		select { font-family: inherit; }
+		input[type="number"] { width: 8rem; }
+		textarea::placeholder,
+		input::placeholder { color: var(--muted); opacity: .8; }
+		textarea:hover,
+		select:hover,
+		input[type="text"]:hover,
+		input[type="number"]:hover { border-color: var(--field-hover-border); }
+		textarea:focus,
+		select:focus,
+		input[type="text"]:focus,
+		input[type="number"]:focus {
+			outline: none;
+			border-color: var(--focus);
+			box-shadow: 0 0 0 3px var(--focus-ring);
+		}
+		input[type="range"] {
+			width: 100%;
+			accent-color: var(--focus);
+		}
+		.check {
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+			font-size: .92rem;
+			cursor: pointer;
+		}
+		.check input { accent-color: var(--focus); width: 1.05rem; height: 1.05rem; }
+		.file-drop {
+			display: flex;
+			align-items: center;
+			gap: .75rem;
+			flex-wrap: wrap;
+			padding: .75rem;
+			border: 1px dashed var(--border);
+			border-radius: 6px;
+			background: var(--input-bg);
+			transition: border-color .15s, background .15s;
+		}
+		.file-drop.is-over {
+			border-color: var(--focus);
+			background: color-mix(in srgb, var(--focus) 8%, var(--input-bg));
+		}
+		.file-drop input[type="file"] {
+			font-family: inherit;
+			font-size: .9rem;
+			color: var(--muted);
+			max-width: 100%;
+		}
+		.crop {
+			display: grid;
+			gap: .9rem;
+			padding: .9rem;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			background: var(--input-bg);
+		}
+		.crop canvas {
+			display: block;
+			width: 100%;
+			max-width: 30rem;
+			height: auto;
+			justify-self: center;
+			background: #fff;
+			border-radius: 2px;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, .15), 0 6px 18px rgba(0, 0, 0, .1);
+			cursor: grab;
+			touch-action: none;
+		}
+		.crop canvas.is-dragging { cursor: grabbing; }
+		.crop .field-row { gap: .9rem 1.25rem; }
+		details.merge summary {
+			cursor: pointer;
+			font-weight: 600;
+			color: var(--accent-2);
+			font-size: .95rem;
+		}
+		details.merge[open] summary { margin-bottom: .6rem; }
+		details.merge .field { gap: .5rem; }
+		button { font-family: inherit; }
+		.actions {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			gap: .75rem;
+		}
+		button[type="submit"],
+		.btn-secondary {
+			padding: .85rem 1.5rem;
+			font-size: 1.05rem;
+			font-weight: 600;
+			border-radius: 6px;
+			cursor: pointer;
+			transition: filter .15s, transform .05s, border-color .15s;
+		}
+		button[type="submit"] {
+			background: var(--btn-bg);
+			color: var(--btn-fg);
+			border: none;
+		}
+		.btn-secondary {
+			background: var(--input-bg);
+			color: var(--fg);
+			border: 1px solid var(--border);
+			font-size: .95rem;
+		}
+		.btn-secondary:hover { border-color: var(--field-hover-border); }
+		button[type="submit"]:hover { filter: brightness(1.08); }
+		button:active { transform: translateY(1px); }
+		button:disabled { opacity: .6; cursor: progress; }
+		button:focus-visible,
+		canvas:focus-visible,
+		summary:focus-visible,
+		.stage:focus-visible {
+			outline: 2px solid var(--focus);
+			outline-offset: 2px;
+		}
+		.form-status {
+			margin: -.6rem 0 0;
+			font-size: .88rem;
+			color: var(--warn);
+			min-height: 1.3em;
+		}
+		.warn-list button {
+			border: none;
+			background: none;
+			padding: 0;
+			color: inherit;
+			font: inherit;
+			text-decoration: underline;
+			text-underline-offset: 2px;
+			cursor: pointer;
+		}
+
+		/* Preview */
+		.preview-nav {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: .5rem;
+			margin-bottom: .75rem;
+		}
+		.preview-nav p {
+			margin: 0;
+			font-size: .85rem;
+			color: var(--muted);
+			font-variant-numeric: tabular-nums;
+			text-align: center;
+			flex: 1 1 auto;
+		}
+		.nav-btn {
+			flex: 0 0 auto;
+			width: 2rem;
+			height: 2rem;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			background: var(--input-bg);
+			color: var(--fg);
+			font-size: 1rem;
+			line-height: 1;
+			cursor: pointer;
+		}
+		.nav-btn:hover:not(:disabled) { border-color: var(--field-hover-border); }
+		.nav-btn:disabled { opacity: .4; cursor: default; }
+		.views {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 2px;
+			padding: 2px;
+			margin-bottom: .75rem;
+			border: 1px solid var(--border);
+			border-radius: 7px;
+			background: var(--input-bg);
+		}
+		.views button {
+			padding: .4rem .25rem;
+			border: none;
+			border-radius: 5px;
+			background: none;
+			color: var(--muted);
+			font-size: .85rem;
+			cursor: pointer;
+		}
+		.views button[aria-pressed="true"] {
+			background: var(--surface-2);
+			color: var(--fg);
+			font-weight: 600;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+		}
+		.stage {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 6px;
+			background: var(--table);
+			perspective: 1800px;
+			overflow: hidden;
+			cursor: pointer;
+			user-select: none;
+			-webkit-user-select: none;
+		}
+		.card3d {
+			position: relative;
+			transform-style: preserve-3d;
+			transition: transform .95s cubic-bezier(.2, .75, .2, 1);
+		}
+		.leaf {
+			position: absolute;
+			inset: 0;
+			transform-style: preserve-3d;
+			transition: transform .95s cubic-bezier(.3, .6, .2, 1);
+		}
+		.face {
+			position: absolute;
+			inset: 0;
+			backface-visibility: hidden;
+			-webkit-backface-visibility: hidden;
+			background: #fff;
+			overflow: hidden;
+			box-shadow: 0 .5px 1px rgba(0, 0, 0, .18), 0 10px 26px -6px rgba(0, 0, 0, .28);
+		}
+		.face canvas { display: block; width: 100%; height: 100%; }
+		/* Soft light across the paper, strongest at the fold. */
+		.face::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+		}
+		.lid { transform: translateZ(.8px); }
+		.base .face-back { transform: rotateY(180deg); }
+		.card3d[data-fold="top"] .lid { transform-origin: 50% 0; }
+		.card3d[data-fold="top"] .lid .face-back { transform: rotateX(180deg); }
+		.card3d[data-fold="top"].is-open .lid { transform: translateZ(.8px) rotateX(180deg); }
+		.card3d[data-fold="top"] .base .face-front::after { background: linear-gradient(180deg, rgba(0, 0, 0, .07), transparent 14%); }
+		.card3d[data-fold="top"] .lid .face-back::after { background: linear-gradient(0deg, rgba(0, 0, 0, .05), transparent 16%); }
+		.card3d[data-fold="left"] .lid { transform-origin: 0 50%; }
+		.card3d[data-fold="left"] .lid .face-back { transform: rotateY(180deg); }
+		.card3d[data-fold="left"].is-open .lid { transform: translateZ(.8px) rotateY(-180deg); }
+		.card3d[data-fold="left"] .base .face-front::after { background: linear-gradient(90deg, rgba(0, 0, 0, .07), transparent 14%); }
+		.card3d[data-fold="left"] .lid .face-back::after { background: linear-gradient(270deg, rgba(0, 0, 0, .05), transparent 16%); }
+		.lid .face-front::after { background: linear-gradient(125deg, rgba(255, 255, 255, .16), transparent 45%, rgba(0, 0, 0, .05)); }
+		.stage-hint {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: .5rem;
+			margin: 0;
+			text-align: center;
+			font-size: .72rem;
+			letter-spacing: .04em;
+			color: var(--muted);
+			pointer-events: none;
+		}
+		.sheets {
+			display: flex;
+			flex-direction: column;
+			gap: .9rem;
+			padding: .9rem;
+			border-radius: 6px;
+			background: var(--sheet-bg);
+		}
+		.sheets figure { margin: 0; }
+		.sheets figcaption {
+			font-size: .72rem;
+			letter-spacing: .06em;
+			text-transform: uppercase;
+			color: var(--muted);
+			margin-bottom: .35rem;
+		}
+		.sheets canvas {
+			display: block;
+			width: 100%;
+			height: auto;
+			background: #fff;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, .15), 0 6px 16px rgba(0, 0, 0, .12);
+		}
+		.fold-guide {
+			margin-top: 1.1rem;
+			font-size: .85rem;
+		}
+		.fold-guide summary {
+			cursor: pointer;
+			font-weight: 600;
+			color: var(--accent-2);
+		}
+		.fold-guide ol {
+			margin: .6rem 0 0;
+			padding-left: 1.2rem;
+			line-height: 1.45;
+		}
+		.fold-guide li + li { margin-top: .3rem; }
+		@media (prefers-reduced-motion: reduce) {
+			.card3d, .leaf { transition: none; }
+		}
+
+		/* Exports (as bingo-gen) */
+		.exports-empty {
+			margin: 0;
+			padding: .85rem 1rem;
+			border: 1px dashed var(--border);
+			border-radius: 6px;
+			font-size: .88rem;
+			color: var(--muted);
+			background: var(--input-bg);
+		}
+		.exports-list {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			gap: .75rem;
+		}
+		.export-card {
+			display: flex;
+			flex-direction: column;
+			gap: .55rem;
+			padding: .85rem .9rem;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			background: var(--input-bg);
+		}
+		.export-card.is-latest {
+			border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+			box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);
+		}
+		.export-card-head {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			gap: .5rem .75rem;
+		}
+		.export-card-title {
+			margin: 0;
+			font-size: .98rem;
+			font-weight: 700;
+			line-height: 1.3;
+			word-break: break-word;
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+		.export-card-meta {
+			margin: 0;
+			font-size: .78rem;
+			color: var(--muted);
+			line-height: 1.45;
+			font-variant-numeric: tabular-nums;
+		}
+		.export-card-meta span + span::before {
+			content: " · ";
+			opacity: .7;
+		}
+		.export-download {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: .55rem .9rem;
+			background: var(--surface-2);
+			color: var(--orange);
+			text-decoration: none;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			font-weight: 600;
+			font-size: .9rem;
+			transition: border-color .15s, background .15s, color .15s;
+		}
+		.export-download:hover {
+			background: var(--surface);
+			border-color: var(--orange);
+			color: var(--fg);
+		}
+		.export-remove {
+			flex: 0 0 auto;
+			margin: -.15rem -.2rem 0 0;
+			padding: .15rem .35rem;
+			border: none;
+			background: none;
+			color: var(--muted);
+			font-size: .75rem;
+			line-height: 1.2;
+			cursor: pointer;
+			text-decoration: underline;
+			text-underline-offset: 2px;
+		}
+		.export-remove:hover { color: var(--fg); }
+	</style>
+</head>
+<body>
+
+	<header class="page-header">
+		<h1>Line og Elias sin takkekortgenerator</h1>
+		<p class="lead">Velg ett forsidebilde og skriv én hilsen per linje. Du får én utskriftsklar PDF med ett ark per mottaker – bildet lagres bare én gang i filen, uansett hvor mange kort det blir.</p>
+	</header>
+
+	<div class="workspace">
+	<form id="form" novalidate>
+		<div class="field-row">
+			<div class="field">
+				<label class="field-label" for="style">Format</label>
+				<select id="style" aria-describedby="styleHint"></select>
+				<p class="field-hint" id="styleHint"></p>
+			</div>
+			<div class="field">
+				<label class="field-label" for="typography">Typografi</label>
+				<select id="typography" aria-describedby="typographyHint"></select>
+				<p class="field-hint" id="typographyHint"></p>
+			</div>
+		</div>
+
+		<p class="group-title">Forside</p>
+
+		<div class="field">
+			<label class="field-label" for="coverFile">Forsidebilde</label>
+			<p class="field-hint" id="coverHint">Dra inn eller velg et bilde. Du kan flytte og zoome utsnittet etterpå.</p>
+			<div class="file-drop" id="coverDrop">
+				<input type="file" id="coverFile" accept="image/*" aria-describedby="coverHint coverInfo">
+			</div>
+			<p class="field-hint" id="coverInfo" aria-live="polite"></p>
+		</div>
+
+		<div class="crop" id="cropPanel" hidden>
+			<canvas id="cropCanvas" tabindex="0" aria-label="Utsnitt av forsiden. Dra, eller bruk piltastene, for å flytte bildet. Dobbeltklikk for å sentrere."></canvas>
+			<div class="field-row">
+				<div class="field">
+					<div class="field-meta">
+						<label class="field-label" for="zoom">Zoom</label>
+						<p class="field-hint" id="zoomValue">100 %</p>
+					</div>
+					<input type="range" id="zoom" min="100" max="300" step="1" value="100">
+				</div>
+				<div class="field">
+					<label class="field-label" for="tone">Bildetone</label>
+					<select id="tone">
+						<option value="original" selected>Original</option>
+						<option value="bw">Sort-hvitt</option>
+						<option value="warm">Varm</option>
+						<option value="film">Film</option>
+					</select>
+				</div>
+				<div class="field">
+					<label class="field-label" for="coverFit">Bildekant</label>
+					<select id="coverFit">
+						<option value="bleed" selected>Utfallende</option>
+						<option value="frame">Hvit ramme</option>
+					</select>
+				</div>
+			</div>
+			<p class="field-hint" id="toneHint"></p>
+		</div>
+
+		<p class="group-title">Innside</p>
+
+		<div class="field">
+			<div class="field-meta">
+				<label class="field-label" for="messages">Hilsener</label>
+				<p class="field-hint" id="messagesCount" aria-live="polite">0 kort</p>
+			</div>
+			<p class="field-hint" id="messagesHint">Én hilsen per linje – hver linje blir ett kort. Bruk <code>|</code> for linjeskift. Anførselstegn, tankestreker og apostrofer settes automatisk typografisk riktig.</p>
+			<textarea id="messages" rows="11" aria-describedby="messagesHint messagesWarn" placeholder="Kjære tante Kari,|tusen takk for den nydelige vasen – den har allerede fått fast plass på stuebordet.
+Kjære Ola og Kari,|takk for at dere feiret dagen med oss. Talen deres fikk hele salen til å le!"></textarea>
+			<p class="field-hint is-warn warn-list" id="messagesWarn" aria-live="polite"></p>
+		</div>
+
+		<details class="merge" id="mergeDetails">
+			<summary>Flett inn fra gjesteliste</summary>
+			<div class="field">
+				<label class="field-label" for="template">Flettemal</label>
+				<p class="field-hint" id="templateHint">Lim inn kolonner fra et regneark i Hilsener (navn, gave …). Hver kolonne blir <code>{1}</code>, <code>{2}</code> osv. i malen. Står det bare ett navn per linje, blir det <code>{1}</code>. La malen stå tom for å bruke hilsenene som de er.</p>
+				<textarea id="template" rows="2" aria-describedby="templateHint" placeholder="Kjære {1},|tusen takk for {2} – og for at du feiret dagen med oss!"></textarea>
+			</div>
+		</details>
+
+		<div class="field">
+			<label class="field-label" for="signature">Signatur</label>
+			<input type="text" id="signature" value="Line &amp; Elias" autocomplete="off" aria-describedby="signatureHint">
+			<p class="field-hint" id="signatureHint">Under hver hilsen. La stå tom for ingen.</p>
+		</div>
+
+		<p class="group-title">Bakside</p>
+
+		<div class="field-row">
+			<div class="field">
+				<label class="check"><input type="checkbox" id="monogram" checked> Monogram</label>
+				<p class="field-hint" id="monogramHint">Initialene fra signaturen.</p>
+			</div>
+			<div class="field">
+				<label class="field-label" for="backText">Tekst</label>
+				<input type="text" id="backText" value="" autocomplete="off" placeholder="f.eks. 14. juni 2026" aria-describedby="backHint">
+				<p class="field-hint" id="backHint">Liten linje i kapiteler nederst.</p>
+			</div>
+		</div>
+
+		<p class="group-title">Utskrift</p>
+
+		<div class="field-row">
+			<div class="field">
+				<label class="field-label" for="colorMode">Fargerom</label>
+				<select id="colorMode" aria-describedby="colorHint">
+					<option value="cmyk" selected>CMYK – trykk</option>
+					<option value="rgb">RGB – skjerm</option>
+				</select>
+				<p class="field-hint" id="colorHint"></p>
+			</div>
+			<div class="field">
+				<label class="field-label" for="dpi">Oppløsning (DPI)</label>
+				<input type="number" id="dpi" value="300" min="72" max="600" step="1" inputmode="numeric" aria-describedby="dpiHint">
+				<p class="field-hint" id="dpiHint"></p>
+			</div>
+		</div>
+
+		<div class="actions">
+			<button type="submit" id="submitBtn">Generer PDF</button>
+			<button type="button" class="btn-secondary" id="proofBtn" title="Lag en PDF med bare kortet i forhåndsvisningen – fint for å teste skriveren og brettingen">Prøveark</button>
+		</div>
+		<p class="form-status" id="formStatus" role="status"></p>
+	</form>
+
+	<div class="side">
+		<section class="panel" aria-labelledby="previewHeading">
+			<h2 id="previewHeading">Forhåndsvisning</h2>
+			<p class="panel-intro">Kortet slik det blir ferdig brettet – eller arket slik det skrives ut.</p>
+			<div class="preview-nav">
+				<button type="button" class="nav-btn" id="prevCard" aria-label="Forrige kort">‹</button>
+				<p id="previewLabel">Eksempel</p>
+				<button type="button" class="nav-btn" id="nextCard" aria-label="Neste kort">›</button>
+			</div>
+			<div class="views" role="group" aria-label="Visning">
+				<button type="button" data-view="front" aria-pressed="true">Forside</button>
+				<button type="button" data-view="open" aria-pressed="false">Innside</button>
+				<button type="button" data-view="back" aria-pressed="false">Bakside</button>
+				<button type="button" data-view="sheet" aria-pressed="false">Ark</button>
+			</div>
+
+			<div class="stage" id="stage" tabindex="0" role="button" aria-label="Kortet. Klikk for å åpne eller lukke.">
+				<div class="card3d" id="card3d" data-fold="top">
+					<div class="leaf base">
+						<div class="face face-front"><canvas data-face="inside"></canvas></div>
+						<div class="face face-back"><canvas data-face="back"></canvas></div>
+					</div>
+					<div class="leaf lid">
+						<div class="face face-front"><canvas data-face="cover"></canvas></div>
+						<div class="face face-back"><canvas data-face="insideBlank"></canvas></div>
+					</div>
+				</div>
+				<p class="stage-hint" id="stageHint">Klikk for å åpne</p>
+			</div>
+			<div class="sheets" id="sheets" hidden></div>
+
+			<details class="fold-guide" id="foldGuide">
+				<summary>Utskrift og bretting</summary>
+				<ol id="foldSteps"></ol>
+			</details>
+		</section>
+
+		<aside class="panel" aria-labelledby="exportsHeading">
+			<h2 id="exportsHeading">Eksporter</h2>
+			<p class="panel-intro">Hver generering legges til her, så du kan hente ned tidligere versjoner i denne økten.</p>
+			<p class="exports-empty" id="exportsEmpty">Ingen PDF-er ennå. Generer for å fylle listen.</p>
+			<ul class="exports-list" id="exportsList" hidden></ul>
+		</aside>
+	</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script>
+		// ==================================================================
+		// Units and inks
+		// ==================================================================
+
+		const PT = 25.4 / 72; // mm per point
+		const MM_PER_IN = 25.4;
+
+		/**
+		 * Solid black on purpose: any tint below 100 % K is screened into dots by the
+		 * printer, which makes fine serifs and hairline script look fuzzy.
+		 */
+		const INK = { cmyk: [0, 0, 0, 1], rgb: [0, 0, 0], css: "#111" };
+		const FOLD_LINE = "rgba(0, 0, 0, .28)";
+
+		// ==================================================================
+		// Fonts – all TrueType so jsPDF embeds them as real, selectable text.
+		// ==================================================================
+
+		const FONTS = {
+			cormorant: { family: "TY Cormorant", pdfName: "CormorantGaramond-Medium", file: "CormorantGaramond-Medium.ttf" },
+			cormorantItalic: { family: "TY Cormorant Italic", pdfName: "CormorantGaramond-MediumItalic", file: "CormorantGaramond-MediumItalic.ttf" },
+			ebgaramond: { family: "TY EB Garamond", pdfName: "EBGaramond-Regular", file: "EBGaramond-Regular.ttf" },
+			jost: { family: "TY Jost Light", pdfName: "Jost-Light", file: "Jost-Light.ttf" },
+			eyesome: { family: "TY Eyesome", pdfName: "EyesomeScript", file: "Eyesome-Script.ttf" },
+			pinyon: { family: "TY Pinyon", pdfName: "PinyonScript-Regular", file: "PinyonScript-Regular.ttf" },
+			greatvibes: { family: "TY Great Vibes", pdfName: "GreatVibes-Regular", file: "GreatVibes-Regular.ttf" },
+		};
+
+		const fontState = new Map(); // key -> Promise
+		const fontData = new Map(); // key -> binary string for jsPDF
+		const fontMetrics = new Map(); // key -> { cap, desc } in em
+
+		function loadFont(key) {
+			if (!fontState.has(key)) {
+				const font = FONTS[key];
+				fontState.set(key, (async () => {
+					const response = await fetch(`resources/fonts/${font.file}`);
+					if (!response.ok) throw new Error(`Font missing: ${font.file}`);
+					const buffer = await response.arrayBuffer();
+					fontData.set(key, bytesToBinaryString(new Uint8Array(buffer)));
+					// No CSS fallback stack: a missing glyph must never silently turn into Georgia.
+					const face = new FontFace(font.family, buffer);
+					await face.load();
+					document.fonts.add(face);
+					measureCtx.font = `${REF_PX}px "${font.family}"`;
+					const cap = measureCtx.measureText("H").actualBoundingBoxAscent / REF_PX;
+					const desc = measureCtx.measureText("gjpqy").actualBoundingBoxDescent / REF_PX;
+					fontMetrics.set(key, { cap, desc });
+				})());
+			}
+			return fontState.get(key);
+		}
+
+		function fontsReady(keys) {
+			return keys.every((k) => fontMetrics.has(k));
+		}
+
+		function bytesToBinaryString(bytes) {
+			let out = "";
+			for (let i = 0; i < bytes.length; i += 0x8000) {
+				out += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+			}
+			return out;
+		}
+
+		// ==================================================================
+		// Measuring and setting text
+		// ==================================================================
+
+		const measureCtx = document.createElement("canvas").getContext("2d");
+		const REF_PX = 100;
+		const widthCache = new Map();
+
+		/** Width in mm of `text` set in font `key` at `sizePt`, with tracking in em. */
+		function textWidth(key, text, sizePt, tracking = 0) {
+			const cacheKey = `${key}\u0000${text}`;
+			let ref = widthCache.get(cacheKey);
+			if (ref === undefined) {
+				measureCtx.font = `${REF_PX}px "${FONTS[key].family}"`;
+				ref = measureCtx.measureText(text).width / REF_PX;
+				if (fontMetrics.has(key)) widthCache.set(cacheKey, ref);
+			}
+			const em = sizePt * PT;
+			return ref * em + Math.max(0, [...text].length - 1) * tracking * em;
+		}
+
+		/** Actual ink above/below the baseline for this very string, in mm. */
+		function textInk(key, text, sizePt) {
+			measureCtx.font = `${REF_PX}px "${FONTS[key].family}"`;
+			const m = measureCtx.measureText(text);
+			const em = sizePt * PT;
+			return { ascent: (m.actualBoundingBoxAscent / REF_PX) * em, descent: (m.actualBoundingBoxDescent / REF_PX) * em };
+		}
+
+		// Words only break at real spaces; NBSP glues a dash to the word before it.
+		const BREAK = /[ \t]+/;
+
+		function wrapGreedy(words, maxW, widthOf) {
+			const lines = [];
+			let current = "";
+			for (const word of words) {
+				const candidate = current ? `${current} ${word}` : word;
+				if (!current || widthOf(candidate) <= maxW) current = candidate;
+				else {
+					lines.push(current);
+					current = word;
+				}
+			}
+			if (current) lines.push(current);
+			return lines;
+		}
+
+		/**
+		 * Centered copy reads best with even line lengths: keep the greedy line
+		 * count, then find the narrowest measure that still gives that count.
+		 */
+		function wrapBalanced(text, maxW, widthOf) {
+			const words = text.split(BREAK).filter(Boolean);
+			const greedy = wrapGreedy(words, maxW, widthOf);
+			if (greedy.length < 2) return greedy;
+			let lo = 0;
+			let hi = maxW;
+			for (let i = 0; i < 16; i++) {
+				const mid = (lo + hi) / 2;
+				if (wrapGreedy(words, mid, widthOf).length <= greedy.length) hi = mid;
+				else lo = mid;
+			}
+			return wrapGreedy(words, hi, widthOf);
+		}
+
+		/** Straight typewriter marks to proper Norwegian typography. */
+		function smarten(text) {
+			return text
+				.replace(/\.\.\./g, "…")
+				.replace(/\s--?\s/g, " – ")
+				.replace(/--/g, "–")
+				.replace(/\s–\s/g, " – ")
+				.replace(/"([^"]*)"/g, "«$1»")
+				.replace(/"/g, "»")
+				.replace(/(\p{L})'(\p{L})/gu, "$1’$2")
+				.replace(/(^|[\s(«])'/gu, "$1‘")
+				.replace(/'/g, "’")
+				.replace(/[ \t]{2,}/g, " ");
+		}
+
+		/**
+		 * Centered lines ending in a comma or starting with « look off-centre,
+		 * because the punctuation has almost no visual weight. Centre the words.
+		 */
+		const HANG_LEAD = /^[«‘“"(]+/;
+		const HANG_TRAIL = /[,.;:!?»’”")…]+$/;
+		function hangParts(text) {
+			return { lead: (text.match(HANG_LEAD) || [""])[0], trail: (text.match(HANG_TRAIL) || [""])[0] };
+		}
+
+		function lineStart(op, widthOf) {
+			const full = widthOf(op.text);
+			if (op.tracking) return op.cx - full / 2;
+			const { lead, trail } = hangParts(op.text);
+			const leadW = lead ? widthOf(lead) : 0;
+			const trailW = trail ? widthOf(trail) : 0;
+			return op.cx - (full - leadW - trailW) / 2 - leadW;
+		}
+
+		function monogramFrom(signature) {
+			const parts = signature.split(/\s*(?:&|\+|\bog\b|\band\b)\s*/i).map((p) => p.trim()).filter(Boolean);
+			const initial = (p) => [...p][0].toLocaleUpperCase("nb");
+			if (parts.length >= 2) return parts.map(initial).join(" & ");
+			if (parts.length === 1) return initial(parts[0]);
+			return "";
+		}
+
+		// ==================================================================
+		// Typography – which faces play which role, at A6 sizes.
+		// ==================================================================
+
+		const TYPOGRAPHY = {
+			classic: {
+				label: "Klassisk",
+				detail: "Cormorant Garamond med signatur i Eyesome Script – lett og elegant.",
+				body: { font: "cormorant", maxPt: 13.5, minPt: 9, leading: 1.42, measure: 100 },
+				signature: { font: "eyesome", sizePt: 24 },
+				monogram: { font: "eyesome", sizePt: 34 },
+				small: { font: "cormorant", sizePt: 7.5, tracking: 0.24 },
+			},
+			romantic: {
+				label: "Romantisk",
+				detail: "Cormorant i kursiv med Pinyon Script – som skrevet med fyllepenn.",
+				body: { font: "cormorantItalic", maxPt: 14, minPt: 9.5, leading: 1.38, measure: 96 },
+				signature: { font: "pinyon", sizePt: 21 },
+				monogram: { font: "pinyon", sizePt: 34 },
+				small: { font: "cormorant", sizePt: 7.5, tracking: 0.24 },
+			},
+			timeless: {
+				label: "Tidløs",
+				detail: "EB Garamond med Great Vibes – rolig og svært lesbar.",
+				body: { font: "ebgaramond", maxPt: 11.5, minPt: 8.5, leading: 1.5, measure: 100 },
+				signature: { font: "greatvibes", sizePt: 21, wordSpaces: 2 }, // its word space is very tight
+				monogram: { font: "greatvibes", sizePt: 34 },
+				small: { font: "ebgaramond", sizePt: 6.6, tracking: 0.22 },
+			},
+			modern: {
+				label: "Moderne",
+				detail: "Jost Light med Cormorant kursiv – luftig og stram.",
+				body: { font: "jost", maxPt: 10, minPt: 7.5, leading: 1.72, measure: 90 },
+				signature: { font: "cormorantItalic", sizePt: 17 },
+				monogram: { font: "jost", sizePt: 12, tracking: 0.5, upper: true },
+				small: { font: "jost", sizePt: 6, tracking: 0.34 },
+			},
+		};
+
+		function typographyFonts(typo) {
+			return [...new Set([typo.body.font, typo.signature.font, typo.monogram.font, typo.small.font])];
+		}
+
+		// ==================================================================
+		// Formats
+		//
+		// A format owns the card size, the fold, and where each face sits on each
+		// printed page. Faces are laid out in their own upright millimetres; the
+		// PDF writer and the sheet preview rotate them into place, and the 3D
+		// preview shows them as they are.
+		//
+		// Faces: cover (photo) · inside (message) · insideBlank · back
+		// ==================================================================
+
+		const STYLES = {
+			"a6-quarter": {
+				label: "A6 liggende – A4 brettet i fire",
+				description: "148 × 105 mm med brett øverst, så kortet står av seg selv. Enkeltsidig utskrift – enhver skriver klarer det.",
+				card: { w: 148.5, h: 105 },
+				fold: "top",
+				typeScale: 1,
+				frameInset: 7,
+				sheet: { format: "a4", orientation: "landscape", w: 297, h: 210 },
+				pages: [{
+					faces: [
+						{ kind: "insideBlank", x: 0, y: 0, rotate: 0 },
+						{ kind: "cover", x: 148.5, y: 0, rotate: 180 },
+						{ kind: "inside", x: 0, y: 105, rotate: 0 },
+						{ kind: "back", x: 148.5, y: 105, rotate: 0 },
+					],
+					folds: [[148.5, 0, 148.5, 210], [0, 105, 297, 105]],
+				}],
+				steps: [
+					"Skriv ut <strong>enkeltsidig</strong> på A4, <strong>100 % størrelse</strong> (ikke «tilpass til side»). 90–120 g/m² papir brettes pent i fire lag.",
+					"Legg arket med trykket opp. Brett venstre halvdel <strong>bakover</strong> langs den loddrette midtlinjen – nå er bildet og baksiden på utsiden.",
+					"Brett nedre halvdel <strong>bakover</strong> langs den vannrette linjen. Snu kortet: bildet er forsiden, hilsenen er inni.",
+				],
+			},
+			"a6-portrait-quarter": {
+				label: "A6 stående – A4 brettet i fire",
+				description: "105 × 148 mm som åpnes som en bok. Enkeltsidig utskrift. Passer til stående bilder.",
+				card: { w: 105, h: 148.5 },
+				fold: "left",
+				typeScale: 1,
+				frameInset: 7,
+				sheet: { format: "a4", orientation: "portrait", w: 210, h: 297 },
+				pages: [{
+					faces: [
+						{ kind: "inside", x: 0, y: 0, rotate: 180 },
+						{ kind: "insideBlank", x: 105, y: 0, rotate: 180 },
+						{ kind: "back", x: 0, y: 148.5, rotate: 0 },
+						{ kind: "cover", x: 105, y: 148.5, rotate: 0 },
+					],
+					folds: [[0, 148.5, 210, 148.5], [105, 0, 105, 297]],
+				}],
+				steps: [
+					"Skriv ut <strong>enkeltsidig</strong> på A4, <strong>100 % størrelse</strong>. 90–120 g/m² papir.",
+					"Legg arket med trykket opp. Brett øvre halvdel <strong>bakover</strong> langs den vannrette midtlinjen – bildet og baksiden er nå på utsiden.",
+					"Brett venstre halvdel <strong>bakover</strong> langs den loddrette linjen. Bildet er forsiden, og kortet åpnes som en bok.",
+				],
+			},
+			"a5-landscape-duplex": {
+				label: "A5 liggende – tosidig, brettet én gang",
+				description: "210 × 148 mm med brett øverst – romslig og stødig på kartong. To sider per kort: utside og innside.",
+				card: { w: 210, h: 148.5 },
+				fold: "top",
+				typeScale: 1.22,
+				frameInset: 9,
+				duplex: "long",
+				sheet: { format: "a4", orientation: "portrait", w: 210, h: 297 },
+				pages: [
+					{
+						label: "Side 1 · utside",
+						faces: [{ kind: "cover", x: 0, y: 0, rotate: 180 }, { kind: "back", x: 0, y: 148.5, rotate: 0 }],
+						folds: [[0, 148.5, 210, 148.5]],
+					},
+					{
+						label: "Side 2 · innside",
+						faces: [{ kind: "insideBlank", x: 0, y: 0, rotate: 0 }, { kind: "inside", x: 0, y: 148.5, rotate: 0 }],
+						folds: [[0, 148.5, 210, 148.5]],
+					},
+				],
+				steps: [
+					"Skriv ut <strong>tosidig – vend på langsiden</strong>, 100 % størrelse. 200–300 g/m² kartong om skriveren tåler det. Test gjerne med «Prøveark» først.",
+					"Rill brettelinjen med en tom kulepenn og en linjal – da sprekker ikke kartongen.",
+					"Brett arket på midten med bildet ut. Bildet er forsiden, hilsenen er inni.",
+				],
+			},
+			"a5-portrait-duplex": {
+				label: "A5 stående – tosidig, brettet én gang",
+				description: "148 × 210 mm som åpnes som en bok. To sider per kort. Passer til stående bilder.",
+				card: { w: 148.5, h: 210 },
+				fold: "left",
+				typeScale: 1.22,
+				frameInset: 9,
+				duplex: "short",
+				sheet: { format: "a4", orientation: "landscape", w: 297, h: 210 },
+				pages: [
+					{
+						label: "Side 1 · utside",
+						faces: [{ kind: "back", x: 0, y: 0, rotate: 0 }, { kind: "cover", x: 148.5, y: 0, rotate: 0 }],
+						folds: [[148.5, 0, 148.5, 210]],
+					},
+					{
+						label: "Side 2 · innside",
+						faces: [{ kind: "insideBlank", x: 0, y: 0, rotate: 0 }, { kind: "inside", x: 148.5, y: 0, rotate: 0 }],
+						folds: [[148.5, 0, 148.5, 210]],
+					},
+				],
+				steps: [
+					"Skriv ut <strong>tosidig – vend på kortsiden</strong>, 100 % størrelse. 200–300 g/m² kartong om skriveren tåler det. Test gjerne med «Prøveark» først.",
+					"Rill brettelinjen med en tom kulepenn og en linjal – da sprekker ikke kartongen.",
+					"Brett arket på midten med bildet ut. Kortet åpnes som en bok.",
+				],
+			},
+		};
+
+		// ==================================================================
+		// Face layout – pure functions of text and settings, in face-local mm.
+		// ==================================================================
+
+		const fitCache = new Map();
+
+		function fitMessage(message, signature, style, typo) {
+			const key = [style.id, typo.id, signature, message].join("\u0000");
+			if (fitCache.has(key)) return fitCache.get(key);
+
+			const { w, h } = style.card;
+			const s = style.typeScale;
+			const B = typo.body;
+			const marginX = w * 0.11;
+			const marginY = h * 0.12;
+			const measure = Math.min(B.measure * s, w - marginX * 2);
+			const maxH = h - marginY * 2;
+			const metrics = fontMetrics.get(B.font) || { cap: 0.65, desc: 0.25 };
+			const paragraphs = message.split("|").map((p) => p.trim());
+
+			let sig = null;
+			if (signature) {
+				const sizePt = typo.signature.sizePt * s;
+				const text = signature.replace(/ /g, " ".repeat(typo.signature.wordSpaces || 1));
+				sig = { text, sizePt, ...textInk(typo.signature.font, text, sizePt) };
+			}
+
+			let fit = null;
+			for (let size = B.maxPt * s; size >= B.minPt * s - 1e-6; size -= 0.25) {
+				const widthOf = (t) => textWidth(B.font, t, size);
+				const lines = paragraphs.flatMap((p) => (p ? wrapBalanced(p, measure, widthOf) : [""]));
+				const em = size * PT;
+				const lineH = em * B.leading;
+				const cap = em * metrics.cap;
+				const desc = em * metrics.desc;
+				const textH = cap + (lines.length - 1) * lineH + desc;
+				const sigGap = sig ? lineH * 0.95 : 0;
+				const height = textH + sigGap + (sig ? sig.ascent + sig.descent : 0);
+				const wide = lines.some((l) => widthOf(l) > w - marginX);
+				fit = { size, lines, lineH, cap, desc, sig, sigGap, height, overflow: height > maxH || wide };
+				if (!fit.overflow) break;
+			}
+			if (fontsReady(typographyFonts(typo))) fitCache.set(key, fit);
+			return fit;
+		}
+
+		function layoutFace(kind, card, ctx) {
+			const { style, typo } = ctx;
+			const { w, h } = style.card;
+			const s = style.typeScale;
+			const ops = [];
+
+			if (kind === "cover") {
+				const inset = ctx.coverFit === "frame" ? style.frameInset : 0;
+				ops.push({ kind: "image", asset: "cover", x: inset, y: inset, w: w - inset * 2, h: h - inset * 2 });
+			}
+
+			if (kind === "inside") {
+				const fit = fitMessage(card.message, card.signature, style, typo);
+				// Optical centre: a hair above the geometric one.
+				let y = (h - fit.height) / 2 - h * 0.015 + fit.cap;
+				for (const text of fit.lines) {
+					if (text) ops.push({ kind: "text", font: typo.body.font, sizePt: fit.size, text, cx: w / 2, y });
+					y += fit.lineH;
+				}
+				if (fit.sig) {
+					const baseline = y - fit.lineH + fit.desc + fit.sigGap + fit.sig.ascent;
+					ops.push({ kind: "text", font: typo.signature.font, sizePt: fit.sig.sizePt, text: fit.sig.text, cx: w / 2, y: baseline });
+				}
+				return { ops, overflow: fit.overflow };
+			}
+
+			if (kind === "back") {
+				// A small signet low on the back, like good stationery.
+				let baseline = h - h * 0.15;
+				if (card.backText) {
+					const S = typo.small;
+					const sizePt = S.sizePt * s;
+					const text = card.backText.toLocaleUpperCase("nb");
+					ops.push({ kind: "text", font: S.font, sizePt, tracking: S.tracking, text, cx: w / 2, y: baseline });
+					const cap = sizePt * PT * (fontMetrics.get(S.font)?.cap ?? 0.65);
+					baseline -= cap + 6.5 * s;
+				}
+				if (card.monogram) {
+					const M = typo.monogram;
+					const sizePt = M.sizePt * s;
+					const text = M.upper ? card.monogram.toLocaleUpperCase("nb") : card.monogram;
+					const ink = textInk(M.font, text, sizePt);
+					ops.push({ kind: "text", font: M.font, sizePt, tracking: M.tracking || 0, text, cx: w / 2, y: baseline - (card.backText ? ink.descent : 0) });
+				}
+			}
+			return { ops, overflow: false };
+		}
+
+		// ==================================================================
+		// Cover photo
+		// ==================================================================
+
+		/** The loaded photo and the chosen crop: focus 0–1 (like object-position), zoom ≥ 1. */
+		const cover = { bitmap: null, name: "", id: 0, focusX: 0.5, focusY: 0.5, zoom: 1 };
+
+		async function decodeImage(file) {
+			if ("createImageBitmap" in window) {
+				try {
+					return await createImageBitmap(file, { imageOrientation: "from-image" });
+				} catch { /* fall through to <img>, e.g. HEIC on Safari */ }
+			}
+			const url = URL.createObjectURL(file);
+			try {
+				const img = new Image();
+				img.src = url;
+				await img.decode();
+				return img;
+			} finally {
+				URL.revokeObjectURL(url);
+			}
+		}
+
+		function sourceSize(src) {
+			return { w: src.naturalWidth || src.width, h: src.naturalHeight || src.height };
+		}
+
+		function cropBox(wPx, hPx) {
+			const { w: sw, h: sh } = sourceSize(cover.bitmap);
+			const scale = Math.max(wPx / sw, hPx / sh) * cover.zoom;
+			const cw = wPx / scale;
+			const ch = hPx / scale;
+			return { sx: (sw - cw) * cover.focusX, sy: (sh - ch) * cover.focusY, cw, ch, scale };
+		}
+
+		/**
+		 * Crop to wPx × hPx at the focus point. Large reductions go down in
+		 * halves first – one big bilinear step aliases fine detail like hair and lace.
+		 */
+		function renderCover(wPx, hPx, { rotate = 0, tone = "original" } = {}) {
+			const out = document.createElement("canvas");
+			out.width = wPx;
+			out.height = hPx;
+			const ctx = out.getContext("2d");
+			ctx.fillStyle = "#fff";
+			ctx.fillRect(0, 0, wPx, hPx);
+
+			let { sx, sy, cw, ch } = cropBox(wPx, hPx);
+			let src = cover.bitmap;
+			let curW = cw;
+			let curH = ch;
+			while (curW / 2 > wPx && curH / 2 > hPx) {
+				const nextW = Math.round(curW / 2);
+				const nextH = Math.round(curH / 2);
+				const step = document.createElement("canvas");
+				step.width = nextW;
+				step.height = nextH;
+				const sctx = step.getContext("2d");
+				sctx.imageSmoothingQuality = "high";
+				sctx.drawImage(src, sx, sy, cw, ch, 0, 0, nextW, nextH);
+				src = step;
+				sx = 0;
+				sy = 0;
+				cw = curW = nextW;
+				ch = curH = nextH;
+			}
+			ctx.imageSmoothingEnabled = true;
+			ctx.imageSmoothingQuality = "high";
+			if (rotate === 180) {
+				ctx.translate(wPx, hPx);
+				ctx.rotate(Math.PI);
+			}
+			ctx.drawImage(src, sx, sy, cw, ch, 0, 0, wPx, hPx);
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			applyTone(out, tone);
+			return out;
+		}
+
+		const TONES = {
+			original: null,
+			bw(r, g, b) {
+				const l = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+				// Gentle S-curve so black-and-white doesn't print flat.
+				const v = 255 * (l + 0.35 * (l * l * (3 - 2 * l) - l));
+				return [v, v, v];
+			},
+			warm(r, g, b) {
+				return [r * 1.035 + 5, g * 1.01 + 2, b * 0.92];
+			},
+			film(r, g, b) {
+				const l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+				const mix = (c) => c * 0.8 + l * 0.2; // desaturate a fifth
+				return [16 + mix(r) * 0.9 + 4, 14 + mix(g) * 0.9, 12 + mix(b) * 0.86];
+			},
+		};
+
+		function applyTone(canvas, tone) {
+			const fn = TONES[tone];
+			if (!fn) return;
+			const ctx = canvas.getContext("2d");
+			const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+			const d = image.data;
+			for (let i = 0; i < d.length; i += 4) {
+				const [r, g, b] = fn(d[i], d[i + 1], d[i + 2]);
+				d[i] = r;
+				d[i + 1] = g;
+				d[i + 2] = b;
+			}
+			ctx.putImageData(image, 0, 0);
+		}
+
+		/** Pixels per inch the photo really has once cropped and zoomed. */
+		function effectiveDpi(rectMm) {
+			if (!cover.bitmap) return 0;
+			const { w, h } = sourceSize(cover.bitmap);
+			return Math.min(w / (rectMm.w / MM_PER_IN), h / (rectMm.h / MM_PER_IN)) / cover.zoom;
+		}
+
+		// ==================================================================
+		// PDF image encoding
+		// ==================================================================
+
+		/**
+		 * jsPDF only emits CMYK images from 4-channel JPEGs, which a canvas cannot
+		 * make. So CMYK pixels go in as a raw DeviceCMYK stream – PNG-predicted
+		 * (Paeth) and Flate-compressed – through a small custom image processor.
+		 */
+		const rasterMeta = new WeakMap();
+
+		function installCmykProcessor(jsPDF) {
+			if (jsPDF.API.processCMYKFLATE) return;
+			jsPDF.API.processCMYKFLATE = function (data, index, alias) {
+				const meta = rasterMeta.get(data);
+				return {
+					data: bytesToBinaryString(data),
+					width: meta.width,
+					height: meta.height,
+					colorSpace: "DeviceCMYK",
+					bitsPerComponent: 8,
+					filter: "FlateDecode",
+					decodeParameters: `/Predictor 15 /Colors 4 /BitsPerComponent 8 /Columns ${meta.width}`,
+					index,
+					alias,
+				};
+			};
+		}
+
+		/**
+		 * Without an ICC profile this is a device separation, but a sensible one:
+		 * medium GCR (black only takes over in the darker tones, so skin stays
+		 * clean), rich black in the shadows, and total ink capped at 300 %.
+		 * Black-and-white photos go on the black plate only – no colour casts.
+		 * Values are stored inverted: jsPDF tags DeviceCMYK with /Decode [1 0 …].
+		 */
+		function canvasToCmyk(canvas, blackOnly) {
+			const { width, height } = canvas;
+			const rgba = canvas.getContext("2d").getImageData(0, 0, width, height).data;
+			const out = new Uint8Array(width * height * 4);
+			for (let i = 0; i < rgba.length; i += 4) {
+				const c0 = 1 - rgba[i] / 255;
+				const m0 = 1 - rgba[i + 1] / 255;
+				const y0 = 1 - rgba[i + 2] / 255;
+				let c = 0;
+				let m = 0;
+				let y = 0;
+				let k;
+				if (blackOnly) {
+					k = (c0 + m0 + y0) / 3;
+				} else {
+					const kmin = Math.min(c0, m0, y0);
+					k = kmin <= 0.2 ? 0 : Math.pow((kmin - 0.2) / 0.8, 1.15) * kmin;
+					if (1 - k < 1e-4) {
+						c = m = y = 0.59;
+					} else {
+						c = (c0 - k) / (1 - k);
+						m = (m0 - k) / (1 - k);
+						y = (y0 - k) / (1 - k);
+					}
+					const cmy = c + m + y;
+					if (cmy + k > 3 && cmy > 0) {
+						const f = (3 - k) / cmy;
+						c *= f;
+						m *= f;
+						y *= f;
+					}
+				}
+				out[i] = 255 - Math.round(c * 255);
+				out[i + 1] = 255 - Math.round(m * 255);
+				out[i + 2] = 255 - Math.round(y * 255);
+				out[i + 3] = 255 - Math.round(k * 255);
+			}
+			return paethRows(out, width, height, 4);
+		}
+
+		/** PNG Paeth prediction per row – photos compress far better than raw. */
+		function paethRows(data, width, height, bpp) {
+			const stride = width * bpp;
+			const out = new Uint8Array(height * (stride + 1));
+			for (let row = 0; row < height; row++) {
+				const o = row * (stride + 1);
+				const cur = row * stride;
+				const prev = cur - stride;
+				out[o] = 4;
+				for (let i = 0; i < stride; i++) {
+					const a = i >= bpp ? data[cur + i - bpp] : 0;
+					const b = row > 0 ? data[prev + i] : 0;
+					const c = row > 0 && i >= bpp ? data[prev + i - bpp] : 0;
+					const p = a + b - c;
+					const pa = Math.abs(p - a);
+					const pb = Math.abs(p - b);
+					const pc = Math.abs(p - c);
+					const pred = pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
+					out[o + 1 + i] = (data[cur + i] - pred) & 255;
+				}
+			}
+			return out;
+		}
+
+		async function deflate(bytes) {
+			const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream("deflate"));
+			return new Uint8Array(await new Response(stream).arrayBuffer());
+		}
+
+		async function encodeRaster(canvas, colorMode, blackOnly) {
+			if (colorMode === "cmyk") {
+				const data = await deflate(canvasToCmyk(canvas, blackOnly));
+				rasterMeta.set(data, { width: canvas.width, height: canvas.height });
+				return { data, format: "CMYKFLATE" };
+			}
+			const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.95));
+			return { data: new Uint8Array(await blob.arrayBuffer()), format: "JPEG" };
+		}
+
+		// ==================================================================
+		// Renderers
+		// ==================================================================
+
+		function drawFacePdf(doc, face, ops, style, assets, colorMode) {
+			const { w, h } = style.card;
+			const flip = face.rotate === 180;
+			for (const op of ops) {
+				if (op.kind === "image") {
+					const x = flip ? face.x + w - op.x - op.w : face.x + op.x;
+					const y = flip ? face.y + h - op.y - op.h : face.y + op.y;
+					const asset = assets[op.asset];
+					// Same alias on every page: jsPDF writes the image once and references it.
+					doc.addImage(asset.data, asset.format, x, y, op.w, op.h, `asset-${op.asset}`, "NONE");
+				} else {
+					doc.setFont(FONTS[op.font].pdfName, "normal");
+					doc.setFontSize(op.sizePt);
+					if (colorMode === "cmyk") doc.setTextColor(...INK.cmyk);
+					else doc.setTextColor(...INK.rgb);
+					const trackMm = (op.tracking || 0) * op.sizePt * PT;
+					doc.setCharSpace(trackMm);
+					const widthOf = (t) => doc.getTextWidth(t) + Math.max(0, [...t].length - 1) * trackMm;
+					const start = lineStart(op, widthOf);
+					if (flip) doc.text(op.text, face.x + w - start, face.y + h - op.y, { angle: 180 });
+					else doc.text(op.text, face.x + start, face.y + op.y);
+				}
+			}
+			doc.setCharSpace(0);
+		}
+
+		/** Draw ops into a canvas context already scaled to face-local mm. */
+		function drawOpsCanvas(ctx, ops, assets) {
+			for (const op of ops) {
+				if (op.kind === "image") {
+					if (assets[op.asset]) ctx.drawImage(assets[op.asset], op.x, op.y, op.w, op.h);
+					continue;
+				}
+				const em = op.sizePt * PT;
+				const family = FONTS[op.font].family;
+				const widthOf = (t) => textWidth(op.font, t, op.sizePt, op.tracking || 0);
+				const start = lineStart(op, widthOf);
+				ctx.save();
+				ctx.fillStyle = INK.css;
+				ctx.textBaseline = "alphabetic";
+				ctx.textAlign = "left";
+				ctx.font = `${REF_PX}px "${family}"`;
+				ctx.translate(start, op.y);
+				ctx.scale(em / REF_PX, em / REF_PX);
+				if (op.tracking) {
+					let x = 0;
+					for (const ch of op.text) {
+						ctx.fillText(ch, x, 0);
+						x += ctx.measureText(ch).width + op.tracking * REF_PX;
+					}
+				} else {
+					ctx.fillText(op.text, 0, 0);
+				}
+				ctx.restore();
+			}
+		}
+
+		function sizeCanvas(canvas, cssW, cssH) {
+			const dpr = Math.min(window.devicePixelRatio || 1, 3);
+			canvas.width = Math.max(1, Math.round(cssW * dpr));
+			canvas.height = Math.max(1, Math.round(cssH * dpr));
+			return canvas.getContext("2d");
+		}
+
+		function drawFaceCanvas(canvas, style, ops, assets) {
+			const { w, h } = style.card;
+			const cssW = canvas.clientWidth || 300;
+			const ctx = sizeCanvas(canvas, cssW, (cssW * h) / w);
+			const scale = canvas.width / w;
+			ctx.fillStyle = "#fff";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.scale(scale, scale);
+			drawOpsCanvas(ctx, ops, assets);
+		}
+
+		function drawSheetCanvas(canvas, style, page, faceOps, assets) {
+			const { w: sw, h: sh } = style.sheet;
+			const { w, h } = style.card;
+			const cssW = canvas.clientWidth || 360;
+			const ctx = sizeCanvas(canvas, cssW, (cssW * sh) / sw);
+			const scale = canvas.width / sw;
+			ctx.fillStyle = "#fff";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.scale(scale, scale);
+			for (const face of page.faces) {
+				ctx.save();
+				ctx.translate(face.x, face.y);
+				if (face.rotate === 180) {
+					ctx.translate(w, h);
+					ctx.rotate(Math.PI);
+				}
+				ctx.beginPath();
+				ctx.rect(0, 0, w, h);
+				ctx.clip();
+				drawOpsCanvas(ctx, faceOps[face.kind], assets);
+				ctx.restore();
+			}
+			ctx.strokeStyle = FOLD_LINE;
+			ctx.lineWidth = 0.35;
+			ctx.setLineDash([2.2, 1.8]);
+			for (const [x1, y1, x2, y2] of page.folds) {
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x2, y2);
+				ctx.stroke();
+			}
+		}
+
+		function placeholderCover(wPx, hPx) {
+			const canvas = document.createElement("canvas");
+			canvas.width = wPx;
+			canvas.height = hPx;
+			const ctx = canvas.getContext("2d");
+			const g = ctx.createLinearGradient(0, 0, wPx, hPx);
+			g.addColorStop(0, "#efece6");
+			g.addColorStop(1, "#e2ded6");
+			ctx.fillStyle = g;
+			ctx.fillRect(0, 0, wPx, hPx);
+			ctx.fillStyle = "#8f8a80";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = `italic ${Math.round(Math.min(wPx, hPx) * 0.085)}px Georgia, serif`;
+			ctx.fillText("Velg et forsidebilde", wPx / 2, hPx / 2);
+			return canvas;
+		}
+
+		// ==================================================================
+		// Form
+		// ==================================================================
+
+		const $ = (id) => document.getElementById(id);
+		const form = $("form");
+		const styleEl = $("style");
+		const typographyEl = $("typography");
+		const colorModeEl = $("colorMode");
+		const dpiEl = $("dpi");
+		const coverFileEl = $("coverFile");
+		const coverDrop = $("coverDrop");
+		const coverInfo = $("coverInfo");
+		const cropPanel = $("cropPanel");
+		const cropCanvas = $("cropCanvas");
+		const zoomEl = $("zoom");
+		const toneEl = $("tone");
+		const coverFitEl = $("coverFit");
+		const messagesEl = $("messages");
+		const templateEl = $("template");
+		const signatureEl = $("signature");
+		const monogramEl = $("monogram");
+		const backTextEl = $("backText");
+		const submitBtn = $("submitBtn");
+		const proofBtn = $("proofBtn");
+		const formStatus = $("formStatus");
+		const stage = $("stage");
+		const card3d = $("card3d");
+		const sheets = $("sheets");
+		const stageHint = $("stageHint");
+		const exportsEmpty = $("exportsEmpty");
+		const exportsList = $("exportsList");
+
+		for (const [id, style] of Object.entries(STYLES)) {
+			style.id = id;
+			styleEl.add(new Option(style.label, id));
+		}
+		for (const [id, typo] of Object.entries(TYPOGRAPHY)) {
+			typo.id = id;
+			typographyEl.add(new Option(typo.label, id));
+		}
+
+		const SAMPLE_MESSAGE = "Kjære tante Kari,|tusen takk for den nydelige vasen - den har allerede fått fast plass på stuebordet.";
+		const DPI_MIN = 72;
+		const DPI_MAX = 600;
+		const COLOR_HINTS = {
+			cmyk: "For trykk. Tekst og signatur står i ren sort (100 % K) og blir knivskarpe. Bildet separeres uten fargeprofil, så farger kan avvike litt fra skjermen.",
+			rgb: "Mindre fil og farger som på skjermen – skriveren konverterer selv. Fint for hjemmeskrivere.",
+		};
+		const TONE_HINTS = {
+			original: "",
+			bw: "Med CMYK trykkes sort-hvitt bare med sort blekk – helt nøytralt, uten fargestikk.",
+			warm: "Litt gyllen, som kveldssol.",
+			film: "Løftede skygger og dempede farger, som analog film.",
+		};
+
+		const currentStyle = () => STYLES[styleEl.value] || STYLES["a6-quarter"];
+		const currentTypo = () => TYPOGRAPHY[typographyEl.value] || TYPOGRAPHY.classic;
+
+		function readDpi() {
+			const value = Math.round(Number(dpiEl.value));
+			if (!Number.isFinite(value) || value <= 0) return 300;
+			return Math.min(DPI_MAX, Math.max(DPI_MIN, value));
+		}
+
+		/** Raw non-empty lines, each one card. */
+		function readLines() {
+			return messagesEl.value.split(/\r?\n/).filter((l) => l.trim());
+		}
+
+		/** Apply the merge template (if any): tab-separated columns become {1}, {2} … */
+		function mergeLine(line) {
+			const template = templateEl.value.trim();
+			if (!template) return line.replace(/\t+/g, " ").trim();
+			const cols = line.split("\t").map((c) => c.trim());
+			return template.replace(/\{(\d+)\}/g, (_, n) => cols[Number(n) - 1] ?? "").trim();
+		}
+
+		function readMessages() {
+			return readLines().map(mergeLine).filter(Boolean);
+		}
+
+		function cardFor(message) {
+			const signature = smarten(signatureEl.value.trim());
+			return {
+				message: smarten(message),
+				signature,
+				monogram: monogramEl.checked ? monogramFrom(signature) : "",
+				backText: smarten(backTextEl.value.trim()),
+			};
+		}
+
+		function layoutCtx() {
+			return { style: currentStyle(), typo: currentTypo(), coverFit: coverFitEl.value };
+		}
+
+		function coverRect(ctx) {
+			return layoutFace("cover", null, ctx).ops[0];
+		}
+
+		function caretMessageIndex() {
+			const before = messagesEl.value.slice(0, messagesEl.selectionStart);
+			return before.split(/\r?\n/).slice(0, -1).filter((l) => l.trim()).length;
+		}
+
+		// ------------------------------------------------------------------
+		// Persistence (settings and text – the photo stays in memory)
+		// ------------------------------------------------------------------
+
+		const STORAGE_KEY = "thank-you-gen:v1";
+		const PERSISTED = {
+			style: styleEl, typography: typographyEl, colorMode: colorModeEl, dpi: dpiEl, coverFit: coverFitEl, tone: toneEl,
+			messages: messagesEl, template: templateEl, signature: signatureEl, backText: backTextEl, monogram: monogramEl,
+		};
+
+		function restore() {
+			try {
+				const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+				if (!saved) return;
+				for (const [key, el] of Object.entries(PERSISTED)) {
+					if (!(key in saved)) continue;
+					if (el.type === "checkbox") el.checked = Boolean(saved[key]);
+					else if (el.tagName === "SELECT" && ![...el.options].some((o) => o.value === saved[key])) continue;
+					else if (typeof saved[key] === "string") el.value = saved[key];
+				}
+				if (templateEl.value.trim()) $("mergeDetails").open = true;
+			} catch { /* storage unavailable */ }
+		}
+
+		function persist() {
+			try {
+				const data = {};
+				for (const [key, el] of Object.entries(PERSISTED)) data[key] = el.type === "checkbox" ? el.checked : el.value;
+				localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+			} catch { /* storage unavailable */ }
+		}
+
+		// ==================================================================
+		// Preview
+		// ==================================================================
+
+		const preview = { index: 0, view: "front" };
+		let previewCoverCache = null;
+
+		/** Upright cover at preview resolution, cached until the crop or tone changes. */
+		function previewCover(ctx, cssW) {
+			const r = coverRect(ctx);
+			const dpr = Math.min(window.devicePixelRatio || 1, 3);
+			const pxPerMm = (cssW * dpr) / ctx.style.card.w;
+			const wPx = Math.max(1, Math.round(r.w * pxPerMm));
+			const hPx = Math.max(1, Math.round(r.h * pxPerMm));
+			const key = [wPx, hPx, cover.id, cover.focusX, cover.focusY, cover.zoom, toneEl.value].join("|");
+			if (!previewCoverCache || previewCoverCache.key !== key) {
+				previewCoverCache = {
+					key,
+					canvas: cover.bitmap ? renderCover(wPx, hPx, { tone: toneEl.value }) : placeholderCover(wPx, hPx),
+				};
+			}
+			return previewCoverCache.canvas;
+		}
+
+		function setView(view) {
+			preview.view = view;
+			for (const btn of document.querySelectorAll(".views button")) {
+				btn.setAttribute("aria-pressed", String(btn.dataset.view === view));
+			}
+			stage.hidden = view === "sheet";
+			sheets.hidden = view !== "sheet";
+			renderPreview();
+		}
+
+		/** Size the 3D stage so the opened spread fits, and place the card for the view. */
+		function layoutStage(style) {
+			const { w, h } = style.card;
+			const stageW = stage.clientWidth || 380;
+			const top = style.fold === "top";
+			const pad = 44;
+			const cardW = top ? stageW * 0.8 : stageW * 0.44;
+			const cardH = (cardW * h) / w;
+			const stageH = top ? cardH * 2 + pad : cardH * 1.32 + pad;
+			// The closed card is shown larger – it has the room – leaving space for the tilt.
+			const closedScale = top ? 1.12 : 1.18;
+			stage.style.height = `${Math.round(stageH)}px`;
+			card3d.style.width = `${cardW}px`;
+			card3d.style.height = `${cardH}px`;
+			card3d.dataset.fold = style.fold;
+			card3d.classList.toggle("is-open", preview.view === "open");
+			const shift = top ? `translateY(${cardH / 2}px)` : `translateX(${cardW / 2}px)`;
+			const transforms = {
+				front: `translateY(-10px) scale(${closedScale}) rotateX(9deg) rotateY(-13deg) rotateZ(.5deg)`,
+				open: `${shift} translateY(-12px) rotateX(0deg)`,
+				back: `translateY(-10px) scale(${closedScale}) rotateX(9deg) rotateY(193deg) rotateZ(-.5deg)`,
+			};
+			card3d.style.transform = transforms[preview.view] || transforms.front;
+			stageHint.textContent = preview.view === "open" ? "Klikk for å lukke" : preview.view === "back" ? "Klikk for å snu" : "Klikk for å åpne";
+			return cardW;
+		}
+
+		function renderPreview() {
+			const ctx = layoutCtx();
+			const { style, typo } = ctx;
+			if (!fontsReady(typographyFonts(typo))) {
+				Promise.all(typographyFonts(typo).map(loadFont)).then(() => {
+					fitCache.clear();
+					refreshMeta();
+					renderPreview();
+				}).catch(() => { formStatus.textContent = "Kunne ikke laste skrifttypene. Last siden på nytt."; });
+				return;
+			}
+
+			const messages = readMessages();
+			const isSample = messages.length === 0;
+			preview.index = isSample ? 0 : Math.min(Math.max(preview.index, 0), messages.length - 1);
+			$("previewLabel").textContent = isSample ? "Eksempel" : `Kort ${preview.index + 1} av ${messages.length}`;
+			$("prevCard").disabled = isSample || preview.index === 0;
+			$("nextCard").disabled = isSample || preview.index >= messages.length - 1;
+
+			const card = cardFor(isSample ? SAMPLE_MESSAGE : messages[preview.index]);
+			const faceOps = {};
+			for (const kind of ["cover", "inside", "insideBlank", "back"]) faceOps[kind] = layoutFace(kind, card, ctx).ops;
+
+			if (preview.view === "sheet") {
+				const cssW = sheets.clientWidth - 30 || 360;
+				const sheetCardW = (cssW * style.card.w) / style.sheet.w;
+				const assets = { cover: previewCover(ctx, sheetCardW) };
+				sheets.replaceChildren(...style.pages.map((page, i) => {
+					const fig = document.createElement("figure");
+					const caption = document.createElement("figcaption");
+					caption.textContent = page.label || (style.pages.length > 1 ? `Side ${i + 1}` : "A4-ark, trykket side");
+					const canvas = document.createElement("canvas");
+					canvas.setAttribute("role", "img");
+					canvas.setAttribute("aria-label", `${caption.textContent} slik det skrives ut, med brettelinjer`);
+					fig.append(caption, canvas);
+					return fig;
+				}));
+				style.pages.forEach((page, i) => drawSheetCanvas(sheets.children[i].querySelector("canvas"), style, page, faceOps, assets));
+			} else {
+				const cardW = layoutStage(style);
+				// Oversample: the closed card is scaled up and resampled by the 3D transform.
+				const dprW = cardW * (preview.view === "open" ? 1.25 : 2);
+				const assets = { cover: previewCover(ctx, dprW) };
+				for (const canvas of card3d.querySelectorAll("canvas")) {
+					canvas.style.width = `${cardW}px`;
+					canvas.style.height = `${(cardW * style.card.h) / style.card.w}px`;
+					// Render a little larger than shown so the scaled-up closed card stays crisp.
+					const ctx2 = sizeCanvas(canvas, dprW, (dprW * style.card.h) / style.card.w);
+					const scale = canvas.width / style.card.w;
+					ctx2.fillStyle = "#fff";
+					ctx2.fillRect(0, 0, canvas.width, canvas.height);
+					ctx2.scale(scale, scale);
+					drawOpsCanvas(ctx2, faceOps[canvas.dataset.face], assets);
+				}
+			}
+			renderCrop(ctx);
+		}
+
+		function renderCrop(ctx) {
+			cropPanel.hidden = !cover.bitmap;
+			if (!cover.bitmap) return;
+			const cssW = cropCanvas.clientWidth || 360;
+			const assets = { cover: previewCover(ctx, cssW) };
+			drawFaceCanvas(cropCanvas, ctx.style, layoutFace("cover", null, ctx).ops, assets);
+			$("zoomValue").textContent = `${Math.round(cover.zoom * 100)} %`;
+		}
+
+		function refreshMeta() {
+			const ctx = layoutCtx();
+			const { style, typo } = ctx;
+			$("styleHint").textContent = style.description;
+			$("typographyHint").textContent = typo.detail;
+			$("colorHint").textContent = COLOR_HINTS[colorModeEl.value];
+			$("toneHint").textContent = TONE_HINTS[toneEl.value];
+			$("foldSteps").innerHTML = style.steps.map((s) => `<li>${s}</li>`).join("");
+
+			const messages = readMessages();
+			const sheetsPerCard = style.pages.length;
+			$("messagesCount").textContent = `${messages.length} kort · ${messages.length * sheetsPerCard} ${sheetsPerCard > 1 ? "sider" : "A4-ark"}`;
+
+			const signature = smarten(signatureEl.value.trim());
+			const mono = monogramFrom(signature);
+			$("monogramHint").textContent = mono ? `Blir «${mono}», satt i signaturens skrift.` : "Skriv en signatur for å få initialer.";
+
+			const warn = $("messagesWarn");
+			warn.replaceChildren();
+			if (fontsReady(typographyFonts(typo))) {
+				const tooLong = [];
+				messages.forEach((m, i) => { if (fitMessage(smarten(m), signature, style, typo).overflow) tooLong.push(i); });
+				if (tooLong.length) {
+					warn.append("For lang tekst på kort ");
+					tooLong.forEach((i, n) => {
+						const btn = document.createElement("button");
+						btn.type = "button";
+						btn.textContent = String(i + 1);
+						btn.addEventListener("click", () => { preview.index = i; setView("open"); });
+						warn.append(n ? ", " : "", btn);
+					});
+					warn.append(" – teksten går ut over kortets marger. Kort den ned, eller velg A5.");
+				}
+			}
+
+			const dpi = readDpi();
+			$("dpiHint").textContent = `Forsidebildet regnes om til ${dpi} DPI. Tekst er vektor og alltid skarp.`;
+			if (cover.bitmap) {
+				const actual = Math.round(effectiveDpi(coverRect(ctx)));
+				const { w, h } = sourceSize(cover.bitmap);
+				const low = actual < Math.min(dpi, 200);
+				coverInfo.textContent = `${cover.name} · ${w} × ${h} px · ca. ${actual} DPI på forsiden`
+					+ (low ? " – lav oppløsning, kan bli uskarpt på trykk. Zoom ut eller bruk et større bilde." : ".");
+				coverInfo.classList.toggle("is-warn", low);
+				const { w: cw, h: ch } = style.card;
+				const photoPortrait = h > w;
+				const cardPortrait = ch > cw;
+				if (photoPortrait !== cardPortrait) {
+					coverInfo.textContent += photoPortrait ? " Bildet er stående – et stående format passer kanskje bedre." : "";
+				}
+			} else {
+				coverInfo.textContent = "";
+			}
+		}
+
+		let refreshTimer = 0;
+		function scheduleRefresh() {
+			clearTimeout(refreshTimer);
+			refreshTimer = setTimeout(() => {
+				refreshMeta();
+				renderPreview();
+			}, 70);
+		}
+
+		// Clicking the card opens, closes or turns it.
+		stage.addEventListener("click", () => setView(preview.view === "open" ? "front" : preview.view === "back" ? "front" : "open"));
+		stage.addEventListener("keydown", (evt) => {
+			if (evt.key === "Enter" || evt.key === " ") {
+				evt.preventDefault();
+				stage.click();
+			}
+		});
+		for (const btn of document.querySelectorAll(".views button")) {
+			btn.addEventListener("click", () => setView(btn.dataset.view));
+		}
+		$("prevCard").addEventListener("click", () => { preview.index--; renderPreview(); });
+		$("nextCard").addEventListener("click", () => { preview.index++; renderPreview(); });
+
+		/** Show the face that is being edited, unless the print sheet is open. */
+		function showFor(view) {
+			if (preview.view !== "sheet" && preview.view !== view) setView(view);
+		}
+
+		// ------------------------------------------------------------------
+		// Crop editor: drag, arrows, zoom, double-click to centre
+		// ------------------------------------------------------------------
+
+		(function enableCrop() {
+			let drag = null;
+
+			function overflowPx() {
+				const ctx = layoutCtx();
+				const r = coverRect(ctx);
+				const cssPerMm = cropCanvas.clientWidth / ctx.style.card.w;
+				const { cw, ch, scale } = cropBox(r.w * cssPerMm, r.h * cssPerMm);
+				const { w: sw, h: sh } = sourceSize(cover.bitmap);
+				return { x: (sw - cw) * scale, y: (sh - ch) * scale };
+			}
+
+			function nudge(dx, dy, over) {
+				if (over.x > 0.5) cover.focusX = Math.min(1, Math.max(0, cover.focusX - dx / over.x));
+				if (over.y > 0.5) cover.focusY = Math.min(1, Math.max(0, cover.focusY - dy / over.y));
+				renderPreview();
+			}
+
+			cropCanvas.addEventListener("pointerdown", (evt) => {
+				if (!cover.bitmap) return;
+				drag = { x: evt.clientX, y: evt.clientY, over: overflowPx() };
+				cropCanvas.setPointerCapture(evt.pointerId);
+				cropCanvas.classList.add("is-dragging");
+				showFor("front");
+			});
+			cropCanvas.addEventListener("pointermove", (evt) => {
+				if (!drag) return;
+				nudge(evt.clientX - drag.x, evt.clientY - drag.y, drag.over);
+				drag.x = evt.clientX;
+				drag.y = evt.clientY;
+			});
+			const end = () => {
+				drag = null;
+				cropCanvas.classList.remove("is-dragging");
+			};
+			cropCanvas.addEventListener("pointerup", end);
+			cropCanvas.addEventListener("pointercancel", end);
+			cropCanvas.addEventListener("dblclick", () => {
+				cover.focusX = 0.5;
+				cover.focusY = 0.5;
+				renderPreview();
+			});
+			cropCanvas.addEventListener("keydown", (evt) => {
+				const step = evt.shiftKey ? 40 : 8;
+				const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+				if (!moves[evt.key]) return;
+				evt.preventDefault();
+				nudge(...moves[evt.key], overflowPx());
+			});
+			zoomEl.addEventListener("input", () => {
+				cover.zoom = Number(zoomEl.value) / 100;
+				showFor("front");
+				refreshMeta();
+				renderPreview();
+			});
+		})();
+
+		async function useCoverFile(file) {
+			if (!file) return;
+			formStatus.textContent = "";
+			try {
+				cover.bitmap = await decodeImage(file);
+				cover.name = file.name;
+				cover.id++;
+				cover.focusX = 0.5;
+				cover.focusY = 0.5;
+				cover.zoom = 1;
+				zoomEl.value = "100";
+			} catch {
+				formStatus.textContent = "Kunne ikke lese bildet. Prøv JPEG eller PNG.";
+			}
+			showFor("front");
+			refreshMeta();
+			renderPreview();
+		}
+
+		coverFileEl.addEventListener("change", () => useCoverFile(coverFileEl.files[0]));
+		for (const type of ["dragenter", "dragover"]) {
+			coverDrop.addEventListener(type, (evt) => {
+				evt.preventDefault();
+				coverDrop.classList.add("is-over");
+			});
+		}
+		for (const type of ["dragleave", "drop"]) coverDrop.addEventListener(type, () => coverDrop.classList.remove("is-over"));
+		coverDrop.addEventListener("drop", (evt) => {
+			evt.preventDefault();
+			const file = [...(evt.dataTransfer?.files || [])].find((f) => f.type.startsWith("image/"));
+			if (file) useCoverFile(file);
+		});
+
+		function followCaret() {
+			const count = readMessages().length;
+			if (!count) return;
+			const index = Math.min(caretMessageIndex(), count - 1);
+			if (index !== preview.index) {
+				preview.index = index;
+				renderPreview();
+			}
+		}
+		messagesEl.addEventListener("keyup", followCaret);
+		messagesEl.addEventListener("click", followCaret);
+
+		const VIEW_FOR = {
+			messages: "open", template: "open", signature: "open", typography: "open",
+			backText: "back", monogram: "back",
+			tone: "front", coverFit: "front",
+		};
+		form.addEventListener("input", (evt) => {
+			if (evt.target === coverFileEl || evt.target === zoomEl) return;
+			if (evt.target === messagesEl) preview.index = caretMessageIndex();
+			if (VIEW_FOR[evt.target.id]) showFor(VIEW_FOR[evt.target.id]);
+			persist();
+			scheduleRefresh();
+		});
+		form.addEventListener("change", (evt) => {
+			if (evt.target === coverFileEl) return;
+			if (VIEW_FOR[evt.target.id]) showFor(VIEW_FOR[evt.target.id]);
+			persist();
+			scheduleRefresh();
+		});
+		new ResizeObserver(() => renderPreview()).observe(stage.parentElement);
+
+		// ==================================================================
+		// Generate
+		// ==================================================================
+
+		async function generate({ proof = false } = {}) {
+			formStatus.textContent = "";
+			let messages = readMessages();
+			if (!cover.bitmap) {
+				formStatus.textContent = "Velg et forsidebilde først.";
+				coverFileEl.focus();
+				return;
+			}
+			if (proof) messages = [messages[preview.index] ?? SAMPLE_MESSAGE];
+			if (messages.length === 0) {
+				formStatus.textContent = "Skriv minst én hilsen – én linje per kort.";
+				messagesEl.focus();
+				return;
+			}
+			if (typeof window.jspdf === "undefined" || !window.jspdf.jsPDF) {
+				formStatus.textContent = "jsPDF-biblioteket ble ikke lastet. Sjekk internettforbindelsen og prøv igjen.";
+				return;
+			}
+			const colorMode = colorModeEl.value;
+			if (colorMode === "cmyk" && !("CompressionStream" in window)) {
+				formStatus.textContent = "Nettleseren kan ikke lage CMYK-bilder. Velg RGB, eller bruk en nyere nettleser.";
+				return;
+			}
+
+			const ctx = layoutCtx();
+			const { style, typo } = ctx;
+			const dpi = readDpi();
+			dpiEl.value = String(dpi);
+			const busy = proof ? proofBtn : submitBtn;
+			const label = busy.textContent;
+			submitBtn.disabled = proofBtn.disabled = true;
+			busy.textContent = "Lager …";
+			await new Promise(requestAnimationFrame);
+
+			try {
+				const fonts = typographyFonts(typo);
+				await Promise.all(fonts.map(loadFont));
+				const { jsPDF } = window.jspdf;
+				installCmykProcessor(jsPDF);
+
+				const doc = new jsPDF({ orientation: style.sheet.orientation, unit: "mm", format: style.sheet.format, compress: true });
+				doc.setProperties({ title: "Takkekort", subject: `${style.label} · ${typo.label}`, creator: "thank-you-gen" });
+				for (const key of fonts) {
+					doc.addFileToVFS(FONTS[key].file, fontData.get(key));
+					doc.addFont(FONTS[key].file, FONTS[key].pdfName, "normal");
+				}
+
+				// One cover raster for the whole document, at the requested density,
+				// already turned the way it sits on the sheet.
+				const r = coverRect(ctx);
+				const coverFace = style.pages.flatMap((p) => p.faces).find((f) => f.kind === "cover");
+				const coverCanvas = renderCover(
+					Math.round((r.w / MM_PER_IN) * dpi),
+					Math.round((r.h / MM_PER_IN) * dpi),
+					{ rotate: coverFace.rotate, tone: toneEl.value },
+				);
+				const assets = { cover: await encodeRaster(coverCanvas, colorMode, toneEl.value === "bw") };
+
+				let first = true;
+				for (const message of messages) {
+					const card = cardFor(message);
+					for (const page of style.pages) {
+						if (!first) doc.addPage(style.sheet.format, style.sheet.orientation);
+						first = false;
+						for (const face of page.faces) {
+							drawFacePdf(doc, face, layoutFace(face.kind, card, ctx).ops, style, assets, colorMode);
+						}
+					}
+				}
+
+				pushExport({ blob: doc.output("blob"), count: messages.length, colorMode, dpi, style, typo, proof });
+			} catch (error) {
+				console.error(error);
+				formStatus.textContent = "Noe gikk galt under genereringen. Prøv igjen, eventuelt med lavere DPI.";
+			} finally {
+				submitBtn.disabled = proofBtn.disabled = false;
+				busy.textContent = label;
+			}
+		}
+
+		form.addEventListener("submit", (evt) => {
+			evt.preventDefault();
+			generate();
+		});
+		proofBtn.addEventListener("click", () => generate({ proof: true }));
+
+		// ==================================================================
+		// Export list (as bingo-gen)
+		// ==================================================================
+
+		/** @type {{ id: string, url: string }[]} */
+		const exportEntries = [];
+
+		function formatTimestamp(date) {
+			try {
+				return new Intl.DateTimeFormat("nb-NO", { dateStyle: "short", timeStyle: "medium" }).format(date);
+			} catch {
+				return date.toLocaleString();
+			}
+		}
+
+		function formatBytes(bytes) {
+			return bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1).replace(".", ",")} MB` : `${Math.round(bytes / 1024)} kB`;
+		}
+
+		function pushExport({ blob, count, colorMode, dpi, style, typo, proof }) {
+			const createdAt = new Date();
+			const id = `${createdAt.getTime()}-${Math.random().toString(36).slice(2, 8)}`;
+			const url = URL.createObjectURL(blob);
+			const stamp = `${createdAt.toISOString().slice(0, 10)}_${createdAt.toISOString().slice(11, 19).replace(/:/g, "")}`;
+			const filename = proof
+				? `takkekort_proveark_${stamp}_${style.id}.pdf`
+				: `takkekort_${stamp}_${count}kort_${style.id}_${colorMode}.pdf`;
+			const title = proof ? "Prøveark · 1 kort" : count === 1 ? "Takkekort · 1 kort" : `Takkekort · ${count} kort`;
+
+			exportEntries.unshift({ id, url });
+
+			const li = document.createElement("li");
+			li.className = "export-card is-latest";
+			li.dataset.exportId = id;
+
+			const head = document.createElement("div");
+			head.className = "export-card-head";
+			const titleEl = document.createElement("p");
+			titleEl.className = "export-card-title";
+			titleEl.textContent = title;
+			const remove = document.createElement("button");
+			remove.type = "button";
+			remove.className = "export-remove";
+			remove.textContent = "Fjern";
+			remove.setAttribute("aria-label", `Fjern eksport ${title}`);
+			remove.addEventListener("click", () => removeExport(id));
+			head.append(titleEl, remove);
+
+			const metaEl = document.createElement("p");
+			metaEl.className = "export-card-meta";
+			for (const text of [formatTimestamp(createdAt), style.label.split(" – ")[0], typo.label, `${colorMode.toUpperCase()} · ${dpi} DPI`, formatBytes(blob.size)]) {
+				const span = document.createElement("span");
+				span.textContent = text;
+				metaEl.append(span);
+			}
+
+			const download = document.createElement("a");
+			download.className = "export-download";
+			download.href = url;
+			download.download = filename;
+			download.textContent = "Last ned PDF";
+
+			li.append(head, metaEl, download);
+			exportsList.querySelectorAll(".export-card.is-latest").forEach((el) => el.classList.remove("is-latest"));
+			exportsList.prepend(li);
+			exportsList.hidden = false;
+			exportsEmpty.hidden = true;
+		}
+
+		function removeExport(id) {
+			const idx = exportEntries.findIndex((e) => e.id === id);
+			if (idx === -1) return;
+			URL.revokeObjectURL(exportEntries[idx].url);
+			exportEntries.splice(idx, 1);
+			exportsList.querySelector(`[data-export-id="${id}"]`)?.remove();
+			if (exportEntries.length === 0) {
+				exportsList.hidden = true;
+				exportsEmpty.hidden = false;
+			} else {
+				exportsList.querySelector(".export-card")?.classList.add("is-latest");
+			}
+		}
+
+		window.addEventListener("beforeunload", () => {
+			for (const entry of exportEntries) URL.revokeObjectURL(entry.url);
+		});
+
+		// ==================================================================
+		// Init
+		// ==================================================================
+
+		restore();
+		refreshMeta();
+		renderPreview();
+	</script>
+
+</body>
+</html>

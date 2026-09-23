@@ -26,6 +26,7 @@
  * | `package.json` | Celestial Alliance 3 | the `version` field — a real release number |
  * | `submodule` | Notar, Bingo generator | the **pinned commit**, which is exactly what the site serves |
  * | `github` | MineSweeper JS | the default branch's head, for a repo this site does not vendor |
+ * | `path` | Thank-you card generator | the last commit touching a folder committed directly in this repo |
  *
  * A static page with no manifest has no version to invent, and the pinned commit is not a consolation prize:
  * it is the precise answer to *"which build is behind this link"*, which is the question a version is asked.
@@ -73,6 +74,13 @@ async function versionOf(project) {
       const args = ['submodule', 'status', '--cached', source.path];
       const line = execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
       return shortSha(line.trim().replace(/^[-+U]/, ''));
+    }
+    if (source.from === 'path') {
+      // Last commit that touched the folder: exactly the build the site serves, for code committed in place.
+      const args = ['log', '-1', '--format=%H', '--', source.path];
+      const sha = execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
+      if (!sha.trim()) throw new Error(`no commits touch ${source.path}`);
+      return shortSha(sha);
     }
     if (source.from === 'github') {
       const response = await fetch(`https://api.github.com/repos/${source.repo}/commits?per_page=1`);
