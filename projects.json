@@ -7,6 +7,20 @@
   ],
   "projects": [
     {
+      "id": "alkomax",
+      "title": "AlkoMax",
+      "blurb": "Search Vinmonopolet and Systembolaget at once — prices in NOK, the most alcohol per krone, and whether a trip to Sweden pays off.",
+      "href": "/alkomax/",
+      "version": {
+        "from": "package.json",
+        "path": "../polet-reborn/polet-app/package.json"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/alkomax/",
+        "settleMs": 4000
+      }
+    },
+    {
       "id": "celestial-alliance-3",
       "title": "Celestial Alliance 3",
       "blurb": "A space-opera RPG that runs in the browser — fly, trade, walk stations and cities, and hire a crew who remember you.",
@@ -32,6 +46,31 @@
       "shot": {
         "url": "https://eliasvagan.github.io/projects/notar/",
         "settleMs": 2500
+      }
+    },
+    {
+      "id": "minesweeper-js",
+      "title": "MineSweeper JS",
+      "blurb": "Classic Minesweeper, playable in the browser.",
+      "href": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
+      "version": {
+        "from": "github",
+        "repo": "eliasvagan/minesweeper-js"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
+        "settleMs": 2000,
+        "steps": [
+          {
+            "click": "#board tr:nth-child(5) td:nth-child(4)"
+          },
+          {
+            "scrollY": 178
+          },
+          {
+            "waitMs": 800
+          }
+        ]
       }
     },
     {
@@ -66,45 +105,6 @@
           },
           {
             "waitMs": 1400
-          }
-        ]
-      }
-    },
-    {
-      "id": "alkomax",
-      "title": "AlkoMax",
-      "blurb": "Search Vinmonopolet and Systembolaget at once — prices in NOK, the most alcohol per krone, and whether a trip to Sweden pays off.",
-      "href": "/alkomax/",
-      "version": {
-        "from": "package.json",
-        "path": "../polet-reborn/polet-app/package.json"
-      },
-      "shot": {
-        "url": "https://eliasvagan.github.io/alkomax/",
-        "settleMs": 4000
-      }
-    },
-    {
-      "id": "minesweeper-js",
-      "title": "MineSweeper JS",
-      "blurb": "Classic Minesweeper, playable in the browser.",
-      "href": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
-      "version": {
-        "from": "github",
-        "repo": "eliasvagan/minesweeper-js"
-      },
-      "shot": {
-        "url": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
-        "settleMs": 2000,
-        "steps": [
-          {
-            "click": "#board tr:nth-child(5) td:nth-child(4)"
-          },
-          {
-            "scrollY": 178
-          },
-          {
-            "waitMs": 800
           }
         ]
       }
