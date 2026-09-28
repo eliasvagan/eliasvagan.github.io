@@ -14,6 +14,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 | **Thank-you card generator** | Wedding thank-you cards as a print-ready PDF — one shared cover photo, one message per card | [projects/thank-you-gen/](https://eliasvagan.github.io/projects/thank-you-gen/) |
 | **Notar** | Browser-based melody composer with staff notation and Web Audio playback | [projects/notar/](https://eliasvagan.github.io/projects/notar/) |
 | **Celestial Alliance 3** | Space-opera RPG in the browser — fly, trade, walk stations and cities | [projects/celestial-alliance-3/](https://eliasvagan.github.io/projects/celestial-alliance-3/) |
+| **AlkoMax** | Search Vinmonopolet and Systembolaget at once — NOK prices, alcohol per krone, a *Grensehandel* calculator | [alkomax/](https://eliasvagan.github.io/alkomax/) |
 | **MineSweeper JS** | Browser-based Minesweeper game | [minesweeper-js](https://eliasvagan.github.io/minesweeper-js/) |
 
 ## Repository layout
@@ -29,6 +30,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 │   ├── thank-you-gen/  # Wedding thank-you card PDF generator
 │   ├── notar/        # Melody composer (submodule)
 │   └── celestial-alliance-3/  # Built bundle, committed directly
+├── alkomax/          # AlkoMax frontend, built bundle committed directly (see below)
 ├── test/             # Playwright + pytest integration tests
 ├── _config.yml       # Jekyll / GitHub Pages config
 └── IT2/              # Archived IT coursework (HTML, CSS, JavaScript exercises)
@@ -46,6 +48,23 @@ python -m http.server 8000
 ```
 
 Then visit `http://localhost:8000`.
+
+## AlkoMax
+
+`alkomax/` is the built frontend of AlkoMax, from the private repo `eliasvagan/polet-reborn` (`polet-app/`).
+It lives at the top level rather than under `projects/`, so the address stays short:
+**eliasvagan.github.io/alkomax/**. Nothing in this folder is edited by hand. To deploy a new version:
+
+```bash
+cd ../polet-reborn/polet-app
+VITE_BASE=/alkomax/ VITE_SITE_URL=https://eliasvagan.github.io/alkomax/ npm run build
+rm -rf ../../eliasvagan.github.io/alkomax && cp -a build ../../eliasvagan.github.io/alkomax
+```
+
+Data comes from the AlkoMax API on the DigitalOcean droplet (`https://134-209-83-197.sslip.io/api/v1/`). The API's
+crawler runs weekly on the droplet. Nothing in this repo, and no GitHub Action, contacts Vinmonopolet or
+Systembolaget. Each client-side route (`search/`, `leaderboard/`, `grensehandel/`) gets its own copy of
+`index.html`, so deep links work on Pages.
 
 ## Front page cards
 

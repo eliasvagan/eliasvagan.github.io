@@ -1,0 +1,55 @@
+{
+  "short_name": "AlkoMax",
+  "name": "AlkoMax - Drikkesøk",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "128x128 64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "icons/logox16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "icons/logox24.png",
+      "type": "image/png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "icons/logox32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "icons/logox48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icons/logox64.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "icons/logox128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "icons/logox192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icons/logox512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2f4858",
+  "background_color": "#ffffff"
+}
