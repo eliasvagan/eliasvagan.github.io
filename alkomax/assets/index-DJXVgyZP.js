@@ -130,38 +130,51 @@ Error generating stack: `+c.message+`
   box-sizing: border-box;
   animation: ${qh} 0.8s ease;
   overflow: hidden;
-  transition: box-shadow 0.15s ease;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
   &:hover, &:focus-within {
-    box-shadow: 0 0.3rem 0.8rem rgba(0,0,0,0.18);
+    box-shadow: 0 0.35rem 0.9rem rgba(0,0,0,0.16);
+    transform: translateY(-2px);
+  }
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 0.15rem 0.35rem rgba(0,0,0,0.14);
   }
 `,jw=q.div`
   position: absolute;
-  top: -1.2em;
-  right: 0.5rem;
-  display: inline;
-  color: #585858;
-  font-weight: 300;
+  top: -1.1em;
+  right: 0.55rem;
+  z-index: 1;
+  color: #3f3f3f;
+  font-weight: 400;
   font-size: 1.1rem;
   line-height: 1.2;
-  background-color: white;
-  padding-left: 0.2em;
+  text-align: right;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 0.2em;
+  padding: 0 0.15em 0.05em 0.3em;
   font-variant-numeric: tabular-nums;
 `,Aw=q.div`
-  margin-top: 1.4em;
+  margin-top: 1.9em;
   height: 10rem;
+  padding: 0.3em 2.6em 0 2.6em;
+  box-sizing: border-box;
   background-image: url("${n=>n.image}"), url("${Mo}");
+  background-origin: content-box;
+  background-clip: content-box;
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;
   position: relative;
 `,Tw=q.div`
-  padding: 0.5rem;
+  padding: 0.6rem 0.7rem 0.75rem 0.7rem;
   & > a {
     display: block;
     text-align: center;
-    color: inherit;
+    color: #262626;
     text-decoration: none;
     font-weight: 500;
+    font-size: 1.02em;
+    line-height: 1.3;
     overflow-wrap: anywhere;
   }
   & > a:hover {
@@ -170,23 +183,37 @@ Error generating stack: `+c.message+`
 `,Nw=q.span`
   display: block;
   text-align: right;
-  font-size: 0.7em;
-  color: #8a8a8a;
+  font-size: 0.68em;
+  font-weight: 300;
+  color: #7a7a7a;
 `,Lw=q.p`
   overflow-wrap: anywhere;
   font-weight: 300;
-  font-size: 0.9em;
-  color: dimgray;
+  font-size: 0.86em;
+  line-height: 1.45;
+  color: #5f5f5f;
+  margin: 0.55em 0 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `,zw=q.div`
   display: flex;
   flex-direction: row;
+  margin-top: 0.55em;
+  border-top: solid 1px #eeeeee;
+  border-bottom: solid 1px #eeeeee;
   & > p {
     flex: 1;
     text-align: center;
     white-space: nowrap;
-    margin: 0.6em 0.1em;
-    font-size: 0.92em;
+    margin: 0.45em 0.1em;
+    font-size: 0.9em;
+    color: #3a3a3a;
     font-variant-numeric: tabular-nums;
+  }
+  & > p + p {
+    border-left: solid 1px #eeeeee;
   }
 `,Qh=q.div`
   background-color: ${n=>n.color};
@@ -209,15 +236,15 @@ Error generating stack: `+c.message+`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 1.0em;
-  height: 5.0em;
+  width: 1.15em;
+  height: 5.75em;
   position: absolute;
-  top: 1.5em;
-  left: 0.5em;
+  top: 1.1em;
+  left: 0.55em;
   box-sizing: border-box;
-  padding: 0.1em;
+  padding: 0.12em;
   overflow: hidden;
-  border: solid 0.2em lightgrey;
+  border: solid 0.23em lightgrey;
   border-radius: 2em;
 `,Iw=q.div`
   height: ${(n=>n.percent)}%;
@@ -225,15 +252,15 @@ Error generating stack: `+c.message+`
   border-radius: 2em;
 `,Fw=q.div`
   position: absolute;
-  bottom: 0;
-  right: 0.5em;
-  width: 2.3em;
-  height: 2.3em;
+  bottom: 0.1em;
+  right: 0.4em;
+  width: 2.1em;
+  height: 2.1em;
   background-image: url(${n=>n.logo});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-`,Mw=({apk:n})=>{const o=Math.max(0,Math.min(n,1))*100,i=s=>{const u=["#28ff77","#06ff00","#94f50b","#ffde06","#ff9900","#ff6600","#ff0000","#960000"];return u[Math.floor(u.length*(1-s/100))]};return v.jsx(Dw,{children:v.jsx(Iw,{percent:o,color:i(o)})})},$w=({category:n})=>{const{value:o,color:i,textColor:s}=n;return v.jsx(Qh,{color:i,textColor:s,title:o,children:o})},Yh=({data:n})=>{const{name:o,code:i,taste:s,apk:u,price:f,url:d,priceLocal:p,currency:g,amount:w,imgUrl:x,region:C,category:j,alcohol:U,store:D}=n,T=Xt[D]||Xt.default,B=Gt[j]||Fo,{color:m}=B;return v.jsxs(Ow,{color:m,children:[v.jsx($w,{category:B}),v.jsxs(Aw,{image:x,role:"img","aria-label":o,children:[v.jsx(Mw,{apk:u}),v.jsxs(jw,{title:"Pris i norske kroner",children:[parseFloat(f).toFixed(2),",-",g&&g!=="NOK"?v.jsxs(Nw,{children:[parseFloat(p).toFixed(2)," ",g]}):null]}),v.jsx(Fw,{logo:T.logo,title:T.value,role:"img","aria-label":T.value})]}),v.jsxs(Tw,{children:[v.jsx("a",{href:d,target:"_blank",rel:"noopener noreferrer",children:o}),v.jsxs(zw,{children:[v.jsxs("p",{children:[(U*100).toFixed(1)," %"]}),v.jsxs("p",{children:[w.toFixed(0)," ml"]}),v.jsxs("p",{title:"Milliliter ren alkohol per krone",children:[u.toFixed(2)," ml/kr"]})]}),v.jsx(Lw,{children:s})]})]})};function $o(n){"@babel/helpers - typeof";return $o=typeof Symbol=="function"&&typeof Symbol.iterator=="symbol"?function(o){return typeof o}:function(o){return o&&typeof Symbol=="function"&&o.constructor===Symbol&&o!==Symbol.prototype?"symbol":typeof o},$o(n)}function Uw(n,o){if($o(n)!="object"||!n)return n;var i=n[Symbol.toPrimitive];if(i!==void 0){var s=i.call(n,o);if($o(s)!="object")return s;throw new TypeError("@@toPrimitive must return a primitive value.")}return(o==="string"?String:Number)(n)}function Bw(n){var o=Uw(n,"string");return $o(o)=="symbol"?o:o+""}function Hw(n,o,i){return(o=Bw(o))in n?Object.defineProperty(n,o,{value:i,enumerable:!0,configurable:!0,writable:!0}):n[o]=i,n}function Vw(n,o){if(n==null)return{};var i,s,u=Bo(n,o);if(Object.getOwnPropertySymbols){var f=Object.getOwnPropertySymbols(n);for(s=0;s<f.length;s++)i=f[s],o.indexOf(i)===-1&&{}.propertyIsEnumerable.call(n,i)&&(u[i]=n[i])}return u}var Ww=["children","iconAttrs","iconVerticalAlign","iconViewBox","size","title"];function Ap(n,o){var i=Object.keys(n);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(n);o&&(s=s.filter(function(u){return Object.getOwnPropertyDescriptor(n,u).enumerable})),i.push.apply(i,s)}return i}function Tp(n){for(var o=1;o<arguments.length;o++){var i=arguments[o]!=null?arguments[o]:{};o%2?Ap(Object(i),!0).forEach(function(s){Hw(n,s,i[s])}):Object.getOwnPropertyDescriptors?Object.defineProperties(n,Object.getOwnPropertyDescriptors(i)):Ap(Object(i)).forEach(function(s){Object.defineProperty(n,s,Object.getOwnPropertyDescriptor(i,s))})}return n}var qw=ne.forwardRef(function(n,o){var i=n.children,s=n.iconAttrs;n.iconVerticalAlign;var u=n.iconViewBox,f=n.size,d=n.title,p=Vw(n,Ww),g=Tp(Tp({viewBox:u,height:n.height!==void 0?n.height:f,width:n.width!==void 0?n.width:f,"aria-hidden":d==null?"true":void 0,focusable:"false",role:d!=null?"img":void 0},s),p);return ne.createElement("svg",Ae({},g,{ref:o}),d&&ne.createElement("title",{key:"icon-title"},d),i)}),xt=q(qw).withConfig({displayName:"StyledIconBase",componentId:"sc-ea9ulj-0"})(["display:inline-block;vertical-align:",";overflow:hidden;"],function(n){return n.iconVerticalAlign}),Gh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"m16.293 17.707 1.414-1.414L13.414 12l4.293-4.293-1.414-1.414L10.586 12zM7 6h2v12H7z"}))});Gh.displayName="FirstPage";var Xh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"M7.707 17.707 13.414 12 7.707 6.293 6.293 7.707 10.586 12l-4.293 4.293zM15 6h2v12h-2z"}))});Xh.displayName="LastPage";var Jh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"}))});Jh.displayName="ChevronLeft";var Zh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"}))});Zh.displayName="ChevronRight";const Ja={name:"",sortBy:"apk",sortDir:"desc",priceMin:0,priceMax:50,categories:[],stores:bw(),onlyinstock:!0,page:1},Kw=(n=null)=>{const o={docs:[],page:1,totalPages:1,totalDocs:0,hasNextPage:!1,hasPrevPage:!1},{search:i}=Xp(),s=cv(),u=()=>{const y=hn.parse(i);for(const E of["categories","stores"])y[E]===void 0?delete y[E]:Array.isArray(y[E])||(y[E]=y[E]?[y[E]]:[]);return{...Ja,...y}},[f,d]=ne.useState(n||u()),[p,g]=ne.useState(o),[w,x]=ne.useState(!1),[C,j]=ne.useState(null),U=ne.useRef(0),D=async()=>{const y=++U.current;x(!0),j(null);const E=cu(hn.parse(i)),_=hn.stringify(E);try{const{data:S}=await jl.getDrinksPage((E.page||1)-1,_);if(y!==U.current)return;S.success&&(g(S.data),S.data.totalPages<parseInt(E.page||1,10)&&T({page:1}))}catch(S){if(y!==U.current)return;g(o),j(S),console.log(S)}x(!1)};ne.useEffect(()=>{if(!hn.stringify(hn.parse(i))){s.replace("?"+hn.stringify(Ja));return}D()},[i]);const T=y=>{Object.entries(y).forEach(([_,S])=>{_==="priceMin"&&parseInt(S)>=f.priceMax&&(y[_]=Math.max(0,Math.min(f.priceMax-1,parseInt(S)))),_==="priceMax"&&parseInt(S)<=f.priceMin&&(y[_]=Math.max(1,Math.min(f.priceMin+1,parseInt(S)))),_==="page"&&parseInt(S)<=0&&(y[_]=1)}),Object.entries(y).filter(([_,S])=>_==="page").length===0&&Object.assign(y,{page:1});const E={...f,...y};d(E),s.push("?"+hn.stringify(E))};return{searchParams:f,setSearchParams:T,reset:()=>{T(Ja)},handleChange:({target:y})=>{T({[y.name]:y.value})},results:p,loading:w,error:C,retry:()=>D()}},cu=n=>Object.entries(n).reduce((o,[i,s])=>((i==="priceMin"||i==="priceMax")&&(s>=50?s=1/0:s=Math.pow(s,3)),{...o,[i]:s}),{}),Jt={mobileM:"(max-width: 375px)",mobileL:"(max-width: 425px)",tablet:"(max-width: 768px)"},Qw=q.div`
+`,Mw=({apk:n})=>{const o=Math.max(0,Math.min(n,1))*100,i=s=>{const u=["#28ff77","#06ff00","#94f50b","#ffde06","#ff9900","#ff6600","#ff0000","#960000"];return u[Math.floor(u.length*(1-s/100))]};return v.jsx(Dw,{title:`${n.toFixed(2)} ml ren alkohol per krone`,children:v.jsx(Iw,{percent:o,color:i(o)})})},$w=({category:n})=>{const{value:o,color:i,textColor:s}=n;return v.jsx(Qh,{color:i,textColor:s,title:o,children:o})},Yh=({data:n})=>{const{name:o,code:i,taste:s,apk:u,price:f,url:d,priceLocal:p,currency:g,amount:w,imgUrl:x,region:C,category:j,alcohol:U,store:D}=n,T=Xt[D]||Xt.default,B=Gt[j]||Fo,{color:m}=B;return v.jsxs(Ow,{color:m,children:[v.jsx($w,{category:B}),v.jsxs(Aw,{image:x,role:"img","aria-label":o,children:[v.jsx(Mw,{apk:u}),v.jsxs(jw,{title:"Pris i norske kroner",children:[parseFloat(f).toFixed(2),",-",g&&g!=="NOK"?v.jsxs(Nw,{children:[parseFloat(p).toFixed(2)," ",g]}):null]}),v.jsx(Fw,{logo:T.logo,title:T.value,role:"img","aria-label":T.value})]}),v.jsxs(Tw,{children:[v.jsx("a",{href:d,target:"_blank",rel:"noopener noreferrer",children:o}),v.jsxs(zw,{children:[v.jsxs("p",{children:[(U*100).toFixed(1)," %"]}),v.jsxs("p",{children:[w.toFixed(0)," ml"]}),v.jsxs("p",{title:"Milliliter ren alkohol per krone",children:[u.toFixed(2)," ml/kr"]})]}),v.jsx(Lw,{title:s||void 0,children:s})]})]})};function $o(n){"@babel/helpers - typeof";return $o=typeof Symbol=="function"&&typeof Symbol.iterator=="symbol"?function(o){return typeof o}:function(o){return o&&typeof Symbol=="function"&&o.constructor===Symbol&&o!==Symbol.prototype?"symbol":typeof o},$o(n)}function Uw(n,o){if($o(n)!="object"||!n)return n;var i=n[Symbol.toPrimitive];if(i!==void 0){var s=i.call(n,o);if($o(s)!="object")return s;throw new TypeError("@@toPrimitive must return a primitive value.")}return(o==="string"?String:Number)(n)}function Bw(n){var o=Uw(n,"string");return $o(o)=="symbol"?o:o+""}function Hw(n,o,i){return(o=Bw(o))in n?Object.defineProperty(n,o,{value:i,enumerable:!0,configurable:!0,writable:!0}):n[o]=i,n}function Vw(n,o){if(n==null)return{};var i,s,u=Bo(n,o);if(Object.getOwnPropertySymbols){var f=Object.getOwnPropertySymbols(n);for(s=0;s<f.length;s++)i=f[s],o.indexOf(i)===-1&&{}.propertyIsEnumerable.call(n,i)&&(u[i]=n[i])}return u}var Ww=["children","iconAttrs","iconVerticalAlign","iconViewBox","size","title"];function Ap(n,o){var i=Object.keys(n);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(n);o&&(s=s.filter(function(u){return Object.getOwnPropertyDescriptor(n,u).enumerable})),i.push.apply(i,s)}return i}function Tp(n){for(var o=1;o<arguments.length;o++){var i=arguments[o]!=null?arguments[o]:{};o%2?Ap(Object(i),!0).forEach(function(s){Hw(n,s,i[s])}):Object.getOwnPropertyDescriptors?Object.defineProperties(n,Object.getOwnPropertyDescriptors(i)):Ap(Object(i)).forEach(function(s){Object.defineProperty(n,s,Object.getOwnPropertyDescriptor(i,s))})}return n}var qw=ne.forwardRef(function(n,o){var i=n.children,s=n.iconAttrs;n.iconVerticalAlign;var u=n.iconViewBox,f=n.size,d=n.title,p=Vw(n,Ww),g=Tp(Tp({viewBox:u,height:n.height!==void 0?n.height:f,width:n.width!==void 0?n.width:f,"aria-hidden":d==null?"true":void 0,focusable:"false",role:d!=null?"img":void 0},s),p);return ne.createElement("svg",Ae({},g,{ref:o}),d&&ne.createElement("title",{key:"icon-title"},d),i)}),xt=q(qw).withConfig({displayName:"StyledIconBase",componentId:"sc-ea9ulj-0"})(["display:inline-block;vertical-align:",";overflow:hidden;"],function(n){return n.iconVerticalAlign}),Gh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"m16.293 17.707 1.414-1.414L13.414 12l4.293-4.293-1.414-1.414L10.586 12zM7 6h2v12H7z"}))});Gh.displayName="FirstPage";var Xh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"M7.707 17.707 13.414 12 7.707 6.293 6.293 7.707 10.586 12l-4.293 4.293zM15 6h2v12h-2z"}))});Xh.displayName="LastPage";var Jh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"}))});Jh.displayName="ChevronLeft";var Zh=ne.forwardRef(function(n,o){var i={fill:"currentColor",xmlns:"http://www.w3.org/2000/svg"};return ne.createElement(xt,Ae({iconAttrs:i,iconVerticalAlign:"middle",iconViewBox:"0 0 24 24"},n,{ref:o}),ne.createElement("path",{d:"M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"}))});Zh.displayName="ChevronRight";const Ja={name:"",sortBy:"apk",sortDir:"desc",priceMin:0,priceMax:50,categories:[],stores:bw(),onlyinstock:!0,page:1},Kw=(n=null)=>{const o={docs:[],page:1,totalPages:1,totalDocs:0,hasNextPage:!1,hasPrevPage:!1},{search:i}=Xp(),s=cv(),u=()=>{const y=hn.parse(i);for(const E of["categories","stores"])y[E]===void 0?delete y[E]:Array.isArray(y[E])||(y[E]=y[E]?[y[E]]:[]);return{...Ja,...y}},[f,d]=ne.useState(n||u()),[p,g]=ne.useState(o),[w,x]=ne.useState(!1),[C,j]=ne.useState(null),U=ne.useRef(0),D=async()=>{const y=++U.current;x(!0),j(null);const E=cu(hn.parse(i)),_=hn.stringify(E);try{const{data:S}=await jl.getDrinksPage((E.page||1)-1,_);if(y!==U.current)return;S.success&&(g(S.data),S.data.totalPages<parseInt(E.page||1,10)&&T({page:1}))}catch(S){if(y!==U.current)return;g(o),j(S),console.log(S)}x(!1)};ne.useEffect(()=>{if(!hn.stringify(hn.parse(i))){s.replace("?"+hn.stringify(Ja));return}D()},[i]);const T=y=>{Object.entries(y).forEach(([_,S])=>{_==="priceMin"&&parseInt(S)>=f.priceMax&&(y[_]=Math.max(0,Math.min(f.priceMax-1,parseInt(S)))),_==="priceMax"&&parseInt(S)<=f.priceMin&&(y[_]=Math.max(1,Math.min(f.priceMin+1,parseInt(S)))),_==="page"&&parseInt(S)<=0&&(y[_]=1)}),Object.entries(y).filter(([_,S])=>_==="page").length===0&&Object.assign(y,{page:1});const E={...f,...y};d(E),s.push("?"+hn.stringify(E))};return{searchParams:f,setSearchParams:T,reset:()=>{T(Ja)},handleChange:({target:y})=>{T({[y.name]:y.value})},results:p,loading:w,error:C,retry:()=>D()}},cu=n=>Object.entries(n).reduce((o,[i,s])=>((i==="priceMin"||i==="priceMax")&&(s>=50?s=1/0:s=Math.pow(s,3)),{...o,[i]:s}),{}),Jt={mobileM:"(max-width: 375px)",mobileL:"(max-width: 425px)",tablet:"(max-width: 768px)"},Qw=q.div`
   display: block;
   font-weight: 300;
 `,Yw=q.div`
@@ -1000,12 +1027,12 @@ Error generating stack: `+c.message+`
   box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
   animation: ${qh} 0.8s ease;
-  transition: box-shadow 0.15s ease;
-  &:hover, &:focus-within { box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.18); }
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  &:hover, &:focus-within { box-shadow: 0 0.35rem 0.9rem rgba(0, 0, 0, 0.16); transform: translateY(-2px); }
 `,gS=q.div`
   position: absolute;
-  top: 0.35em;
-  right: 0.4em;
+  top: 0.45em;
+  right: 0.45em;
   z-index: 1;
   padding: 0.1em 0.55em;
   border-radius: 1em;
@@ -1023,17 +1050,20 @@ Error generating stack: `+c.message+`
   display: block;
   height: 8.5rem;
   width: 100%;
+  padding: 0.3em 2.6em 0 2.6em;
+  box-sizing: border-box;
   object-fit: contain;
   margin-top: 1.9em;
 `,yS=q.div`
-  padding: 0.4rem 0.6rem 0.6rem 0.6rem;
+  padding: 0.6rem 0.7rem 0.75rem 0.7rem;
   display: flex;
   flex-direction: column;
   flex: 1;
   & .name {
     font-weight: 500;
     text-align: center;
-    color: #2b2b2b;
+    color: #262626;
+    font-size: 1.02em;
     overflow-wrap: anywhere;
     line-height: 1.3;
   }
@@ -1062,8 +1092,9 @@ Error generating stack: `+c.message+`
   background: white;
   color: ${$n};
   cursor: pointer;
-  transition: background 0.1s;
+  transition: background 0.1s, transform 0.1s;
   &:hover { background: #f0f4f7; }
+  &:active { transform: scale(0.98); }
 `,xS=q.div`
   margin-top: auto;
   display: flex;
