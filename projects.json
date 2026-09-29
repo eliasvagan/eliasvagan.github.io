@@ -2,7 +2,7 @@
   "$comment": [
     "The projects the front page lists, and where each one's version comes from.",
     "Run `npm run projects` after changing this; it rewrites the block between the markers in index.html.",
-    "version.from is one of: package.json (path, relative to this repo) | submodule (path) | github (repo) | path (folder in this repo; last commit touching it).",
+    "version.from is one of: deployed (url + dir: the project.json its deploy publishes; also supplies the blurb and picture) | package.json (path, relative to this repo) | submodule (path) | github (repo) | path (folder in this repo; last commit touching it).",
     "shot.steps walks the page to the frame worth showing: { key } | { click: selector } | { scrollY } | { waitMs }."
   ],
   "projects": [
@@ -12,8 +12,9 @@
       "blurb": "Search Vinmonopolet and Systembolaget at once — prices in NOK, the most alcohol per krone, and whether a trip to Sweden pays off.",
       "href": "https://alkomax.no/",
       "version": {
-        "from": "package.json",
-        "path": "../polet-reborn/polet-app/package.json"
+        "from": "deployed",
+        "url": "https://alkomax.no/",
+        "dir": "/var/www/alkomax-web"
       },
       "shot": {
         "url": "https://alkomax.no/",
@@ -24,13 +25,14 @@
       "id": "celestial-alliance-3",
       "title": "Celestial Alliance 3",
       "blurb": "A space-opera RPG that runs in the browser — fly, trade, walk stations and cities, and hire a crew who remember you.",
-      "href": "/projects/celestial-alliance-3/",
+      "href": "/celestial-alliance/",
       "version": {
-        "from": "package.json",
-        "path": "../celestial-alliance-3/package.json"
+        "from": "deployed",
+        "url": "https://eliasv.com/celestial-alliance/",
+        "dir": "/var/www/apps/celestial-alliance"
       },
       "shot": {
-        "url": "https://eliasvagan.github.io/projects/celestial-alliance-3/",
+        "url": "https://eliasv.com/celestial-alliance/",
         "settleMs": 6000
       }
     },

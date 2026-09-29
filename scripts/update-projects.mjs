@@ -23,7 +23,8 @@
  *
  * | source | used by | what it reads |
  * | --- | --- | --- |
- * | `package.json` | Celestial Alliance 3 | the `version` field — a real release number |
+ * | `deployed` | AlkoMax, Celestial Alliance 3 | `project.json` that the project's own deploy writes next to its
+ *   index.html, from its package.json: version, description and card picture |
  * | `submodule` | Notar, Bingo generator | the **pinned commit**, which is exactly what the site serves |
  * | `github` | MineSweeper JS | the default branch's head, for a repo this site does not vendor |
  * | `path` | Thank-you card generator | the last commit touching a folder committed directly in this repo |
@@ -62,8 +63,31 @@ const END = '<!-- projects:end -->';
 /** Short enough to read at a glance in a corner, long enough to be unambiguous. */
 const shortSha = (sha) => sha.trim().slice(0, 7);
 
-async function versionOf(project) {
+/**
+ * What a deployed project says about itself: `{ version, description, image, commit }`.
+ *
+ * On the server the build is a folder (`dir`); anywhere else it is read over HTTPS from the live site. A
+ * project whose metadata cannot be read keeps the blurb and picture in projects.json and shows no version.
+ */
+async function deployedMeta(project) {
   const source = project.version;
+  if (source.from !== 'deployed') return null;
+  try {
+    if (source.dir && existsSync(join(source.dir, 'project.json'))) {
+      return JSON.parse(readFileSync(join(source.dir, 'project.json'), 'utf8'));
+    }
+    const response = await fetch(new URL('project.json', source.url));
+    if (response.ok) return await response.json();
+    throw new Error(`HTTP ${response.status}`);
+  } catch (error) {
+    console.warn(`  ${project.id}: no deployed metadata (${error.message.split('\n')[0]})`);
+    return null;
+  }
+}
+
+async function versionOf(project, meta) {
+  const source = project.version;
+  if (source.from === 'deployed') return meta?.version ? `v${meta.version}` : null;
   try {
     if (source.from === 'package.json') {
       const at = resolve(ROOT, source.path);
@@ -136,9 +160,12 @@ async function shoot(project) {
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-function card(project, version) {
-  const src = `/assets/projects/${project.id}.png`;
-  const shot = existsSync(join(SHOTS, `${project.id}.png`))
+function card(project, version, meta) {
+  // A deployed project brings its own picture (package.json `image`, published as part of the build).
+  const own = meta?.image ? new URL(meta.image, project.version.url).href : null;
+  const src = own ?? `/assets/projects/${project.id}.png`;
+  const blurb = meta?.description || project.blurb;
+  const shot = own || existsSync(join(SHOTS, `${project.id}.png`))
     ? `\n\t\t\t\t<img class="shot" src="${src}" alt="${escape(project.title)} screenshot"`
       + ' loading="lazy" width="1200" height="600">'
     : '';
@@ -150,7 +177,7 @@ function card(project, version) {
 \t\t\t<a href="${project.href}">${shot}${stamp}
 \t\t\t\t<span class="card-text">
 \t\t\t\t\t<strong>${escape(project.title)}</strong>
-\t\t\t\t\t<span>${escape(project.blurb)}</span>
+\t\t\t\t\t<span>${escape(blurb)}</span>
 \t\t\t\t</span>
 \t\t\t</a>
 \t\t</li>`;
@@ -161,10 +188,12 @@ mkdirSync(SHOTS, { recursive: true });
 console.log(`\n▸ ${manifest.projects.length} projects`);
 const cards = [];
 for (const project of manifest.projects) {
-  const version = await versionOf(project);
+  const meta = await deployedMeta(project);
+  const version = await versionOf(project, meta);
   console.log(`  ${project.id.padEnd(22)} ${version ?? '(no version)'}`);
-  if (withShots && (!onlyId || project.id === onlyId)) await shoot(project);
-  cards.push(card(project, version));
+  // Deployed projects' pictures come with their build, so they are never shot from here.
+  if (withShots && !meta && (!onlyId || project.id === onlyId)) await shoot(project);
+  cards.push(card(project, version, meta));
 }
 
 const indexPath = join(ROOT, 'index.html');
