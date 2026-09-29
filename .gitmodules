@@ -4,3 +4,6 @@
 [submodule "projects/notar"]
 	path = projects/notar
 	url = https://github.com/eliasvagan/notar.git
+[submodule "minesweeper"]
+	path = minesweeper
+	url = https://github.com/eliasvagan/minesweeper-js.git

@@ -15,7 +15,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 | **Notar** | Browser-based melody composer with staff notation and Web Audio playback | [projects/notar/](https://eliasvagan.github.io/projects/notar/) |
 | **Celestial Alliance 3** | Space-opera RPG in the browser — fly, trade, walk stations and cities | [projects/celestial-alliance-3/](https://eliasvagan.github.io/projects/celestial-alliance-3/) |
 | **AlkoMax** | Search Vinmonopolet and Systembolaget at once — NOK prices, alcohol per krone, a *Grensehandel* calculator | [alkomax/](https://eliasvagan.github.io/alkomax/) |
-| **MineSweeper JS** | Browser-based Minesweeper game | [minesweeper-js](https://eliasvagan.github.io/minesweeper-js/) |
+| **MineSweeper JS** | Minesweeper for phones and desktop — long-press to flag, chording, best times and streaks per difficulty | [minesweeper/](https://eliasvagan.github.io/minesweeper/) |
 
 ## Repository layout
 
@@ -31,6 +31,7 @@ Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.g
 │   ├── notar/        # Melody composer (submodule)
 │   └── celestial-alliance-3/  # Built bundle, committed directly
 ├── alkomax/          # AlkoMax frontend, built bundle committed directly (see below)
+├── minesweeper/      # Minesweeper (submodule of eliasvagan/minesweeper-js), served at /minesweeper/
 ├── test/             # Playwright + pytest integration tests
 ├── _config.yml       # Jekyll / GitHub Pages config
 └── IT2/              # Archived IT coursework (HTML, CSS, JavaScript exercises)

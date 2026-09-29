@@ -53,24 +53,21 @@
     {
       "id": "minesweeper-js",
       "title": "MineSweeper JS",
-      "blurb": "Classic Minesweeper, playable in the browser.",
-      "href": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
+      "blurb": "Classic Minesweeper, rebuilt for phones — long-press to flag, tap a number to clear around it, and best times and streaks for every difficulty.",
+      "href": "/minesweeper/",
       "version": {
-        "from": "github",
-        "repo": "eliasvagan/minesweeper-js"
+        "from": "submodule",
+        "path": "minesweeper"
       },
       "shot": {
-        "url": "https://eliasvagan.github.io/minesweeper-js/minesweeper/index.html",
+        "url": "https://eliasvagan.github.io/minesweeper-js/",
         "settleMs": 2000,
         "steps": [
           {
-            "click": "#board tr:nth-child(5) td:nth-child(4)"
+            "click": "#cell-40"
           },
           {
-            "scrollY": 178
-          },
-          {
-            "waitMs": 800
+            "waitMs": 1200
           }
         ]
       }

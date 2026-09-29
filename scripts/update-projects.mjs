@@ -25,8 +25,8 @@
  * | --- | --- | --- |
  * | `deployed` | AlkoMax, Celestial Alliance 3 | `project.json` that the project's own deploy writes next to its
  *   index.html, from its package.json: version, description and card picture |
- * | `submodule` | Notar, Bingo generator | the **pinned commit**, which is exactly what the site serves |
- * | `github` | MineSweeper JS | the default branch's head, for a repo this site does not vendor |
+ * | `submodule` | Notar, Bingo generator, MineSweeper JS | the **pinned commit**, which is exactly what the site serves |
+ * | `github` | (none at the moment) | the default branch's head, for a repo this site does not vendor |
  * | `path` | Thank-you card generator | the last commit touching a folder committed directly in this repo |
  *
  * A static page with no manifest has no version to invent, and the pinned commit is not a consolation prize:
