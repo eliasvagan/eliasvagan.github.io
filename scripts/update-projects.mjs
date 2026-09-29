@@ -36,8 +36,8 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -162,7 +162,14 @@ const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').repla
 
 function card(project, version, meta) {
   // A deployed project brings its own picture (package.json `image`, published as part of the build).
-  const own = meta?.image ? new URL(meta.image, project.version.url).href : null;
+  // On the server the file is copied next to the other thumbnails, so the page never depends on another host.
+  let own = meta?.image ? new URL(meta.image, project.version.url).href : null;
+  const local = meta?.image && project.version.dir ? join(project.version.dir, meta.image) : null;
+  if (local && existsSync(local)) {
+    const name = `${project.id}${extname(meta.image)}`;
+    copyFileSync(local, join(SHOTS, name));
+    own = `/assets/projects/${name}`;
+  }
   const src = own ?? `/assets/projects/${project.id}.png`;
   const blurb = meta?.description || project.blurb;
   const shot = own || existsSync(join(SHOTS, `${project.id}.png`))
