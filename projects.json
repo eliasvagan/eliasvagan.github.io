@@ -10,13 +10,13 @@
       "id": "alkomax",
       "title": "AlkoMax",
       "blurb": "Search Vinmonopolet and Systembolaget at once — prices in NOK, the most alcohol per krone, and whether a trip to Sweden pays off.",
-      "href": "/alkomax/",
+      "href": "https://alkomax.no/",
       "version": {
         "from": "package.json",
         "path": "../polet-reborn/polet-app/package.json"
       },
       "shot": {
-        "url": "https://eliasvagan.github.io/alkomax/",
+        "url": "https://alkomax.no/",
         "settleMs": 4000
       }
     },
