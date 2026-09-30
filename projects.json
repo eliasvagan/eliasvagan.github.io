@@ -25,23 +25,6 @@
       }
     },
     {
-      "id": "celestial-alliance-3",
-      "title": "Celestial Alliance 3",
-      "status": "featured",
-      "kind": "Browser game",
-      "blurb": "A space-opera RPG that runs in the browser — fly, trade, walk stations and cities, and hire a crew who remember you.",
-      "href": "/celestial-alliance/",
-      "version": {
-        "from": "deployed",
-        "url": "https://eliasv.com/celestial-alliance/",
-        "dir": "/var/www/apps/celestial-alliance"
-      },
-      "shot": {
-        "url": "https://eliasv.com/celestial-alliance/",
-        "settleMs": 6000
-      }
-    },
-    {
       "id": "minesweeper-js",
       "title": "MineSweeper JS",
       "status": "featured",
@@ -68,7 +51,7 @@
     {
       "id": "notar",
       "title": "Notar",
-      "status": "in-progress",
+      "status": "featured",
       "kind": "Music tool",
       "blurb": "Compose melodies on a scrolling staff and play them in the browser.",
       "href": "/projects/notar/",
@@ -79,6 +62,23 @@
       "shot": {
         "url": "https://eliasvagan.github.io/projects/notar/",
         "settleMs": 2500
+      }
+    },
+    {
+      "id": "celestial-alliance-3",
+      "title": "Celestial Alliance 3",
+      "status": "in-progress",
+      "kind": "Browser game",
+      "blurb": "A space-opera RPG that runs in the browser — fly, trade, walk stations and cities, and hire a crew who remember you.",
+      "href": "/celestial-alliance/",
+      "version": {
+        "from": "deployed",
+        "url": "https://eliasv.com/celestial-alliance/",
+        "dir": "/var/www/apps/celestial-alliance"
+      },
+      "shot": {
+        "url": "https://eliasv.com/celestial-alliance/",
+        "settleMs": 6000
       }
     },
     {
