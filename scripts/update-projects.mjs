@@ -18,20 +18,23 @@
  * carry this week's version over a picture from a month ago. A deploy now waits for its own bundle to be
  * served and *then* shoots itself, which is both objections answered rather than traded.
  *
- * ## Where a version comes from, and why there are three answers
+ * ## Where a version comes from
  *
- * There is no single source, because these are not one kind of thing:
+ * Versions are resolved on every build, never written into the page by hand. The first answer wins:
  *
  * | source | used by | what it reads |
  * | --- | --- | --- |
  * | `deployed` | AlkoMax, Celestial Alliance 3 | `project.json` that the project's own deploy writes next to its
- *   index.html, from its package.json: version, description and card picture |
- * | `submodule` | Notar, Bingo generator, MineSweeper JS | the **pinned commit**, which is exactly what the site serves |
- * | `github` | (none at the moment) | the default branch's head, for a repo this site does not vendor |
- * | `path` | Thank-you card generator | the last commit touching a folder committed directly in this repo |
+ *   index.html from its package.json (version, description, card picture): the build folder on this server,
+ *   otherwise the live site, e.g. https://alkomax.no/project.json |
+ * | `submodule` | Notar, Bingo generator, Minesweeper | at the **pinned commit**: `version` in package.json, then
+ *   project.json, then the latest git tag reachable from the pin |
+ * | `path` / `package.json` | Thank-you card generator | the same, for a folder (or one package.json) committed here |
+ * | `github` | (none at the moment) | the latest tag, else the default branch's head |
  *
- * A static page with no manifest has no version to invent, and the pinned commit is not a consolation prize:
- * it is the precise answer to *"which build is behind this link"*, which is the question a version is asked.
+ * A project that declares no version anywhere uses `version.fallback` from projects.json (or `"version": "1.2.0"`
+ * as a plain string), and failing that the pinned commit, which is still the precise answer to *"which build is
+ * behind this link"*. The label's tooltip says which of these it is.
  *
  * ## Two groups: Selected work and the Lab
  *
@@ -49,7 +52,7 @@
 
 import { execFileSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, extname, join, resolve } from 'node:path';
+import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -71,6 +74,8 @@ const manifest = JSON.parse(readFileSync(join(ROOT, 'projects.json'), 'utf8'));
 const STATUSES = ['featured', 'in-progress'];
 for (const project of manifest.projects) {
   project.status ??= 'in-progress';
+  // `"version": "1.2.0"` is shorthand for a version the project does not declare anywhere else.
+  if (typeof project.version === 'string') project.version = { from: 'literal', value: project.version };
   if (!STATUSES.includes(project.status)) {
     console.error(`\nprojects.json: ${project.id} has status "${project.status}"; use one of ${STATUSES.join(', ')}.`);
     process.exit(1);
@@ -105,39 +110,95 @@ async function deployedMeta(project) {
   }
 }
 
+/** `3.4.2` → `v3.4.2`; a tag that already says `v1.0` or `2026.1-beta` is left as written. */
+const semver = (value) => {
+  const text = String(value ?? '').trim();
+  return !text ? null : /^\d/.test(text) ? `v${text}` : text;
+};
+
+/**
+ * The pinned commit of a submodule (what this repo *serves*), or the last commit touching a folder in this repo.
+ * `git submodule status --cached` reports the pin rather than whatever happens to be checked out.
+ */
+function pinOf(source) {
+  if (source.from === 'submodule') {
+    return git(['submodule', 'status', '--cached', source.path]).replace(/^[-+U]/, '').split(' ')[0];
+  }
+  if (source.from === 'path' || source.from === 'package.json') {
+    const sha = git(['log', '-1', '--format=%H', '--', source.path]);
+    if (!sha) throw new Error(`no commits touch ${source.path}`);
+    return sha;
+  }
+  return null;
+}
+
+/**
+ * A version the project itself declares, at exactly the build the site serves: `version` in its package.json,
+ * then in a project.json next to it, then the latest git tag reachable from the pinned commit. For a submodule
+ * the files are read *at the pin* (`git show <sha>:package.json`), not from a checkout that may have moved.
+ */
+function declaredVersion(source, pin) {
+  const dir = source.from === 'package.json' ? dirname(source.path) : source.path;
+  const inSub = source.from === 'submodule';
+  const read = (name) => {
+    try {
+      const text = inSub
+        ? git(['show', `${pin}:${name}`], resolve(ROOT, dir))
+        : readFileSync(resolve(ROOT, dir, name), 'utf8');
+      return JSON.parse(text).version ?? null;
+    } catch {
+      return null;
+    }
+  };
+  for (const name of source.from === 'package.json' ? [basename(source.path)] : ['package.json', 'project.json']) {
+    const version = read(name);
+    if (version) return { version: semver(version), from: name };
+  }
+  try {
+    const tag = inSub
+      ? git(['describe', '--tags', '--abbrev=0', pin], resolve(ROOT, dir))
+      : git(['describe', '--tags', '--abbrev=0', pin]);
+    if (tag) return { version: semver(tag), from: 'git tag' };
+  } catch { /* no tags */ }
+  return null;
+}
+
+/**
+ * The version shown on a card, and where it came from (the label's tooltip says so). In order:
+ *
+ *   1. what the project declares: the deployed project.json (`deployed`: on this server the build folder,
+ *      anywhere else the live site), or package.json / project.json / latest tag at the pinned commit;
+ *   2. the manifest's own `version.fallback` (or `version` written as a plain string) for a project that
+ *      declares nothing;
+ *   3. the pinned commit itself, which is still the precise answer to "which build is behind this link".
+ *
+ * A version that cannot be resolved is omitted rather than guessed: a wrong one is worse than none.
+ */
 async function versionOf(project, meta) {
   const source = project.version;
-  if (source.from === 'deployed') return meta?.version ? `v${meta.version}` : null;
+  const fallback = source.fallback ? { version: semver(source.fallback), from: 'projects.json' } : null;
   try {
-    if (source.from === 'package.json') {
-      const at = resolve(ROOT, source.path);
-      return `v${JSON.parse(readFileSync(at, 'utf8')).version}`;
-    }
-    if (source.from === 'submodule') {
-      // The pin, not the checkout: `git submodule status` reports what this repo *serves*, which is the point.
-      const args = ['submodule', 'status', '--cached', source.path];
-      const line = execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
-      return shortSha(line.trim().replace(/^[-+U]/, ''));
-    }
-    if (source.from === 'path') {
-      // Last commit that touched the folder: exactly the build the site serves, for code committed in place.
-      const args = ['log', '-1', '--format=%H', '--', source.path];
-      const sha = execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
-      if (!sha.trim()) throw new Error(`no commits touch ${source.path}`);
-      return shortSha(sha);
+    if (source.from === 'literal') return { version: semver(source.value), from: 'projects.json' };
+    if (source.from === 'deployed') {
+      if (meta?.version) return { version: semver(meta.version), from: 'deployed project.json' };
+      return fallback;
     }
     if (source.from === 'github') {
+      const tags = await fetch(`https://api.github.com/repos/${source.repo}/tags?per_page=1`);
+      const [tag] = tags.ok ? await tags.json() : [];
+      if (tag?.name) return { version: semver(tag.name), from: 'git tag' };
+      if (fallback) return fallback;
       const response = await fetch(`https://api.github.com/repos/${source.repo}/commits?per_page=1`);
       if (!response.ok) return null;
       const [head] = await response.json();
-      return head?.sha ? shortSha(head.sha) : null;
+      return head?.sha ? { version: shortSha(head.sha), from: 'commit', commit: true } : null;
     }
+    const pin = pinOf(source);
+    return declaredVersion(source, pin) ?? fallback ?? { version: shortSha(pin), from: 'commit', commit: true };
   } catch (error) {
-    // A version that cannot be resolved is omitted rather than guessed — a wrong one is worse than none,
-    // because a visitor would believe it.
     console.warn(`  ${project.id}: no version (${error.message.split('\n')[0]})`);
   }
-  return null;
+  return fallback;
 }
 
 const git = (args, cwd = ROOT) => execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
@@ -225,6 +286,13 @@ async function shoot(project) {
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+/** The quiet version label: small muted monospace, with where it came from in the tooltip. */
+function versionLabel(resolved) {
+  if (!resolved?.version) return '';
+  const title = resolved.commit ? `Build ${resolved.version}: the commit this site serves (no version declared)` : `Version ${resolved.version} (${resolved.from})`;
+  return `<code class="version" title="${escape(title)}">${escape(resolved.version)}</code>`;
+}
+
 /** A line icon, drawn in currentColor so it follows the text it sits in. */
 const ARROW = '<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg>';
 const CLOCK = '<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 1.5"/></svg>';
@@ -257,7 +325,7 @@ function featured(project, index) {
   const { blurb, picture, version } = project.resolved;
   const frame = picture ? `\n\t\t\t\t\t\t<span class="frame">${img(picture, index === 0)}</span>` : '';
   const kind = project.kind ? `<span class="kind">${escape(project.kind)}</span>` : '';
-  const stamp = version ? `<code>${escape(version)}</code>` : '';
+  const stamp = versionLabel(version);
   return `\t\t\t\t<li>
 \t\t\t\t\t<a href="${project.href}">${frame}
 \t\t\t\t\t\t<span class="work-text">
@@ -272,15 +340,13 @@ function featured(project, index) {
 function lab(project) {
   const { blurb, picture, updated, version } = project.resolved;
   const thumb = picture ? `<span class="thumb">${img(picture, false)}</span>` : '<span class="thumb"></span>';
-  // The date says how alive it is; the version (a pinned commit, mostly) is there for whoever wants it.
-  const when = updated
-    ? `${CLOCK}<time datetime="${updated}">Updated ${longDate(updated)}</time>`
-    : (version ? `<code>${escape(version)}</code>` : '');
+  // The date says how alive it is; the version sits by the title for whoever wants it.
+  const when = updated ? `${CLOCK}<time datetime="${updated}">Updated ${longDate(updated)}</time>` : '';
   return `\t\t\t\t<li>
 \t\t\t\t\t<a href="${project.href}">
 \t\t\t\t\t\t${thumb}
 \t\t\t\t\t\t<span class="lab-text">
-\t\t\t\t\t\t\t<strong class="lab-title">${escape(project.title)}</strong>
+\t\t\t\t\t\t\t<span class="lab-head"><strong class="lab-title">${escape(project.title)}</strong>${versionLabel(version)}</span>
 \t\t\t\t\t\t\t<span class="blurb">${escape(blurb)}</span>
 \t\t\t\t\t\t</span>
 \t\t\t\t\t\t<span class="meta">${when}</span>
@@ -325,7 +391,7 @@ for (const project of manifest.projects) {
   const meta = await deployedMeta(project);
   const version = await versionOf(project, meta);
   const updated = project.status === 'featured' ? null : await updatedOf(project, meta);
-  console.log(`  ${project.id.padEnd(22)} ${project.status.padEnd(12)} ${version ?? '(no version)'}${updated ? `  ${updated}` : ''}`);
+  console.log(`  ${project.id.padEnd(22)} ${project.status.padEnd(12)} ${version ? `${version.version} (${version.from})` : '(no version)'}${updated ? `  ${updated}` : ''}`);
   // Deployed projects' pictures come with their build, so they are never shot from here.
   if (withShots && !meta && (!onlyId || project.id === onlyId)) await shoot(project);
   project.resolved = { blurb: meta?.description || project.blurb, picture: pictureOf(project, meta), updated, version };

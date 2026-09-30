@@ -177,6 +177,15 @@
 			letter-spacing: .02em;
 			color: var(--muted);
 		}
+		/* The version: a quiet mono label by the title, from the build (see scripts/update-projects.mjs). */
+		.version {
+			font-family: var(--mono);
+			font-size: .72rem;
+			font-weight: 400;
+			letter-spacing: .02em;
+			color: var(--muted);
+			white-space: nowrap;
+		}
 		.meta .kind {
 			font-family: Georgia, "Times New Roman", serif;
 			font-size: .8rem;
@@ -238,7 +247,7 @@
 		.lab li { border-top: 1px solid var(--rule); }
 		.lab a {
 			display: grid;
-			grid-template-columns: 5.5rem minmax(0, 1fr);
+			grid-template-columns: 6.5rem minmax(0, 1fr);
 			gap: .2rem 1rem;
 			align-items: start;
 			padding: 1.1rem 0;
@@ -253,20 +262,26 @@
 			border-radius: 2px;
 			background: var(--surface);
 		}
-		/* A thumbnail this small cannot show a whole page, so it shows the top-left corner, larger. */
-		.lab .thumb { aspect-ratio: 3 / 2; }
+		/* The same 2:1 as the shots and the Selected work frames, so the whole picture fits, centred, uncropped. */
+		.lab .thumb { aspect-ratio: 2 / 1; align-self: start; }
 		.lab .thumb img {
 			display: block;
-			width: 170%;
-			max-width: none;
-			height: auto;
-			aspect-ratio: 2 / 1;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center;
 			filter: grayscale(1);
 			opacity: .85;
 			transition: filter .3s, opacity .3s;
 		}
 		.lab a:hover .thumb img { filter: none; opacity: 1; }
 		@media (prefers-color-scheme: dark) { .lab .thumb img { opacity: .7; } }
+		.lab-head {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			gap: 0 .6rem;
+		}
 		.lab-title {
 			display: block;
 			font-size: 1.05rem;
@@ -284,7 +299,7 @@
 				align-items: center;
 				padding: 1.25rem 0;
 			}
-			.lab .thumb { grid-row: auto; }
+			.lab .thumb { grid-row: auto; align-self: center; }
 			.lab .meta { grid-column: 3; margin-top: 0; justify-content: flex-end; white-space: nowrap; }
 		}
 
@@ -327,7 +342,7 @@
 					<a href="https://alkomax.no/">
 						<span class="frame"><img src="https://alkomax.no/portfolio.png" alt="" width="1200" height="600" decoding="async" fetchpriority="high"></span>
 						<span class="work-text">
-							<span class="meta"><span class="kind">Web app</span><code>v3.2.5</code></span>
+							<span class="meta"><span class="kind">Web app</span><code class="version" title="Version v3.4.2 (deployed project.json)">v3.4.2</code></span>
 							<strong class="work-title"><span>AlkoMax</span><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></strong>
 							<span class="blurb">Search Vinmonopolet and Systembolaget at once — prices in NOK, the most alcohol per krone, and whether a trip to Sweden pays off.</span>
 						</span>
@@ -337,7 +352,7 @@
 					<a href="/minesweeper/">
 						<span class="frame"><img src="/assets/projects/minesweeper-js.png" alt="" width="1200" height="600" decoding="async" loading="lazy"></span>
 						<span class="work-text">
-							<span class="meta"><span class="kind">Browser game</span><code>b776b05</code></span>
+							<span class="meta"><span class="kind">Browser game</span><code class="version" title="Build 6ed86e3: the commit this site serves (no version declared)">6ed86e3</code></span>
 							<strong class="work-title"><span>Minesweeper</span><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></strong>
 							<span class="blurb">The way it should be.</span>
 						</span>
@@ -347,7 +362,7 @@
 					<a href="/projects/notar/">
 						<span class="frame"><img src="/assets/projects/notar.png" alt="" width="1200" height="600" decoding="async" loading="lazy"></span>
 						<span class="work-text">
-							<span class="meta"><span class="kind">Music tool</span><code>61545e5</code></span>
+							<span class="meta"><span class="kind">Music tool</span><code class="version" title="Build 1b8aebc: the commit this site serves (no version declared)">1b8aebc</code></span>
 							<strong class="work-title"><span>Notar</span><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></strong>
 							<span class="blurb">Compose melodies on a scrolling staff and play them in the browser.</span>
 						</span>
@@ -363,7 +378,7 @@
 					<a href="/projects/thank-you-gen/">
 						<span class="thumb"><img src="/assets/projects/thank-you-gen.png" alt="" width="1200" height="600" decoding="async" loading="lazy"></span>
 						<span class="lab-text">
-							<strong class="lab-title">Thank-you card generator</strong>
+							<span class="lab-head"><strong class="lab-title">Thank-you card generator</strong><code class="version" title="Build fccdb27: the commit this site serves (no version declared)">fccdb27</code></span>
 							<span class="blurb">Print-ready wedding thank-you cards — one photo, one message per card, folded to stand on their own.</span>
 						</span>
 						<span class="meta"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 1.5"/></svg><time datetime="2026-09-23">Updated 23 Sep 2026</time></span>
@@ -373,7 +388,7 @@
 					<a href="/projects/bingo-gen/">
 						<span class="thumb"><img src="/assets/projects/bingo-gen.png" alt="" width="1200" height="600" decoding="async" loading="lazy"></span>
 						<span class="lab-text">
-							<strong class="lab-title">Bingo generator</strong>
+							<span class="lab-head"><strong class="lab-title">Bingo generator</strong><code class="version" title="Build aea4092: the commit this site serves (no version declared)">aea4092</code></span>
 							<span class="blurb">Create randomized wedding bingo sheets and download them as PDFs.</span>
 						</span>
 						<span class="meta"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 1.5"/></svg><time datetime="2026-07-25">Updated 25 Jul 2026</time></span>
@@ -383,10 +398,10 @@
 					<a href="/celestial-alliance/">
 						<span class="thumb"><img src="https://eliasv.com/celestial-alliance/portfolio.png" alt="" width="1200" height="600" decoding="async" loading="lazy"></span>
 						<span class="lab-text">
-							<strong class="lab-title">Celestial Alliance 3</strong>
+							<span class="lab-head"><strong class="lab-title">Celestial Alliance 3</strong><code class="version" title="Version v2.7.33 (deployed project.json)">v2.7.33</code></span>
 							<span class="blurb">A space-opera RPG that runs in the browser — fly, trade, walk stations and cities, and hire a crew who remember you.</span>
 						</span>
-						<span class="meta"><code>v2.7.32</code></span>
+						<span class="meta"></span>
 					</a>
 				</li>
 			</ul>

@@ -3,7 +3,7 @@
     "The projects the front page lists, and where each one comes from. Run `npm run projects` (or `node scripts/update-projects.mjs --no-shots`) after changing this; it rewrites the block between the markers in index.html.",
     "status is featured (Selected work: the finished, live products, large and image-led) | in-progress (Lab: smaller tools and work still taking shape, a quiet list stamped with its last update). A project without a status goes to the Lab, so nothing is promoted by accident.",
     "kind is the one- or two-word label over a featured title (Web app, Browser game).",
-    "version.from is one of: deployed (url + dir: the project.json its deploy publishes; also supplies the blurb and picture) | package.json (path, relative to this repo) | submodule (path) | github (repo) | path (folder in this repo; last commit touching it).",
+    "version.from is one of: deployed (url + dir: the project.json its deploy publishes; also supplies the blurb and picture) | package.json (path, relative to this repo) | submodule (path) | github (repo) | path (folder in this repo). For submodule and path the version is package.json, then project.json, then the latest git tag at the pinned commit. version.fallback (or \"version\": \"1.2.0\" as a plain string) is used when the project declares none; failing that the label shows the pinned commit.",
     "shot.steps walks the page to the frame worth showing: { key } | { click: selector } | { scrollY } | { waitMs }."
   ],
   "projects": [
