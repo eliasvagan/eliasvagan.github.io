@@ -1,7 +1,8 @@
 {
   "$comment": [
-    "The projects the front page lists, and where each one's version comes from.",
-    "Run `npm run projects` after changing this; it rewrites the block between the markers in index.html.",
+    "The projects the front page lists, and where each one comes from. Run `npm run projects` (or `node scripts/update-projects.mjs --no-shots`) after changing this; it rewrites the block between the markers in index.html.",
+    "status is featured (Selected work: the finished, live products, large and image-led) | in-progress (Lab: smaller tools and work still taking shape, a quiet list stamped with its last update). A project without a status goes to the Lab, so nothing is promoted by accident.",
+    "kind is the one- or two-word label over a featured title (Web app, Browser game).",
     "version.from is one of: deployed (url + dir: the project.json its deploy publishes; also supplies the blurb and picture) | package.json (path, relative to this repo) | submodule (path) | github (repo) | path (folder in this repo; last commit touching it).",
     "shot.steps walks the page to the frame worth showing: { key } | { click: selector } | { scrollY } | { waitMs }."
   ],
@@ -9,6 +10,8 @@
     {
       "id": "alkomax",
       "title": "AlkoMax",
+      "status": "featured",
+      "kind": "Web app",
       "blurb": "Search Vinmonopolet and Systembolaget at once — prices in NOK, the most alcohol per krone, and whether a trip to Sweden pays off.",
       "href": "https://alkomax.no/",
       "version": {
@@ -24,6 +27,8 @@
     {
       "id": "celestial-alliance-3",
       "title": "Celestial Alliance 3",
+      "status": "featured",
+      "kind": "Browser game",
       "blurb": "A space-opera RPG that runs in the browser — fly, trade, walk stations and cities, and hire a crew who remember you.",
       "href": "/celestial-alliance/",
       "version": {
@@ -37,22 +42,10 @@
       }
     },
     {
-      "id": "notar",
-      "title": "Notar",
-      "blurb": "Compose melodies on a scrolling staff and play them in the browser.",
-      "href": "/projects/notar/",
-      "version": {
-        "from": "submodule",
-        "path": "projects/notar"
-      },
-      "shot": {
-        "url": "https://eliasvagan.github.io/projects/notar/",
-        "settleMs": 2500
-      }
-    },
-    {
       "id": "minesweeper-js",
       "title": "MineSweeper JS",
+      "status": "featured",
+      "kind": "Browser game",
       "blurb": "Classic Minesweeper, rebuilt for phones — long-press to flag, tap a number to clear around it, and best times and streaks for every difficulty.",
       "href": "/minesweeper/",
       "version": {
@@ -73,8 +66,26 @@
       }
     },
     {
+      "id": "notar",
+      "title": "Notar",
+      "status": "in-progress",
+      "kind": "Music tool",
+      "blurb": "Compose melodies on a scrolling staff and play them in the browser.",
+      "href": "/projects/notar/",
+      "version": {
+        "from": "submodule",
+        "path": "projects/notar"
+      },
+      "shot": {
+        "url": "https://eliasvagan.github.io/projects/notar/",
+        "settleMs": 2500
+      }
+    },
+    {
       "id": "bingo-gen",
       "title": "Bingo generator",
+      "status": "in-progress",
+      "kind": "Utility",
       "blurb": "Create randomized wedding bingo sheets and download them as PDFs.",
       "href": "/projects/bingo-gen/",
       "version": {
@@ -89,6 +100,8 @@
     {
       "id": "thank-you-gen",
       "title": "Thank-you card generator",
+      "status": "in-progress",
+      "kind": "Utility",
       "blurb": "Print-ready wedding thank-you cards — one photo, one message per card, folded to stand on their own.",
       "href": "/projects/thank-you-gen/",
       "version": {

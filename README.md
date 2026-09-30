@@ -67,27 +67,37 @@ crawler runs weekly on the droplet. Nothing in this repo, and no GitHub Action, 
 Systembolaget. Each client-side route (`search/`, `leaderboard/`, `grensehandel/`) gets its own copy of
 `index.html`, so deep links work on Pages.
 
-## Front page cards
+## Front page
 
-The project list on `index.html` is generated — a screenshot, a blurb and a version stamp per card:
+The front page has two generated sections, both from [`projects.json`](projects.json):
+
+- **Selected work** — projects with `"status": "featured"`: the finished, live products (AlkoMax, Celestial
+  Alliance 3, MineSweeper JS). Large and image-led; the first spans the full width, with a `kind` label and version.
+- **Lab** — `"status": "in-progress"` (the default, so nothing is promoted by accident): smaller tools and work
+  still taking shape (Notar, the wedding generators). A quiet one-line index with a small thumbnail and the date of
+  the last update, most recent first. It is a section of the same page, not a separate `/lab/`, because three short
+  rows do not make a page, and one page stays one request.
+
+Moving a project between the two is a one-word change to its `status`. To regenerate:
 
 ```bash
 npm install
 npm run projects            # versions + screenshots + rewrite index.html
-npm run projects -- --no-shots   # versions and markup only, which is the fast path
+npm run projects -- --no-shots   # versions and markup only, which is the fast path (and what the server runs)
 ```
 
-It reads [`projects.json`](projects.json) and replaces only the block between the
-`<!-- projects:start -->` / `<!-- projects:end -->` markers, so the rest of the page stays hand-edited.
-**Edit `projects.json`, not the card markup** — the next run will overwrite it.
+It replaces only the block between the `<!-- projects:start -->` / `<!-- projects:end -->` markers inside `<main>`,
+so the intro, styles and footer stay hand-edited. **Edit `projects.json`, not the card markup** — the next run will
+overwrite it. Running it twice produces the same file.
 
 Each version comes from whichever source is honest for that project:
 
 | `version.from` | Used by | Reads |
 | --- | --- | --- |
-| `package.json` | Celestial Alliance 3 | the `version` field — a real release number |
-| `submodule` | Notar, Bingo generator | the **pinned commit**, which is exactly what the site serves |
-| `github` | MineSweeper JS | the default branch's head, for a repo this site does not vendor |
+| `deployed` | AlkoMax, Celestial Alliance 3 | the `project.json` each app's deploy publishes: version, blurb, picture |
+| `package.json` | (none at the moment) | the `version` field — a real release number |
+| `submodule` | Notar, Bingo generator, MineSweeper JS | the **pinned commit**, which is exactly what the site serves |
+| `github` | (none at the moment) | the default branch's head, for a repo this site does not vendor |
 | `path` | Thank-you card generator | the last commit touching a folder committed directly in this repo |
 
 A static page with no manifest has no version to invent, and the pinned commit is not a consolation prize: it
