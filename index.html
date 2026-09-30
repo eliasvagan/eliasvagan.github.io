@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved to eliasv.com</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://eliasv.com/">
+<script>
+(function () {
+  var l = window.location;
+  var t = (function (p) {
+    var m;
+    if ((m = p.match(/^\/alkomax(\/.*)?$/))) return 'https://alkomax.no' + (m[1] || '/');
+    if (/^\/projects\/celestial-alliance-3(\/|$)/.test(p)) return 'https://eliasv.com/celestial-alliance/';
+    if (/^\/minesweeper-js(\/|$)/.test(p)) return 'https://eliasv.com/minesweeper/';
+    var first = p.split('/')[1] || '';
+    var known = ['', 'index.html', 'projects', 'minesweeper', 'notar', 'IT2', 'assets', 'bingo-gen.html', 'projects.json', 'favicon.svg', 'README.md'];
+    try { first = decodeURIComponent(first); } catch (e) {}
+    if (known.indexOf(first) !== -1) return 'https://eliasv.com' + p;
+    return 'https://eliasv.com/';
+  })(l.pathname) + l.search + l.hash;
+  var c = document.querySelector('link[rel="canonical"]');
+  if (c) c.href = t.split('#')[0];
+  l.replace(t);
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=https://eliasv.com/"></noscript>
+</head>
+<body>
+<p>This page has moved to <a href="https://eliasv.com/">eliasv.com</a>.</p>
+</body>
+</html>
