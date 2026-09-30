@@ -26,17 +26,17 @@
     },
     {
       "id": "minesweeper-js",
-      "title": "MineSweeper JS",
+      "title": "Minesweeper",
       "status": "featured",
       "kind": "Browser game",
-      "blurb": "Classic Minesweeper, rebuilt for phones — long-press to flag, tap a number to clear around it, and best times and streaks for every difficulty.",
+      "blurb": "The way it should be.",
       "href": "/minesweeper/",
       "version": {
         "from": "submodule",
         "path": "minesweeper"
       },
       "shot": {
-        "url": "https://eliasvagan.github.io/minesweeper-js/",
+        "url": "https://eliasv.com/minesweeper/",
         "settleMs": 2000,
         "steps": [
           {
