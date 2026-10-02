@@ -1,4 +1,12 @@
-# eliasvagan.github.io
+# eliasvagan.github.io (retired)
+
+> **This repo is no longer the source of eliasv.com.** The site, its project manifest and its deployment now live in
+> **[github.com/eliasvagan/eliasv_com](https://github.com/eliasvagan/eliasv_com)** (branch `main`), deployed by the
+> orchestrator on the `eliasv-com` droplet. Edit that repo instead; nothing here is deployed any more.
+>
+> GitHub Pages for this repo serves the `pages-redirect` branch, which only redirects every old
+> `eliasvagan.github.io/...` address to the same path on https://eliasv.com/. The content below is kept as history.
+
 
 Personal site and small web tools, hosted on [GitHub Pages](https://eliasvagan.github.io/).
 
